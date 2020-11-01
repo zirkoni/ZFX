@@ -1,46 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="2D">
-      <UniqueIdentifier>{a2190d3c-09db-4693-b7bf-78d92a7704e1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="2D\Color">
-      <UniqueIdentifier>{df1f5149-dceb-4783-b1c8-970f9c7c04b8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Common">
-      <UniqueIdentifier>{f35bf2f5-8fc8-4d36-b509-927cdbe2187f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Demo">
       <UniqueIdentifier>{6e484ddd-80d0-4d68-8cf3-4e333147442a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ZFX">
+      <UniqueIdentifier>{96cc33b0-ec61-4ced-a622-c378dca9e872}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ZFX\include">
+      <UniqueIdentifier>{229d188c-37e2-4365-a832-d54d876c50cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ZFX\src">
+      <UniqueIdentifier>{88de63b7-35ae-4391-a80f-a2a2975c4d6c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\2D\Color\Mesh.cpp">
-      <Filter>2D\Color</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\2D\Color\Vertex.cpp">
-      <Filter>2D\Color</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Common\Window.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Demo\Demo.cpp">
       <Filter>Demo</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\ZFX\src\Mesh.cpp">
+      <Filter>ZFX\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZFX\src\Vertex.cpp">
+      <Filter>ZFX\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZFX\src\Window.cpp">
+      <Filter>ZFX\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ZFX\src\Shader.cpp">
+      <Filter>ZFX\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\2D\Color\Mesh.h">
-      <Filter>2D\Color</Filter>
+    <ClInclude Include="..\..\ZFX\include\Mesh.h">
+      <Filter>ZFX\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\2D\Color\Vertex.h">
-      <Filter>2D\Color</Filter>
+    <ClInclude Include="..\..\ZFX\include\Vertex.h">
+      <Filter>ZFX\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Common\Window.h">
-      <Filter>Common</Filter>
+    <ClInclude Include="..\..\ZFX\include\Window.h">
+      <Filter>ZFX\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\Common\zfxdefs.h">
-      <Filter>Common</Filter>
+    <ClInclude Include="..\..\ZFX\include\zfxdefs.h">
+      <Filter>ZFX\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ZFX.h" />
+    <ClInclude Include="..\..\ZFX\ZFX.h">
+      <Filter>ZFX</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZFX\include\Shader.h">
+      <Filter>ZFX\include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

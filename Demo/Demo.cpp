@@ -1,14 +1,16 @@
-#include "../Source/ZFX.h"
+#include "ZFX.h"
 #include <memory>
 
+#define ARRAY_SIZE(A) (sizeof(A) / sizeof(A[0]))
 
-std::unique_ptr<ZFX_2D::Color::Mesh> addTriangle()
+
+std::unique_ptr<ZFX::Mesh> addTriangle()
 {
-	ZFX_2D::Color::Vertex vertices[] =
+	ZFX::Vertex vertices[] =
 	{
-		ZFX_2D::Color::Vertex{ glm::vec2{ -0.5f, -0.5f } },
-		ZFX_2D::Color::Vertex{ glm::vec2{  0.0f,  0.5f } },
-		ZFX_2D::Color::Vertex{ glm::vec2{  0.5f, -0.5f } }
+		ZFX::Vertex{ glm::vec2{ -0.5f, -0.5f } },
+		ZFX::Vertex{ glm::vec2{  0.0f,  0.5f } },
+		ZFX::Vertex{ glm::vec2{  0.5f, -0.5f } }
 	};
 
 	unsigned int indeces[] =
@@ -16,13 +18,14 @@ std::unique_ptr<ZFX_2D::Color::Mesh> addTriangle()
 		0, 1, 2
 	};
 
-	return std::make_unique<ZFX_2D::Color::Mesh>(vertices, sizeof(vertices) / sizeof(vertices[0]),
-		indeces, sizeof(indeces) / sizeof(indeces[0]));
+	return std::make_unique<ZFX::Mesh>(vertices, ARRAY_SIZE(vertices), indeces, ARRAY_SIZE(indeces));
 }
 
 void mainLoop(ZFX::Window& window)
 {
 	auto triangle = addTriangle();
+
+	ZFX::Shader shader("../../../Shaders/basicShader");
 
 	bool exitRequested = false;
 	SDL_Event e;
@@ -38,6 +41,9 @@ void mainLoop(ZFX::Window& window)
 		}
 
 		window.clear(0.0f, 0.0f, 0.0f, 1.0f);
+
+		shader.bind();
+		shader.update();
 
 		triangle->draw();
 

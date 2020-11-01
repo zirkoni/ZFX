@@ -20,16 +20,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Demo\Demo.cpp" />
-    <ClCompile Include="..\..\Source\2D\Color\Mesh.cpp" />
-    <ClCompile Include="..\..\Source\2D\Color\Vertex.cpp" />
-    <ClCompile Include="..\..\Source\Common\Window.cpp" />
+    <ClCompile Include="..\..\ZFX\src\Mesh.cpp" />
+    <ClCompile Include="..\..\ZFX\src\Shader.cpp" />
+    <ClCompile Include="..\..\ZFX\src\Vertex.cpp" />
+    <ClCompile Include="..\..\ZFX\src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\2D\Color\Mesh.h" />
-    <ClInclude Include="..\..\Source\2D\Color\Vertex.h" />
-    <ClInclude Include="..\..\Source\Common\Window.h" />
-    <ClInclude Include="..\..\Source\Common\zfxdefs.h" />
-    <ClInclude Include="..\..\Source\ZFX.h" />
+    <ClInclude Include="..\..\ZFX\include\Mesh.h" />
+    <ClInclude Include="..\..\ZFX\include\Shader.h" />
+    <ClInclude Include="..\..\ZFX\include\Vertex.h" />
+    <ClInclude Include="..\..\ZFX\include\Window.h" />
+    <ClInclude Include="..\..\ZFX\include\zfxdefs.h" />
+    <ClInclude Include="..\..\ZFX\ZFX.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -89,7 +91,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\dev\ZFX\Source\Common;D:\dev\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\dev\ZFX\ZFX;D:\dev\ZFX\ZFX\include;D:\dev\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -102,7 +104,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\dev\ZFX\Source\Common;D:\dev\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\dev\ZFX\ZFX;D:\dev\ZFX\ZFX\include;D:\dev\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -119,7 +121,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\dev\ZFX\Source\Common;D:\dev\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\dev\ZFX\ZFX;D:\dev\ZFX\ZFX\include;D:\dev\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,7 +138,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\dev\ZFX\Source\Common;D:\dev\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\dev\ZFX\ZFX;D:\dev\ZFX\ZFX\include;D:\dev\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

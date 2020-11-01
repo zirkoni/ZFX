@@ -1,7 +1,7 @@
 #include "Mesh.h"
 #include "zfxdefs.h"
 
-ZFX_2D::Color::Mesh::Mesh(Vertex* vertices, const uint32_t numVertices, uint32_t* indeces, const uint32_t numIndeces):
+ZFX::Mesh::Mesh(Vertex* vertices, const uint32_t numVertices, uint32_t* indeces, const uint32_t numIndeces):
 	m_numIndeces{ numIndeces }
 {
 	glGenVertexArrays(1, &m_vertexArrayObject);
@@ -23,13 +23,13 @@ ZFX_2D::Color::Mesh::Mesh(Vertex* vertices, const uint32_t numVertices, uint32_t
 	glBindVertexArray(0);
 }
 
-ZFX_2D::Color::Mesh::~Mesh()
+ZFX::Mesh::~Mesh()
 {
 	glDeleteBuffers(NUM_BUFFERS, m_vertexArrayBuffers);
 	glDeleteVertexArrays(1, &m_vertexArrayObject);
 }
 
-void ZFX_2D::Color::Mesh::draw()
+void ZFX::Mesh::draw()
 {
 	glBindVertexArray(m_vertexArrayObject);
 
