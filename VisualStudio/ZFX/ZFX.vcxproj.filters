@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="2D">
+      <UniqueIdentifier>{a2190d3c-09db-4693-b7bf-78d92a7704e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2D\Color">
+      <UniqueIdentifier>{df1f5149-dceb-4783-b1c8-970f9c7c04b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{f35bf2f5-8fc8-4d36-b509-927cdbe2187f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demo">
+      <UniqueIdentifier>{6e484ddd-80d0-4d68-8cf3-4e333147442a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\2D\Color\Mesh.cpp">
+      <Filter>2D\Color</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\2D\Color\Vertex.cpp">
+      <Filter>2D\Color</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Common\Window.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Demo\Demo.cpp">
+      <Filter>Demo</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\2D\Color\Mesh.h">
+      <Filter>2D\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\2D\Color\Vertex.h">
+      <Filter>2D\Color</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Common\Window.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Common\zfxdefs.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ZFX.h" />
+  </ItemGroup>
+</Project>
