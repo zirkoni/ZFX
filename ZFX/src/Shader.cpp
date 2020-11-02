@@ -15,7 +15,7 @@ ZFX::Shader::Shader(const std::string& filename) : m_program{ 0 }
 	}
 
 	glBindAttribLocation(m_program, POSITION_VA, "positionIn");
-	glBindAttribLocation(m_program, TEXTURE_VA, "texCoordIn");
+	glBindAttribLocation(m_program, COLOUR_VA, "colourIn");
 
 	glLinkProgram(m_program);
 	checkError(m_program, GL_LINK_STATUS, true, "Error: glLinkProgram failed: ");

@@ -16,6 +16,9 @@ ZFX::Mesh::Mesh(Vertex* vertices, const uint32_t numVertices, uint32_t* indeces,
 	glEnableVertexAttribArray(POSITION_VA);
 	glVertexAttribPointer(POSITION_VA, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, position));
 
+	glEnableVertexAttribArray(COLOUR_VA);
+	glVertexAttribPointer(COLOUR_VA, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, colour));
+
 	// indeces
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vertexArrayBuffers[INDEX_BUFFER]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndeces * sizeof(indeces[0]), indeces, GL_STATIC_DRAW);
@@ -34,7 +37,7 @@ void ZFX::Mesh::draw()
 	glBindVertexArray(m_vertexArrayObject);
 
 	//glDrawArrays(GL_LINE_LOOP, 0, m_numIndeces); // wireframe
-	//glDrawArrays(GL_TRIANGLES, 0, m_numIndeces); // fill with color
+	//glDrawArrays(GL_TRIANGLES, 0, m_numIndeces); // fill with colour
 	glDrawElements(GL_TRIANGLES, m_numIndeces, GL_UNSIGNED_INT, 0); // with indeces
 
 	glBindVertexArray(0);

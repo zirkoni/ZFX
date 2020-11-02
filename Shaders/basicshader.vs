@@ -1,11 +1,13 @@
 #version 330
 
-attribute vec3 positionIn;
+in vec3 positionIn;
+in vec4 colourIn;
 
-varying vec3 positionOut;
+out vec4 colour;
 
 void main()
 {
-	positionOut = positionIn;
 	gl_Position = vec4(positionIn, 1.0);
+	colour = colourIn;
 }
+

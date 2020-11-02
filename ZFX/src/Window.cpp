@@ -38,6 +38,11 @@ ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::stri
 	if (GLEW_OK != glewInit())
 	{
 		throw std::runtime_error{ "glewInit() failed" };
+	} else
+	{
+		// Enable transparency (alpha channel)
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 }
 

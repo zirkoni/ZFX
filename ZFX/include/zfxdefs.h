@@ -3,7 +3,8 @@
 enum EVertexAttribute
 {
 	POSITION_VA,
-	TEXTURE_VA,
+	COLOUR_VA,
+	//TEXTURE_VA,
 
 	NUM_ATTRIBUTES
 };
