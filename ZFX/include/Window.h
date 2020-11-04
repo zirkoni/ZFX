@@ -14,6 +14,7 @@ namespace ZFX
 
 		void clear(float r, float g, float b, float a);
 		void update();
+		const float aspectRatio() const { return (float)(m_width / m_height); }
 
 	private:
 		SDL_Window* m_window;

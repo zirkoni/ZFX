@@ -1,4 +1,6 @@
 #include "Shader.h"
+#include "Camera.h"
+#include "Transform.h"
 #include <stdexcept>
 #include <fstream>
 
@@ -42,9 +44,10 @@ void ZFX::Shader::bind()
 	glUseProgram(m_program);
 }
 
-void ZFX::Shader::update()
+void ZFX::Shader::update(const Transform& transform, const Camera& camera)
 {
-	// TODO: MVP + Camera
+	glm::mat4 model = camera.getViewProjection() * transform.getModel();
+	glUniformMatrix4fv(m_uniforms[TRANSFORM_U], 1, GL_FALSE, &model[0][0]);
 }
 
 void ZFX::Shader::checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg)

@@ -3,8 +3,14 @@
 #include <string>
 #include <glew/include/GL/glew.h>
 
+
+
 namespace ZFX
 {
+	class Camera;
+	class Transform;
+
+
 	class Shader
 	{
 	public:
@@ -14,7 +20,7 @@ namespace ZFX
 		~Shader();
 
 		void bind();
-		void update();
+		void update(const Transform& transform, const Camera& camera);
 
 	protected:
 		static void checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg);

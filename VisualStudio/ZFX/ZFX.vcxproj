@@ -26,8 +26,10 @@
     <ClCompile Include="..\..\ZFX\src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\ZFX\include\Camera.h" />
     <ClInclude Include="..\..\ZFX\include\Mesh.h" />
     <ClInclude Include="..\..\ZFX\include\Shader.h" />
+    <ClInclude Include="..\..\ZFX\include\Transform.h" />
     <ClInclude Include="..\..\ZFX\include\Vertex.h" />
     <ClInclude Include="..\..\ZFX\include\Window.h" />
     <ClInclude Include="..\..\ZFX\include\zfxdefs.h" />

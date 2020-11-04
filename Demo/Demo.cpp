@@ -2,11 +2,29 @@
 #include <memory>
 #include <iostream>
 
-#define ARRAY_SIZE(A) (sizeof(A) / sizeof(A[0]))
 
-
-std::unique_ptr<ZFX::Mesh> addTriangle()
+struct BasicShape
 {
+	BasicShape(ZFX::Vertex* vertices, const uint32_t numVertices, uint32_t* indeces, const uint32_t numIndeces) :
+		mesh{ vertices, numVertices, indeces, numIndeces },
+		shader{ "../../../Shaders/basicShader" },
+		transform{} {}
+
+	void draw(const ZFX::Camera& camera)
+	{
+		shader.bind();
+		shader.update(transform, camera);
+		mesh.draw();
+	}
+
+	ZFX::Mesh mesh;
+	ZFX::Shader shader;
+	ZFX::Transform transform;
+};
+
+std::unique_ptr<BasicShape> addTriangle()
+{
+	/* The 3 corners of a triangle */
 	ZFX::Vertex vertices[] =
 	{
 		/*                        x       y                red  green  blue  alpha   */
@@ -15,23 +33,25 @@ std::unique_ptr<ZFX::Mesh> addTriangle()
 		ZFX::Vertex{ glm::vec2{  0.5f, -0.5f }, glm::vec4{ 0.0f, 0.0f, 1.0f, 1.0f } }
 	};
 
-	unsigned int indeces[] =
+	/* For a triangle these don't really matter. Check out square! */
+	uint32_t indeces[] =
 	{
 		0, 1, 2
 	};
 
-	return std::make_unique<ZFX::Mesh>(vertices, ARRAY_SIZE(vertices), indeces, ARRAY_SIZE(indeces));
+	return std::make_unique<BasicShape>(vertices, 3, indeces, 3);
 }
 
 void mainLoop(ZFX::Window& window)
 {
 	auto triangle = addTriangle();
 
-	ZFX::Shader shader("../../../Shaders/basicShader");
+	ZFX::Camera camera{ glm::vec3{0.0f, 0.0f, 3.0f}, window.aspectRatio() };
 
 	bool exitRequested = false;
 	SDL_Event e;
 
+	float counter = 0.0f;
 	while (!exitRequested)
 	{
 		while (SDL_PollEvent(&e))
@@ -44,13 +64,12 @@ void mainLoop(ZFX::Window& window)
 
 		window.clear(0.0f, 0.0f, 0.0f, 1.0f);
 
-		shader.bind();
-		shader.update();
-
-		triangle->draw();
+		triangle->transform.position().x = sin(counter);
+		triangle->draw(camera);
 
 		window.update();
 
+		counter += 0.001f;
 		SDL_Delay(1);
 	}
 }

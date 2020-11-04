@@ -50,5 +50,11 @@
     <ClInclude Include="..\..\ZFX\include\Shader.h">
       <Filter>ZFX\include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\ZFX\include\Camera.h">
+      <Filter>ZFX\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZFX\include\Transform.h">
+      <Filter>ZFX\include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

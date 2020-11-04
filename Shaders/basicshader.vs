@@ -5,9 +5,11 @@ in vec4 colourIn;
 
 out vec4 colour;
 
+uniform mat4 transform;
+
 void main()
 {
-	gl_Position = vec4(positionIn, 1.0);
+	gl_Position = transform * vec4(positionIn, 1.0);
 	colour = colourIn;
 }
 
