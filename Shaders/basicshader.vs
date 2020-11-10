@@ -1,7 +1,7 @@
 #version 330
 
-in vec3 positionIn;
-in vec4 colourIn;
+layout (location = 0) in vec3 positionIn;
+layout (location = 1) in vec4 colourIn;
 
 out vec4 colour;
 

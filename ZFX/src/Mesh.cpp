@@ -35,10 +35,6 @@ ZFX::Mesh::~Mesh()
 void ZFX::Mesh::draw()
 {
 	glBindVertexArray(m_vertexArrayObject);
-
-	//glDrawArrays(GL_LINE_LOOP, 0, m_numIndeces); // wireframe
-	//glDrawArrays(GL_TRIANGLES, 0, m_numIndeces); // fill with colour
-	glDrawElements(GL_TRIANGLES, m_numIndeces, GL_UNSIGNED_INT, 0); // with indeces
-
+	glDrawElements(GL_TRIANGLES, m_numIndeces, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }

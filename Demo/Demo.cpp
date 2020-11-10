@@ -51,6 +51,7 @@ void mainLoop(ZFX::Window& window)
 	bool exitRequested = false;
 	SDL_Event e;
 
+	bool wireframeOn = false;
 	float counter = 0.0f;
 	while (!exitRequested)
 	{
@@ -60,6 +61,23 @@ void mainLoop(ZFX::Window& window)
 			{
 				exitRequested = true;
 			}
+			else if (e.type == SDL_KEYDOWN)
+			{
+				/* Toggle wireframe mode on/off by pressing space */
+				if (e.key.keysym.scancode == SDL_SCANCODE_SPACE)
+				{
+					wireframeOn = !wireframeOn;
+				}
+			}
+		}
+
+		if (wireframeOn)
+		{
+			ZFX::wireframeMode();
+		}
+		else
+		{
+			ZFX::filledMode();
 		}
 
 		window.clear(0.0f, 0.0f, 0.0f, 1.0f);
