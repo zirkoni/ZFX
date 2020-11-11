@@ -1,12 +1,11 @@
 #pragma once
+#define USE_SDL2_IMAGE
 
 enum EVertexAttribute
 {
 	POSITION_VA,
 	COLOUR_VA,
-	//TEXTURE_VA,
-
-	NUM_ATTRIBUTES
+	TEXTURE_VA
 };
 
 enum EUniforms

@@ -4,31 +4,11 @@
 #include <stdexcept>
 #include <fstream>
 
-ZFX::Shader::Shader(const std::string& filename) : m_program{ 0 }
+ZFX::ShaderBase::ShaderBase() : m_program{ 0 }
 {
-	m_program = glCreateProgram();
-
-	m_shaders[VERTEX_SHADER] = create(load(filename + ".vs"), GL_VERTEX_SHADER);
-	m_shaders[FRAGMENT_SHADER] = create(load(filename + ".fs"), GL_FRAGMENT_SHADER);
-
-	for (unsigned int i = 0; i < NUM_SHADERS; ++i)
-	{
-		glAttachShader(m_program, m_shaders[i]);
-	}
-
-	glBindAttribLocation(m_program, POSITION_VA, "positionIn");
-	glBindAttribLocation(m_program, COLOUR_VA, "colourIn");
-
-	glLinkProgram(m_program);
-	checkError(m_program, GL_LINK_STATUS, true, "Error: glLinkProgram failed: ");
-
-	glValidateProgram(m_program);
-	checkError(m_program, GL_VALIDATE_STATUS, true, "Error: glValidateProgram failed: ");
-
-	m_uniforms[TRANSFORM_U] = glGetUniformLocation(m_program, "transform");
 }
 
-ZFX::Shader::~Shader()
+ZFX::ShaderBase::~ShaderBase()
 {
 	for (uint32_t i = 0; i < NUM_SHADERS; i++)
 	{
@@ -39,18 +19,42 @@ ZFX::Shader::~Shader()
 	glDeleteProgram(m_program);
 }
 
-void ZFX::Shader::bind()
+void ZFX::ShaderBase::createAndAttach(const std::string& filename)
+{
+	m_program = glCreateProgram();
+
+	m_shaders[VERTEX_SHADER] = create(load(filename + ".vs"), GL_VERTEX_SHADER);
+	m_shaders[FRAGMENT_SHADER] = create(load(filename + ".fs"), GL_FRAGMENT_SHADER);
+
+	for (unsigned int i = 0; i < NUM_SHADERS; ++i)
+	{
+		glAttachShader(m_program, m_shaders[i]);
+	}
+}
+
+void ZFX::ShaderBase::compileAndSetUniforms()
+{
+	glLinkProgram(m_program);
+	checkError(m_program, GL_LINK_STATUS, true, "glLinkProgram failed: ");
+
+	glValidateProgram(m_program);
+	checkError(m_program, GL_VALIDATE_STATUS, true, "glValidateProgram failed: ");
+
+	m_uniforms[TRANSFORM_U] = glGetUniformLocation(m_program, "transform");
+}
+
+void ZFX::ShaderBase::bind()
 {
 	glUseProgram(m_program);
 }
 
-void ZFX::Shader::update(const Transform& transform, const Camera& camera)
+void ZFX::ShaderBase::update(const Transform& transform, const Camera& camera)
 {
 	glm::mat4 model = camera.getViewProjection() * transform.getModel();
 	glUniformMatrix4fv(m_uniforms[TRANSFORM_U], 1, GL_FALSE, &model[0][0]);
 }
 
-void ZFX::Shader::checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg)
+void ZFX::ShaderBase::checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg)
 {
 	GLint success = 0;
 	GLchar error[1024] = { 0 };
@@ -77,7 +81,7 @@ void ZFX::Shader::checkError(GLuint shader, GLuint flag, bool isProgram, const s
 	}
 }
 
-std::string ZFX::Shader::load(const std::string& fileName)
+std::string ZFX::ShaderBase::load(const std::string& fileName)
 {
 	std::ifstream file(fileName.c_str());
 
@@ -93,19 +97,19 @@ std::string ZFX::Shader::load(const std::string& fileName)
 		file.close();
 	} else
 	{
-		throw std::runtime_error{ "Error: Unable to load shader: " + fileName };
+		throw std::runtime_error{ "Unable to load shader: " + fileName };
 	}
 
 	return output;
 }
 
-GLuint ZFX::Shader::create(const std::string& text, GLenum shaderType)
+GLuint ZFX::ShaderBase::create(const std::string& text, GLenum shaderType)
 {
 	GLuint shader = glCreateShader(shaderType);
 
 	if (0 == shader)
 	{
-		throw std::runtime_error{ "Error: glCreateShader failed, shader type " + shaderType };
+		throw std::runtime_error{ "glCreateShader failed, shader type " + shaderType };
 	} else
 	{
 		const GLchar* p[1];
@@ -120,4 +124,23 @@ GLuint ZFX::Shader::create(const std::string& text, GLenum shaderType)
 	}
 
 	return shader;
+}
+
+
+ZFX::Shader::Shader(const std::string& filename): ShaderBase{}
+{
+	createAndAttach(filename);
+	glBindAttribLocation(m_program, POSITION_VA, "positionIn");
+	glBindAttribLocation(m_program, COLOUR_VA, "colourIn");
+	compileAndSetUniforms();
+}
+
+
+ZFX::ShaderTex::ShaderTex(const std::string& filename) : ShaderBase{}
+{
+	createAndAttach(filename);
+	glBindAttribLocation(m_program, POSITION_VA, "positionIn");
+	glBindAttribLocation(m_program, COLOUR_VA, "colourIn");
+	glBindAttribLocation(m_program, COLOUR_VA, "texCoordIn");
+	compileAndSetUniforms();
 }

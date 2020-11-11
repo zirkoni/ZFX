@@ -1,9 +1,10 @@
 #pragma once
-#include <glm/glm/glm.hpp>
+#include <glm/glm.hpp>
 
 
 namespace ZFX
 {
+	/* Basic vertex */
 	struct Vertex
 	{
 		/* 2D constructor (z = 0.0) */
@@ -18,6 +19,16 @@ namespace ZFX
 		glm::vec3 position;
 
 		glm::vec4 colour;
+	};
+
+
+	/* Vertex with texture coordinate */
+	struct VertexTex : public Vertex
+	{
+		VertexTex(const glm::vec2& pos, const glm::vec4& col, const glm::vec2& tex);
+		VertexTex(const glm::vec3& pos, const glm::vec4& col, const glm::vec2& tex);
+
+		glm::vec2 texCoord;
 	};
 }
 

@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <SDL2\include\SDL.h>
+#include <SDL.h>
 
 namespace ZFX
 {

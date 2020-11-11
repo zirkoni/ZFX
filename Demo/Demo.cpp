@@ -22,6 +22,28 @@ struct BasicShape
 	ZFX::Transform transform;
 };
 
+struct TexturedShape
+{
+	TexturedShape(ZFX::VertexTex* vertices, const uint32_t numVertices, uint32_t* indeces, const uint32_t numIndeces) :
+		mesh{ vertices, numVertices, indeces, numIndeces },
+		shader{ "../../../Shaders/basicShaderTexture" },
+		transform{},
+		texture{ "../../../Demo/Textures/texture.png" } {}
+
+	void draw(const ZFX::Camera& camera)
+	{
+		shader.bind();
+		shader.update(transform, camera);
+		texture.bind(0);
+		mesh.draw();
+	}
+
+	ZFX::MeshTex mesh;
+	ZFX::ShaderTex shader;
+	ZFX::Transform transform;
+	ZFX::Texture texture;
+};
+
 std::unique_ptr<BasicShape> addTriangle()
 {
 	/* The 3 corners of a triangle */
@@ -42,9 +64,31 @@ std::unique_ptr<BasicShape> addTriangle()
 	return std::make_unique<BasicShape>(vertices, 3, indeces, 3);
 }
 
+std::unique_ptr<TexturedShape> addTexturedTriangle()
+{
+	/* The 3 corners of a triangle */
+	/* Texture coordinates have (0, 0) at the lower left corder and (1, 1) at the upper right corner */
+	ZFX::VertexTex vertices[] =
+	{
+		/*                        x       y                red  green  blue  alpha         texture coordinates */
+		ZFX::VertexTex{ glm::vec2{ -0.5f, -0.5f }, glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.0f, 0.0f } },
+		ZFX::VertexTex{ glm::vec2{  0.0f,  0.5f }, glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.5f, 1.0f } },
+		ZFX::VertexTex{ glm::vec2{  0.5f, -0.5f }, glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f }, glm::vec2{ 1.0f, 0.0f } }
+	};
+
+	/* For a triangle these don't really matter. Check out square! */
+	uint32_t indeces[] =
+	{
+		0, 1, 2
+	};
+
+	return std::make_unique<TexturedShape>(vertices, 3, indeces, 3);
+}
+
 void mainLoop(ZFX::Window& window)
 {
 	auto triangle = addTriangle();
+	auto texturedTriangle = addTexturedTriangle();
 
 	ZFX::Camera camera{ glm::vec3{0.0f, 0.0f, 3.0f}, window.aspectRatio() };
 
@@ -84,6 +128,9 @@ void mainLoop(ZFX::Window& window)
 
 		triangle->transform.position().x = sin(counter);
 		triangle->draw(camera);
+
+		texturedTriangle->transform.position().y = sin(counter);
+		texturedTriangle->draw(camera);
 
 		window.update();
 

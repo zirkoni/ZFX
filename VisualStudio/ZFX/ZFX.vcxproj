@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\Demo\Demo.cpp" />
     <ClCompile Include="..\..\ZFX\src\Mesh.cpp" />
     <ClCompile Include="..\..\ZFX\src\Shader.cpp" />
+    <ClCompile Include="..\..\ZFX\src\Texture.cpp" />
     <ClCompile Include="..\..\ZFX\src\Vertex.cpp" />
     <ClCompile Include="..\..\ZFX\src\Window.cpp" />
   </ItemGroup>
@@ -29,6 +30,8 @@
     <ClInclude Include="..\..\ZFX\include\Camera.h" />
     <ClInclude Include="..\..\ZFX\include\Mesh.h" />
     <ClInclude Include="..\..\ZFX\include\Shader.h" />
+    <ClInclude Include="..\..\ZFX\include\stb_image.h" />
+    <ClInclude Include="..\..\ZFX\include\Texture.h" />
     <ClInclude Include="..\..\ZFX\include\Transform.h" />
     <ClInclude Include="..\..\ZFX\include\Vertex.h" />
     <ClInclude Include="..\..\ZFX\include\Window.h" />
@@ -106,13 +109,13 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\dev\ZFX\ZFX;D:\dev\ZFX\ZFX\include;D:\dev\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\dev\ZFX\ZFX;D:\dev\ZFX\ZFX\include;D:\dev\libs\SDL2_image\include;D:\dev\libs\SDL2\include;D:\dev\libs\glew\include;D:\dev\libs\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>D:\dev\libs\glew\lib\Release\x64;D:\dev\libs\SDL2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;SDL2.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\dev\libs\SDL2_image\lib\x64;D:\dev\libs\glew\lib\Release\x64;D:\dev\libs\SDL2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2main.lib;SDL2.lib;SDL2_image.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

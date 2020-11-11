@@ -1,5 +1,7 @@
 #include "Window.h"
-#include <glew\include\GL\glew.h>
+#include "zfxdefs.h"
+#include <GL/glew.h>
+#include <SDL_image.h>
 #include <iostream>
 #include <stdexcept>
 
@@ -10,7 +12,21 @@ ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::stri
 	m_window{ nullptr },
 	m_glContext{ nullptr }
 {
-	SDL_Init(SDL_INIT_VIDEO);
+	if (SDL_Init(SDL_INIT_VIDEO) != 0)
+	{
+		std::string msg = "SDL_Init failed: ";
+		msg += std::string{ SDL_GetError() };
+		throw std::runtime_error{ msg };
+	}
+
+#ifdef USE_SDL2_IMAGE
+	if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG)
+	{
+		std::string msg = "IMG_Init failed: ";
+		msg += std::string{ IMG_GetError() };
+		throw std::runtime_error{ msg };
+	}
+#endif
 
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
