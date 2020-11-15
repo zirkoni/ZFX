@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Demo\Demo.cpp">
-      <Filter>Demo</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ZFX\src\Mesh.cpp">
       <Filter>ZFX\src</Filter>
     </ClCompile>
@@ -32,6 +29,12 @@
     </ClCompile>
     <ClCompile Include="..\..\ZFX\src\Texture.cpp">
       <Filter>ZFX\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Demo\main.cpp">
+      <Filter>Demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Demo\Demo.hpp">
+      <Filter>Demo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +67,12 @@
     </ClInclude>
     <ClInclude Include="..\..\ZFX\include\stb_image.h">
       <Filter>ZFX\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Demo\Demo1_Triangles.hpp">
+      <Filter>Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Demo\Demo2_Square.hpp">
+      <Filter>Demo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

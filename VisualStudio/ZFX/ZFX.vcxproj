@@ -19,7 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Demo\Demo.cpp" />
+    <ClCompile Include="..\..\Demo\Demo.hpp" />
+    <ClCompile Include="..\..\Demo\main.cpp" />
     <ClCompile Include="..\..\ZFX\src\Mesh.cpp" />
     <ClCompile Include="..\..\ZFX\src\Shader.cpp" />
     <ClCompile Include="..\..\ZFX\src\Texture.cpp" />
@@ -27,6 +28,8 @@
     <ClCompile Include="..\..\ZFX\src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Demo\Demo1_Triangles.hpp" />
+    <ClInclude Include="..\..\Demo\Demo2_Square.hpp" />
     <ClInclude Include="..\..\ZFX\include\Camera.h" />
     <ClInclude Include="..\..\ZFX\include\Mesh.h" />
     <ClInclude Include="..\..\ZFX\include\Shader.h" />
@@ -110,7 +113,8 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\dev\ZFX\ZFX;D:\dev\ZFX\ZFX\include;D:\dev\libs\SDL2_image\include;D:\dev\libs\SDL2\include;D:\dev\libs\glew\include;D:\dev\libs\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,6 +148,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\dev\ZFX\ZFX;D:\dev\ZFX\ZFX\include;D:\dev\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
