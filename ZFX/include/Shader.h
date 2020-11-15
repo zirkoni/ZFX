@@ -11,13 +11,13 @@ namespace ZFX
 	class Transform;
 
 
-	class ShaderBase
+	class Shader
 	{
 	public:
-		ShaderBase();
-		ShaderBase(const ShaderBase& other) = delete;
-		ShaderBase& operator=(const ShaderBase& other) = delete;
-		virtual ~ShaderBase();
+		Shader(const std::string& filename, const bool useTexture = false);
+		Shader(const Shader& other) = delete;
+		Shader& operator=(const Shader& other) = delete;
+		virtual ~Shader();
 
 		/* Use this shader */
 		void bind();
@@ -42,29 +42,10 @@ namespace ZFX
 			NUM_SHADERS
 		};
 
+		bool m_useTexture;
 		GLuint m_program;
 		GLuint m_shaders[NUM_SHADERS];
 		GLuint m_uniforms[NUM_UNIFORMS];
-	};
-
-
-	/* Basic shader */
-	class Shader: public ShaderBase
-	{
-	public:
-		Shader(const std::string& filename);
-		Shader(const Shader& other) = delete;
-		Shader& operator=(const Shader& other) = delete;
-	};
-
-
-	/* Shader with textures */
-	class ShaderTex : public ShaderBase
-	{
-	public:
-		ShaderTex(const std::string& filename);
-		ShaderTex(const ShaderTex& other) = delete;
-		ShaderTex& operator=(const ShaderTex& other) = delete;
 	};
 }
 

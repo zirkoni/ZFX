@@ -4,11 +4,22 @@
 #include <stdexcept>
 #include <fstream>
 
-ZFX::ShaderBase::ShaderBase() : m_program{ 0 }
+ZFX::Shader::Shader(const std::string& filename, const bool useTexture):
+	m_program{ 0 }, m_useTexture{ useTexture }
 {
+	createAndAttach(filename);
+	glBindAttribLocation(m_program, POSITION_VA, "positionIn");
+	glBindAttribLocation(m_program, COLOUR_VA, "colourIn");
+
+	if (m_useTexture)
+	{
+		glBindAttribLocation(m_program, TEXTURE_VA, "texCoordIn");
+	}
+	
+	compileAndSetUniforms();
 }
 
-ZFX::ShaderBase::~ShaderBase()
+ZFX::Shader::~Shader()
 {
 	for (uint32_t i = 0; i < NUM_SHADERS; i++)
 	{
@@ -19,7 +30,7 @@ ZFX::ShaderBase::~ShaderBase()
 	glDeleteProgram(m_program);
 }
 
-void ZFX::ShaderBase::createAndAttach(const std::string& filename)
+void ZFX::Shader::createAndAttach(const std::string& filename)
 {
 	m_program = glCreateProgram();
 
@@ -32,7 +43,7 @@ void ZFX::ShaderBase::createAndAttach(const std::string& filename)
 	}
 }
 
-void ZFX::ShaderBase::compileAndSetUniforms()
+void ZFX::Shader::compileAndSetUniforms()
 {
 	glLinkProgram(m_program);
 	checkError(m_program, GL_LINK_STATUS, true, "glLinkProgram failed: ");
@@ -43,18 +54,18 @@ void ZFX::ShaderBase::compileAndSetUniforms()
 	m_uniforms[TRANSFORM_U] = glGetUniformLocation(m_program, "transform");
 }
 
-void ZFX::ShaderBase::bind()
+void ZFX::Shader::bind()
 {
 	glUseProgram(m_program);
 }
 
-void ZFX::ShaderBase::update(const Transform& transform, const Camera& camera)
+void ZFX::Shader::update(const Transform& transform, const Camera& camera)
 {
 	glm::mat4 model = camera.getViewProjection() * transform.getModel();
 	glUniformMatrix4fv(m_uniforms[TRANSFORM_U], 1, GL_FALSE, &model[0][0]);
 }
 
-void ZFX::ShaderBase::checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg)
+void ZFX::Shader::checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg)
 {
 	GLint success = 0;
 	GLchar error[1024] = { 0 };
@@ -81,7 +92,7 @@ void ZFX::ShaderBase::checkError(GLuint shader, GLuint flag, bool isProgram, con
 	}
 }
 
-std::string ZFX::ShaderBase::load(const std::string& fileName)
+std::string ZFX::Shader::load(const std::string& fileName)
 {
 	std::ifstream file(fileName.c_str());
 
@@ -103,7 +114,7 @@ std::string ZFX::ShaderBase::load(const std::string& fileName)
 	return output;
 }
 
-GLuint ZFX::ShaderBase::create(const std::string& text, GLenum shaderType)
+GLuint ZFX::Shader::create(const std::string& text, GLenum shaderType)
 {
 	GLuint shader = glCreateShader(shaderType);
 
@@ -124,23 +135,4 @@ GLuint ZFX::ShaderBase::create(const std::string& text, GLenum shaderType)
 	}
 
 	return shader;
-}
-
-
-ZFX::Shader::Shader(const std::string& filename): ShaderBase{}
-{
-	createAndAttach(filename);
-	glBindAttribLocation(m_program, POSITION_VA, "positionIn");
-	glBindAttribLocation(m_program, COLOUR_VA, "colourIn");
-	compileAndSetUniforms();
-}
-
-
-ZFX::ShaderTex::ShaderTex(const std::string& filename) : ShaderBase{}
-{
-	createAndAttach(filename);
-	glBindAttribLocation(m_program, POSITION_VA, "positionIn");
-	glBindAttribLocation(m_program, COLOUR_VA, "colourIn");
-	glBindAttribLocation(m_program, COLOUR_VA, "texCoordIn");
-	compileAndSetUniforms();
 }

@@ -24,9 +24,9 @@ struct BasicShape
 
 struct TexturedShape
 {
-	TexturedShape(ZFX::VertexTex* vertices, const uint32_t numVertices, uint32_t* indeces, const uint32_t numIndeces) :
+	TexturedShape(ZFX::Vertex* vertices, const uint32_t numVertices, uint32_t* indeces, const uint32_t numIndeces) :
 		mesh{ vertices, numVertices, indeces, numIndeces },
-		shader{ "../../../Shaders/basicShaderTexture" },
+		shader{ "../../../Shaders/basicShaderTexture", true },
 		transform{},
 		texture{ "../../../Demo/Textures/texture.png" } {}
 
@@ -38,8 +38,8 @@ struct TexturedShape
 		mesh.draw();
 	}
 
-	ZFX::MeshTex mesh;
-	ZFX::ShaderTex shader;
+	ZFX::Mesh mesh;
+	ZFX::Shader shader;
 	ZFX::Transform transform;
 	ZFX::Texture texture;
 };
@@ -68,12 +68,12 @@ std::unique_ptr<TexturedShape> addTexturedTriangle()
 {
 	/* The 3 corners of a triangle */
 	/* Texture coordinates have (0, 0) at the lower left corder and (1, 1) at the upper right corner */
-	ZFX::VertexTex vertices[] =
+	ZFX::Vertex vertices[] =
 	{
 		/*                        x       y                red  green  blue  alpha         texture coordinates */
-		ZFX::VertexTex{ glm::vec2{ -0.5f, -0.5f }, glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.0f, 0.0f } },
-		ZFX::VertexTex{ glm::vec2{  0.0f,  0.5f }, glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.5f, 1.0f } },
-		ZFX::VertexTex{ glm::vec2{  0.5f, -0.5f }, glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f }, glm::vec2{ 1.0f, 0.0f } }
+		ZFX::Vertex{ glm::vec2{ -0.5f, -0.5f }, glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.0f, 0.0f } },
+		ZFX::Vertex{ glm::vec2{  0.0f,  0.5f }, glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.5f, 1.0f } },
+		ZFX::Vertex{ glm::vec2{  0.5f, -0.5f }, glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f }, glm::vec2{ 1.0f, 0.0f } }
 	};
 
 	/* For a triangle these don't really matter. Check out square! */
