@@ -1,3 +1,4 @@
+#pragma once
 #include "Demo.hpp"
 
 
@@ -23,7 +24,8 @@ public:
 private:
 	std::unique_ptr<BasicShape> addTriangle()
 	{
-		/* The 3 corners of a triangle */
+		/* The 3 corners of a triangle (clockwise) */
+#if 1
 		ZFX::Vertex vertices[] =
 		{
 			/*                        x       y                red  green  blue  alpha   */
@@ -31,6 +33,16 @@ private:
 			ZFX::Vertex{ glm::vec2{  0.0f,  0.5f }, glm::vec4{ 0.0f, 1.0f, 0.0f, 0.5f } },
 			ZFX::Vertex{ glm::vec2{  0.5f, -0.5f }, glm::vec4{ 0.0f, 0.0f, 1.0f, 1.0f } }
 		};
+#else
+		/* Counter clockwise => Window.cpp sets clockwise winding => this triangle is not visible */
+		ZFX::Vertex vertices[] =
+		{
+			/*                        x       y                red  green  blue  alpha   */
+			ZFX::Vertex{ glm::vec2{ -0.5f, -0.5f }, glm::vec4{ 1.0f, 0.0f, 0.0f, 0.1f } },
+			ZFX::Vertex{ glm::vec2{  0.5f, -0.5f }, glm::vec4{ 0.0f, 0.0f, 1.0f, 1.0f } },
+			ZFX::Vertex{ glm::vec2{  0.0f,  0.5f }, glm::vec4{ 0.0f, 1.0f, 0.0f, 0.5f } }
+		};
+#endif
 
 		/* For a triangle these don't really matter. Check out square! */
 		uint32_t indeces[] =

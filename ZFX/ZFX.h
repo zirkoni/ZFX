@@ -5,6 +5,7 @@
 #include "Texture.h"
 #include "Camera.h"
 #include "Transform.h"
+#include "TextFreetype.h"
 #include <stdexcept>
 
 

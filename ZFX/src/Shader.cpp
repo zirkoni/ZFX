@@ -19,6 +19,14 @@ ZFX::Shader::Shader(const std::string& filename, const bool useTexture):
 	compileAndSetUniforms();
 }
 
+ZFX::Shader::Shader(const std::string& filename, ShaderType type):
+	m_program{ 0 }, m_useTexture{ false }
+{
+	createAndAttach(filename);
+	glBindAttribLocation(m_program, 0, "vertex");
+	compileAndSetUniforms();
+}
+
 ZFX::Shader::~Shader()
 {
 	for (uint32_t i = 0; i < NUM_SHADERS; i++)
@@ -63,6 +71,11 @@ void ZFX::Shader::update(const Transform& transform, const Camera& camera)
 {
 	glm::mat4 model = camera.getViewProjection() * transform.getModel();
 	glUniformMatrix4fv(m_uniforms[TRANSFORM_U], 1, GL_FALSE, &model[0][0]);
+}
+
+void ZFX::Shader::update(const glm::mat4& transform)
+{
+	glUniformMatrix4fv(m_uniforms[TRANSFORM_U], 1, GL_FALSE, &transform[0][0]);
 }
 
 void ZFX::Shader::checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg)

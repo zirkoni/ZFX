@@ -36,6 +36,9 @@
     <ClCompile Include="..\..\Demo\Demo.hpp">
       <Filter>Demo</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\ZFX\src\TextFreetype.cpp">
+      <Filter>ZFX\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ZFX\include\Mesh.h">
@@ -72,6 +75,12 @@
       <Filter>Demo</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Demo\Demo2_Square.hpp">
+      <Filter>Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZFX\include\TextFreetype.h">
+      <Filter>ZFX\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Demo\Demo3_Text_Freetype.hpp">
       <Filter>Demo</Filter>
     </ClInclude>
   </ItemGroup>

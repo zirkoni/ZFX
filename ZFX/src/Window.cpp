@@ -5,13 +5,16 @@
 #include <iostream>
 #include <stdexcept>
 
+uint32_t ZFX::Window::s_width = 0;
+uint32_t ZFX::Window::s_height = 0;
 
 ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::string& title):
-	m_width{ width },
-	m_height{ height },
 	m_window{ nullptr },
 	m_glContext{ nullptr }
 {
+	s_width = width;
+	s_height = height;
+
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
 		std::string msg = "SDL_Init failed: ";
@@ -37,7 +40,7 @@ ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::stri
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 	m_window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		m_width, m_height, SDL_WINDOW_OPENGL);
+		s_width, s_height, SDL_WINDOW_OPENGL);
 
 	if (nullptr == m_window)
 	{
@@ -56,6 +59,13 @@ ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::stri
 		throw std::runtime_error{ "glewInit() failed" };
 	} else
 	{
+		// for simple object these are enough
+		// Cull faces that are facing away from the camera
+		glEnable(GL_CULL_FACE);
+		glFrontFace(GL_CW); // Winding order of vertices is clockwise
+		glCullFace(GL_BACK); // We could also use the default winding (GL_CCW) and cull GL_FRONT
+		// (or really use CCW winding for vertices and cull GL_BACK)
+
 		// Enable transparency (alpha channel)
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

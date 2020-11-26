@@ -14,14 +14,17 @@ namespace ZFX
 
 		void clear(float r, float g, float b, float a);
 		void update();
-		const float aspectRatio() const { return ((float)m_width / m_height); }
+
+		static float aspectRatio() { return ((float)s_width / s_height); }
+		static uint32_t width()    { return s_width;  }
+		static uint32_t height()   { return s_height; }
 
 	private:
 		SDL_Window* m_window;
 		SDL_GLContext m_glContext;
 
-		uint32_t m_width;
-		uint32_t m_height;
+		static uint32_t s_width;
+		static uint32_t s_height;
 	};
 }
 

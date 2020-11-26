@@ -8,5 +8,5 @@ varying vec2 texCoord;
 
 void main()
 {
-    fragColorOut = texture2D(diffuse, texCoord) * colour;
+    fragColorOut = texture(diffuse, texCoord) * colour;
 }

@@ -2,7 +2,7 @@
 #include "zfxdefs.h"
 #include <string>
 #include <GL/glew.h>
-
+#include <glm/glm.hpp>
 
 
 namespace ZFX
@@ -24,14 +24,9 @@ namespace ZFX
 
 		/* Apply transformations */
 		void update(const Transform& transform, const Camera& camera);
+		void update(const glm::mat4& transform);
 
-	protected:
-		void createAndAttach(const std::string& filename);
-		void compileAndSetUniforms();
-
-		static void checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg);
-		static std::string load(const std::string& fileName);
-		static GLuint create(const std::string& text, GLenum shaderType);
+		GLuint programId() const { return m_program; }
 
 	protected:
 		enum
@@ -42,6 +37,20 @@ namespace ZFX
 			NUM_SHADERS
 		};
 
+		enum class ShaderType
+		{
+			Freetype
+		};
+
+		Shader(const std::string& filename, ShaderType type);
+		void createAndAttach(const std::string& filename);
+		void compileAndSetUniforms();
+
+		static void checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg);
+		static std::string load(const std::string& fileName);
+		static GLuint create(const std::string& text, GLenum shaderType);
+
+	protected:
 		bool m_useTexture;
 		GLuint m_program;
 		GLuint m_shaders[NUM_SHADERS];
