@@ -1,24 +1,44 @@
 #pragma once
 #include "Demo.hpp"
+#include <vector>
+
+#include <iostream>
 
 
 class Demo1 : public Demo
 {
+	static constexpr uint32_t NUM_TRIANGLES = 5;
+
 public:
 	Demo1(ZFX::Camera& camera) : Demo{ camera }
 	{
-		m_triangle = addTriangle();
+		for (uint32_t i = 0; i < NUM_TRIANGLES; ++i)
+		{
+			/* All objects should be usually created around the origin (0,0,0) */
+			auto triangle = addTriangle();
+
+			// Their positions are set with transform
+			triangle->transform.position().x -= ((float)i - (NUM_TRIANGLES - 1) / 2.0f) * 0.2f;
+
+			m_triangles.push_back(std::move(triangle));
+		}
+
 		m_texturedTriangle = addTexturedTriangle();
 	}
 
 	void draw() override
 	{
-		m_triangle->transform.position().x = sin(m_counter);
+		m_triangles.back()->transform.position().x = sin(m_counter);
 		m_texturedTriangle->transform.position().y = sin(m_counter);
 		m_counter += 0.001f;
 
-		m_triangle->draw(m_camera);
+		/* Draw opaque triangle 1st */
 		m_texturedTriangle->draw(m_camera);
+
+		for (const auto& t : m_triangles)
+		{
+			t->draw(m_camera);
+		}
 	}
 
 private:
@@ -76,6 +96,6 @@ private:
 
 private:
 	float m_counter;
-	std::unique_ptr<BasicShape> m_triangle;
+	std::vector<std::unique_ptr<BasicShape> > m_triangles;
 	std::unique_ptr<TexturedShape> m_texturedTriangle;
 };
