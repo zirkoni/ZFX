@@ -22,7 +22,7 @@ private:
 	std::unique_ptr<BasicShape> addSquare()
 	{
 		/* The 4 corners of a square, starting from left lower corner in clockwise order */
-		ZFX::Vertex vertices[] =
+		ZFX::Verteces vertices =
 		{
 			/*                        x       y                red  green  blue  alpha   */
 			ZFX::Vertex{ glm::vec2{ -0.5f, -0.5f }, glm::vec4{ 0.2f, 0.2f, 0.2f, 1.0f } },
@@ -32,13 +32,13 @@ private:
 		};
 
 		/* Now we use indeces to define our shape (square is made of 2 triangles that have 2 common verteces) */
-		uint32_t indeces[] =
+		ZFX::Indeces indeces =
 		{
 			0, 1, 2, // 1st triangle: (-0.5, -0.5), (-0.5, 0.5), (0.5, 0.5)
 			0, 2, 3  // 2nd triangle: (-0.5, -0.5), (0.5, 0.5), (0.5, -0.5)
 		};
 
-		return std::make_unique<BasicShape>(vertices, 4, indeces, 6);
+		return std::make_unique<BasicShape>(vertices, indeces);
 	}
 
 private:

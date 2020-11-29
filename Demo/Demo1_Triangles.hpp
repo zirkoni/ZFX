@@ -46,7 +46,7 @@ private:
 	{
 		/* The 3 corners of a triangle (clockwise) */
 #if 1
-		ZFX::Vertex vertices[] =
+		ZFX::Verteces vertices =
 		{
 			/*                        x       y                red  green  blue  alpha   */
 			ZFX::Vertex{ glm::vec2{ -0.5f, -0.5f }, glm::vec4{ 1.0f, 0.0f, 0.0f, 0.1f } },
@@ -55,7 +55,7 @@ private:
 		};
 #else
 		/* Counter clockwise => Window.cpp sets clockwise winding => this triangle is not visible */
-		ZFX::Vertex vertices[] =
+		ZFX::Verteces vertices =
 		{
 			/*                        x       y                red  green  blue  alpha   */
 			ZFX::Vertex{ glm::vec2{ -0.5f, -0.5f }, glm::vec4{ 1.0f, 0.0f, 0.0f, 0.1f } },
@@ -65,19 +65,19 @@ private:
 #endif
 
 		/* For a triangle these don't really matter. Check out square! */
-		uint32_t indeces[] =
+		ZFX::Indeces indeces =
 		{
 			0, 1, 2
 		};
 
-		return std::make_unique<BasicShape>(vertices, 3, indeces, 3);
+		return std::make_unique<BasicShape>(vertices, indeces);
 	}
 
 	std::unique_ptr<TexturedShape> addTexturedTriangle()
 	{
 		/* The 3 corners of a triangle */
 		/* Texture coordinates have (0, 0) at the lower left corder and (1, 1) at the upper right corner */
-		ZFX::Vertex vertices[] =
+		ZFX::Verteces vertices =
 		{
 			/*                        x       y                red  green  blue  alpha         texture coordinates */
 			ZFX::Vertex{ glm::vec2{ -0.5f, -0.5f }, glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.0f, 0.0f } },
@@ -86,12 +86,12 @@ private:
 		};
 
 		/* For a triangle these don't really matter. Check out square! */
-		uint32_t indeces[] =
+		ZFX::Indeces indeces =
 		{
 			0, 1, 2
 		};
 
-		return std::make_unique<TexturedShape>(vertices, 3, indeces, 3);
+		return std::make_unique<TexturedShape>(vertices, indeces);
 	}
 
 private:

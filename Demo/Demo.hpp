@@ -4,8 +4,8 @@
 
 struct BasicShape
 {
-	BasicShape(ZFX::Vertex* vertices, const uint32_t numVertices, uint32_t* indeces, const uint32_t numIndeces) :
-		mesh{ vertices, numVertices, indeces, numIndeces },
+	BasicShape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces) :
+		mesh{ vertices, indeces },
 		shader{ "../../../Shaders/basicShader" },
 		transform{} {}
 
@@ -23,8 +23,8 @@ struct BasicShape
 
 struct TexturedShape
 {
-	TexturedShape(ZFX::Vertex* vertices, const uint32_t numVertices, uint32_t* indeces, const uint32_t numIndeces) :
-		mesh{ vertices, numVertices, indeces, numIndeces },
+	TexturedShape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces) :
+		mesh{ vertices, indeces },
 		shader{ "../../../Shaders/basicShaderTexture", true },
 		transform{},
 		texture{ "../../../Demo/Textures/texture.png" } {}

@@ -1,15 +1,18 @@
 #pragma once
 #include "Vertex.h"
 #include <GL/glew.h>
-#include <memory>
+#include <vector>
 
 
 namespace ZFX
 {
+	using Verteces = std::vector<Vertex>;
+	using Indeces = std::vector<uint32_t>;
+
 	class Mesh
 	{
 	public:
-		Mesh(Vertex* vertices, const uint32_t numVertices, uint32_t* indeces, const uint32_t numIndeces);
+		Mesh(const Verteces& vertices, const Indeces& indeces);
 		Mesh(const Mesh& other) = delete;
 		Mesh& operator=(const Mesh& other) = delete;
 		~Mesh();
@@ -25,7 +28,7 @@ namespace ZFX
 			NUM_BUFFERS
 		};
 
-		uint32_t m_numIndeces;
+		GLsizei m_numIndeces;
 		GLuint m_vertexArrayObject;
 		GLuint m_vertexArrayBuffers[NUM_BUFFERS];
 	};
