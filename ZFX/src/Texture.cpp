@@ -9,80 +9,80 @@
 #include "stb_image.h"
 #endif
 
-ZFX::Texture::Texture(const std::string& filename): m_texture{0}
+ZFX::Texture::Texture(const std::string& filename) : m_texture{ 0 }
 {
 #ifdef USE_SDL2_IMAGE
-	SDL_Surface* surface;
-	surface = IMG_Load(filename.c_str());
+    SDL_Surface* surface;
+    surface = IMG_Load(filename.c_str());
 
-	if (surface == nullptr)
-	{
-		std::string msg = "IMG_Load failed: ";
-		msg += std::string{ IMG_GetError() };
-		throw std::runtime_error{ msg };
-	}
+    if (surface == nullptr)
+    {
+        std::string msg = "IMG_Load failed: ";
+        msg += std::string{ IMG_GetError() };
+        throw std::runtime_error{ msg };
+    }
 
-	glGenTextures(1, &m_texture);
-	glBindTexture(GL_TEXTURE_2D, m_texture);
+    glGenTextures(1, &m_texture);
+    glBindTexture(GL_TEXTURE_2D, m_texture);
 
-	// Define what happens when reading outside texture width/height (or x/y)
-	// GL_REPEAT: repeat, i.e. go back to beginning
-	// GL_CLAMP: out of bounds -> default (black?) pixels
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // Define what happens when reading outside texture width/height (or x/y)
+    // GL_REPEAT: repeat, i.e. go back to beginning
+    // GL_CLAMP: out of bounds -> default (black?) pixels
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	// Define what happens when rendered object size is not equal to texture size (interpolating)
-	// GL_LINEAR: linear interpolation
-	// GL_NEAREST: ...
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // smaller
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // bigger
+    // Define what happens when rendered object size is not equal to texture size (interpolating)
+    // GL_LINEAR: linear interpolation
+    // GL_NEAREST: ...
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // smaller
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // bigger
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGB, GL_UNSIGNED_BYTE, surface->pixels);
-	SDL_FreeSurface(surface);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGB, GL_UNSIGNED_BYTE, surface->pixels);
+    SDL_FreeSurface(surface);
 #else
-	int width;
-	int height;
-	int numComponents;
-	unsigned char* imageData = stbi_load(filename.c_str(), &width, &height, &numComponents, 4);
+    int width;
+    int height;
+    int numComponents;
+    unsigned char* imageData = stbi_load(filename.c_str(), &width, &height, &numComponents, 4);
 
-	if (imageData == nullptr)
-	{
-		std::string msg = "Texture loading failed: " + filename;
-		throw std::runtime_error{ msg };
-	}
-	else
-	{
-		glGenTextures(1, &m_texture);
-		glBindTexture(GL_TEXTURE_2D, m_texture);
+    if (imageData == nullptr)
+    {
+        std::string msg = "Texture loading failed: " + filename;
+        throw std::runtime_error{ msg };
+    }
+    else
+    {
+        glGenTextures(1, &m_texture);
+        glBindTexture(GL_TEXTURE_2D, m_texture);
 
-		// Define what happens when reading outside texture width/height (or x/y)
-		// GL_REPEAT: repeat, i.e. go back to beginning
-		// GL_CLAMP: out of bounds -> default (black?) pixels
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // Define what happens when reading outside texture width/height (or x/y)
+        // GL_REPEAT: repeat, i.e. go back to beginning
+        // GL_CLAMP: out of bounds -> default (black?) pixels
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-		// Define what happens when rendered object size is not equal to texture size (interpolating)
-		// GL_LINEAR: linear interpolation
-		// GL_NEAREST: ...
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // smaller
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // bigger
+        // Define what happens when rendered object size is not equal to texture size (interpolating)
+        // GL_LINEAR: linear interpolation
+        // GL_NEAREST: ...
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // smaller
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // bigger
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
 
-		stbi_image_free(imageData);
-	}
+        stbi_image_free(imageData);
+    }
 #endif
 }
 
 ZFX::Texture::~Texture()
 {
-	glDeleteTextures(1, &m_texture);
+    glDeleteTextures(1, &m_texture);
 }
 
 void ZFX::Texture::bind(uint32_t unit)
 {
-	assert(unit >= 0 && unit <= 31);
+    assert(unit >= 0 && unit <= 31);
 
-	glActiveTexture(GL_TEXTURE0 + unit);
-	glBindTexture(GL_TEXTURE_2D, m_texture);
+    glActiveTexture(GL_TEXTURE0 + unit);
+    glBindTexture(GL_TEXTURE_2D, m_texture);
 }

@@ -4,28 +4,28 @@
 
 namespace ZFX
 {
-	class Window
-	{
-	public:
-		Window(const uint32_t width, const uint32_t height, const std::string& title);
-		Window(const Window& other) = delete;
-		Window& operator=(const Window& other) = delete;
-		~Window();
+    class Window
+    {
+    public:
+        Window(const uint32_t width, const uint32_t height, const std::string& title);
+        Window(const Window& other) = delete;
+        Window& operator=(const Window& other) = delete;
+        ~Window();
 
-		void clear(float r, float g, float b, float a);
-		void update();
+        void clear(float r, float g, float b, float a);
+        void update();
 
-		static float aspectRatio() { return ((float)s_width / s_height); }
-		static uint32_t width()    { return s_width;  }
-		static uint32_t height()   { return s_height; }
+        static float aspectRatio() { return ((float)s_width / s_height); }
+        static uint32_t width() { return s_width; }
+        static uint32_t height() { return s_height; }
 
-	private:
-		SDL_Window* m_window;
-		SDL_GLContext m_glContext;
+    private:
+        SDL_Window* m_window;
+        SDL_GLContext m_glContext;
 
-		static uint32_t s_width;
-		static uint32_t s_height;
-	};
+        static uint32_t s_width;
+        static uint32_t s_height;
+    };
 }
 
 

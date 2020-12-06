@@ -6,31 +6,31 @@
 
 namespace ZFX
 {
-	using Verteces = std::vector<Vertex>;
-	using Indeces = std::vector<uint32_t>;
+    using Verteces = std::vector<Vertex>;
+    using Indeces = std::vector<uint32_t>;
 
-	class Mesh
-	{
-	public:
-		Mesh(const Verteces& vertices, const Indeces& indeces);
-		Mesh(const Mesh& other) = delete;
-		Mesh& operator=(const Mesh& other) = delete;
-		~Mesh();
+    class Mesh
+    {
+    public:
+        Mesh(const Verteces& vertices, const Indeces& indeces);
+        Mesh(const Mesh& other) = delete;
+        Mesh& operator=(const Mesh& other) = delete;
+        ~Mesh();
 
-		void draw();
+        void draw();
 
-	private:
-		enum
-		{
-			VERTEX_BUFFER,
-			INDEX_BUFFER,
+    private:
+        enum
+        {
+            VERTEX_BUFFER,
+            INDEX_BUFFER,
 
-			NUM_BUFFERS
-		};
+            NUM_BUFFERS
+        };
 
-		GLsizei m_numIndeces;
-		GLuint m_vertexArrayObject;
-		GLuint m_vertexArrayBuffers[NUM_BUFFERS];
-	};
+        GLsizei m_numIndeces;
+        GLuint m_vertexArrayObject;
+        GLuint m_vertexArrayBuffers[NUM_BUFFERS];
+    };
 }
 

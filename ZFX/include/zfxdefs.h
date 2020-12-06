@@ -3,14 +3,14 @@
 
 enum EVertexAttribute
 {
-	POSITION_VA,
-	COLOUR_VA,
-	TEXTURE_VA
+    POSITION_VA,
+    COLOUR_VA,
+    TEXTURE_VA
 };
 
 enum EUniforms
 {
-	TRANSFORM_U,
+    TRANSFORM_U,
 
-	NUM_UNIFORMS
+    NUM_UNIFORMS
 };
