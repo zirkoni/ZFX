@@ -18,9 +18,6 @@
     <ClCompile Include="..\..\ZFX\src\Mesh.cpp">
       <Filter>ZFX\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ZFX\src\Vertex.cpp">
-      <Filter>ZFX\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ZFX\src\Window.cpp">
       <Filter>ZFX\src</Filter>
     </ClCompile>
@@ -39,12 +36,12 @@
     <ClCompile Include="..\..\ZFX\src\TextFreetype.cpp">
       <Filter>ZFX\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\ZFX\src\Vertex.cpp">
+      <Filter>ZFX\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ZFX\include\Mesh.h">
-      <Filter>ZFX\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ZFX\include\Vertex.h">
       <Filter>ZFX\include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ZFX\include\Window.h">
@@ -82,6 +79,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Demo\Demo3_Text_Freetype.hpp">
       <Filter>Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZFX\include\Vertex.h">
+      <Filter>ZFX\include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

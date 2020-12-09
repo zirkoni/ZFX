@@ -1,5 +1,6 @@
 #include "Mesh.h"
 #include "zfxdefs.h"
+#include <algorithm>
 
 
 ZFX::Mesh::Mesh(const Verteces& vertices, const Indeces& indeces) :
@@ -11,19 +12,21 @@ ZFX::Mesh::Mesh(const Verteces& vertices, const Indeces& indeces) :
     // move data to GPU
     glGenBuffers(NUM_BUFFERS, m_vertexArrayBuffers);
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexArrayBuffers[VERTEX_BUFFER]);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vertices.at(0)), vertices.data(), GL_STATIC_DRAW);
-
+    glBufferData(GL_ARRAY_BUFFER, vertices.data().size() * sizeof(float), vertices.data().data(), GL_STATIC_DRAW);
+    
     // tell GPU how to interpret the data
-    glEnableVertexAttribArray(POSITION_VA);
-    glVertexAttribPointer(POSITION_VA, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, position));
+    GLuint index = 0;
+    uint64_t offset = 0;
+    uint32_t numElementsPerVertex = vertices.numElementsPerVertex();
 
-    glEnableVertexAttribArray(COLOUR_VA);
-    glVertexAttribPointer(COLOUR_VA, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, colour));
-
-    if (vertices[0].hasTexture)
+    for (const auto& attribute : vertices.attributes())
     {
-        glEnableVertexAttribArray(TEXTURE_VA);
-        glVertexAttribPointer(TEXTURE_VA, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, texCoord));
+        glEnableVertexAttribArray(index);
+        glVertexAttribPointer(index, attribute.numElements, GL_FLOAT, GL_FALSE,
+            numElementsPerVertex * sizeof(float), (GLvoid*)offset);
+        
+        ++index;
+        offset += attribute.numElements * sizeof(float);
     }
 
     // indeces
@@ -46,3 +49,5 @@ void ZFX::Mesh::draw()
     glDrawElements(GL_TRIANGLES, m_numIndeces, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }
+
+

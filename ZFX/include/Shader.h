@@ -1,7 +1,6 @@
 #pragma once
+#include "Vertex.h"
 #include "zfxdefs.h"
-#include <string>
-#include <GL/glew.h>
 #include <glm/glm.hpp>
 
 
@@ -10,11 +9,16 @@ namespace ZFX
     class Camera;
     class Transform;
 
+    using Uniforms = std::vector<std::string>;
 
     class Shader
     {
+        /* Transform uniform is always the first uniform */
+        static constexpr uint32_t U_TRANSFORM = 0;
+
     public:
-        Shader(const std::string& filename, const bool useTexture = false);
+        Shader(const std::string& filename, const VertexAttributes& attributes);
+        Shader(const std::string& filename, const VertexAttributes& attributes, const Uniforms& uniforms);
         Shader(const Shader& other) = delete;
         Shader& operator=(const Shader& other) = delete;
         virtual ~Shader();
@@ -44,17 +48,19 @@ namespace ZFX
 
         Shader(const std::string& filename, ShaderType type);
         void createAndAttach(const std::string& filename);
-        void compileAndSetUniforms();
+        void compile();
+        void setUniforms(const Uniforms& uniforms);
+        bool setSingleUniform(const std::string name);
 
         static void checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg);
         static std::string load(const std::string& fileName);
         static GLuint create(const std::string& text, GLenum shaderType);
 
     protected:
-        bool m_useTexture;
+        bool m_hasTransform;
         GLuint m_program;
         GLuint m_shaders[NUM_SHADERS];
-        GLuint m_uniforms[NUM_UNIFORMS];
+        std::vector<GLint> m_uniforms;
     };
 }
 

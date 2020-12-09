@@ -1,12 +1,9 @@
 #pragma once
 #include "Vertex.h"
-#include <GL/glew.h>
-#include <vector>
 
 
 namespace ZFX
 {
-    using Verteces = std::vector<Vertex>;
     using Indeces = std::vector<uint32_t>;
 
     class Mesh

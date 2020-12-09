@@ -15,11 +15,10 @@ public:
 
     void draw() override
     {
-        // This function uses pixel coordinates!
         m_textRenderer.drawText(
             "Hello World!",                          // text
-            ZFX::Window::width() / 2.0f - 150.0f,    // x-coordinate
-            ZFX::Window::height() / 2.0f,            // y-coordinate
+            ZFX::Window::width() / 2.0f - 150.0f,    // x-coordinate (pixel coordinates)
+            ZFX::Window::height() / 2.0f,            // y-coordinate (pixel coordinates)
             1.0f,                                    // scale
             glm::vec3(0.5f, 0.8f, 0.2f));            // text colour
 

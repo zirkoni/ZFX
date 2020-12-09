@@ -1,30 +1,19 @@
 #include "Vertex.h"
 
 
-ZFX::Vertex::Vertex(const glm::vec2& pos, const glm::vec4& col) :
-    position{ pos.x, pos.y, 0.0f }, colour{ col }, texCoord{ 0.0f, 0.0f }, hasTexture{ false }
+ZFX::Verteces::Verteces(VertexData&& data, VertexAttributes&& attributes)
 {
+    m_data = std::move(data);
+    m_attributes = std::move(attributes);
 }
 
-ZFX::Vertex::Vertex(const glm::vec2& pos, const glm::vec4& col, const glm::vec2& tex) :
-    Vertex{ pos, col }
+uint32_t ZFX::Verteces::numElementsPerVertex() const
 {
-    hasTexture = true;
-    texCoord = tex;
-}
+    uint32_t sum = 0;
+    for (const auto& atr : m_attributes)
+    {
+        sum += atr.numElements;
+    }
 
-ZFX::Vertex::Vertex(const glm::vec3& pos, const glm::vec4& col) :
-    position{ pos }, colour{ col }, texCoord{ 0.0f, 0.0f }, hasTexture{ false }
-{
-}
-
-ZFX::Vertex::Vertex(const glm::vec3& pos, const glm::vec4& col, const glm::vec2& tex) :
-    Vertex{ pos, col }
-{
-    hasTexture = true;
-    texCoord = tex;
-}
-
-ZFX::Vertex::~Vertex()
-{
+    return sum;
 }

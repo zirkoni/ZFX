@@ -24,11 +24,16 @@ private:
         /* The 4 corners of a square, starting from left lower corner in clockwise order */
         ZFX::Verteces vertices =
         {
-            /*                        x       y                red  green  blue  alpha   */
-            ZFX::Vertex{ glm::vec2{ -0.5f, -0.5f }, glm::vec4{ 0.2f, 0.2f, 0.2f, 1.0f } },
-            ZFX::Vertex{ glm::vec2{ -0.5f,  0.5f }, glm::vec4{ 0.2f, 0.2f, 0.2f, 1.0f } },
-            ZFX::Vertex{ glm::vec2{  0.5f,  0.5f }, glm::vec4{ 0.2f, 0.2f, 0.2f, 1.0f } },
-            ZFX::Vertex{ glm::vec2{  0.5f, -0.5f }, glm::vec4{ 0.8f, 0.8f, 0.8f, 1.0f } }
+            ZFX::VertexData
+            {
+            //    x      y      red  green  blue  alpha
+                -0.5f, -0.5f,   0.2f, 0.2f, 0.2f, 1.0f,
+                -0.5f,  0.5f,   0.2f, 0.2f, 0.2f, 1.0f,
+                 0.5f,  0.5f,   0.2f, 0.2f, 0.2f, 1.0f,
+                 0.5f, -0.5f,   0.8f, 0.8f, 0.8f, 1.0f
+            },
+
+            ZFX::VertexAttributes{ {"positionIn", 2}, {"colourIn", 4} }
         };
 
         /* Now we use indeces to define our shape (square is made of 2 triangles that have 2 common verteces) */

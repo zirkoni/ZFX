@@ -6,7 +6,7 @@ struct BasicShape
 {
     BasicShape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces) :
         mesh{ vertices, indeces },
-        shader{ "../../../Shaders/basicShader" },
+        shader{ "../../../Shaders/basicShader", vertices.attributes() },
         transform{} {}
 
     void draw(const ZFX::Camera& camera)
@@ -25,7 +25,7 @@ struct TexturedShape
 {
     TexturedShape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces) :
         mesh{ vertices, indeces },
-        shader{ "../../../Shaders/basicShaderTexture", true },
+        shader{ "../../../Shaders/basicShaderTexture", vertices.attributes() },
         transform{},
         texture{ "../../../Demo/Textures/texture.png" } {}
 

@@ -2,8 +2,6 @@
 #include "Demo.hpp"
 #include <vector>
 
-#include <iostream>
-
 
 class Demo1 : public Demo
 {
@@ -48,19 +46,29 @@ private:
 #if 1
         ZFX::Verteces vertices =
         {
-            /*                        x       y                red  green  blue  alpha   */
-            ZFX::Vertex{ glm::vec2{ -0.5f, -0.5f }, glm::vec4{ 1.0f, 0.0f, 0.0f, 0.1f } },
-            ZFX::Vertex{ glm::vec2{  0.0f,  0.5f }, glm::vec4{ 0.0f, 1.0f, 0.0f, 0.5f } },
-            ZFX::Vertex{ glm::vec2{  0.5f, -0.5f }, glm::vec4{ 0.0f, 0.0f, 1.0f, 1.0f } }
+            ZFX::VertexData
+            {
+            //    x      y      red  green  blue  alpha
+                -0.5f, -0.5f,   1.0f, 0.0f, 0.0f, 0.1f,
+                 0.0f,  0.5f,   0.0f, 1.0f, 0.0f, 0.5f,
+                 0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 1.0f
+            },
+
+            ZFX::VertexAttributes{ {"positionIn", 2}, {"colourIn", 4} }
         };
 #else
         /* Counter clockwise => Window.cpp sets clockwise winding => this triangle is not visible */
         ZFX::Verteces vertices =
         {
-            /*                        x       y                red  green  blue  alpha   */
-            ZFX::Vertex{ glm::vec2{ -0.5f, -0.5f }, glm::vec4{ 1.0f, 0.0f, 0.0f, 0.1f } },
-            ZFX::Vertex{ glm::vec2{  0.5f, -0.5f }, glm::vec4{ 0.0f, 0.0f, 1.0f, 1.0f } },
-            ZFX::Vertex{ glm::vec2{  0.0f,  0.5f }, glm::vec4{ 0.0f, 1.0f, 0.0f, 0.5f } }
+            ZFX::VertexData
+            {
+            //    x      y      red  green  blue  alpha
+                -0.5f, -0.5f,   1.0f, 0.0f, 0.0f, 0.1f,
+                 0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 1.0f,
+                 0.0f,  0.5f,   0.0f, 1.0f, 0.0f, 0.5f
+            },
+
+            ZFX::VertexAttributes{ {"positionIn", 2}, {"colourIn", 4} }
         };
 #endif
 
@@ -79,10 +87,15 @@ private:
         /* Texture coordinates have (0, 0) at the lower left corder and (1, 1) at the upper right corner */
         ZFX::Verteces vertices =
         {
-            /*                        x       y                red  green  blue  alpha         texture coordinates */
-            ZFX::Vertex{ glm::vec2{ -0.5f, -0.5f }, glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.0f, 0.0f } },
-            ZFX::Vertex{ glm::vec2{  0.0f,  0.5f }, glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.5f, 1.0f } },
-            ZFX::Vertex{ glm::vec2{  0.5f, -0.5f }, glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f }, glm::vec2{ 1.0f, 0.0f } }
+            ZFX::VertexData
+            {
+            //    x      y      texture coordinates
+                -0.5f, -0.5f,     0.0f, 0.0f,
+                 0.0f,  0.5f,     0.5f, 1.0f,
+                 0.5f, -0.5f,     1.0f, 0.0f
+            },
+
+            ZFX::VertexAttributes{ {"positionIn", 2}, {"texCoordIn", 2} }
         };
 
         /* For a triangle these don't really matter. Check out square! */

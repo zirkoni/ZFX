@@ -1,34 +1,33 @@
 #pragma once
-#include <glm/glm.hpp>
 #include <GL/glew.h>
+#include <vector>
+#include <utility>
+#include <string>
 
 
 namespace ZFX
 {
-    struct Vertex
+    struct VertexAttribute
     {
-        /* Basic 2D constructor (z = 0.0) */
-        Vertex(const glm::vec2& pos, const glm::vec4& col);
+        std::string name;
+        GLint numElements;
+    };
 
-        /* 2D constructor with texture coordinates */
-        Vertex(const glm::vec2& pos, const glm::vec4& col, const glm::vec2& tex);
+    using VertexData = std::vector<float>;
+    using VertexAttributes = std::vector<VertexAttribute>;
 
-        /* Basic 3D constructor */
-        Vertex(const glm::vec3& pos, const glm::vec4& col);
+    class Verteces
+    {
+    public:
+        Verteces(VertexData&& data, VertexAttributes&& attributes);
 
-        /* 3D constructor with texture coordinates */
-        Vertex(const glm::vec3& pos, const glm::vec4& col, const glm::vec2& tex);
+        const VertexData& data() const { return m_data; }
+        const VertexAttributes& attributes() const { return m_attributes; }
+        uint32_t numElementsPerVertex() const;
 
-        virtual ~Vertex();
-
-        /* OpenGL coordinates */
-        glm::vec3 position;
-
-        glm::vec4 colour;
-
-        glm::vec2 texCoord;
-
-        bool hasTexture;
+    private:
+        VertexData m_data;
+        VertexAttributes m_attributes;
     };
 }
 

@@ -4,27 +4,32 @@
 #include <stdexcept>
 #include <fstream>
 
-ZFX::Shader::Shader(const std::string& filename, const bool useTexture) :
-    m_program{ 0 }, m_useTexture{ useTexture }
+ZFX::Shader::Shader(const std::string& filename, const VertexAttributes& attributes):
+    Shader{ filename, attributes, {} }
 {
-    createAndAttach(filename);
-    glBindAttribLocation(m_program, POSITION_VA, "positionIn");
-    glBindAttribLocation(m_program, COLOUR_VA, "colourIn");
-
-    if (m_useTexture)
-    {
-        glBindAttribLocation(m_program, TEXTURE_VA, "texCoordIn");
-    }
-
-    compileAndSetUniforms();
 }
 
-ZFX::Shader::Shader(const std::string& filename, ShaderType type) :
-    m_program{ 0 }, m_useTexture{ false }
+ZFX::Shader::Shader(const std::string& filename, const VertexAttributes& attributes, const Uniforms& uniforms) :
+    m_hasTransform{ false }, m_program{ 0 }, m_uniforms{}
+{
+    createAndAttach(filename);
+
+    GLuint index = 0;
+    for (const auto& attribute : attributes)
+    {
+        glBindAttribLocation(m_program, index, attribute.name.c_str());
+    }
+
+    compile();
+    setUniforms(uniforms);
+}
+
+ZFX::Shader::Shader(const std::string& filename, ShaderType type) : m_program{ 0 }
 {
     createAndAttach(filename);
     glBindAttribLocation(m_program, 0, "vertex");
-    compileAndSetUniforms();
+    compile();
+    setUniforms({});
 }
 
 ZFX::Shader::~Shader()
@@ -51,15 +56,34 @@ void ZFX::Shader::createAndAttach(const std::string& filename)
     }
 }
 
-void ZFX::Shader::compileAndSetUniforms()
+void ZFX::Shader::compile()
 {
     glLinkProgram(m_program);
     checkError(m_program, GL_LINK_STATUS, true, "glLinkProgram failed: ");
 
     glValidateProgram(m_program);
     checkError(m_program, GL_VALIDATE_STATUS, true, "glValidateProgram failed: ");
+}
 
-    m_uniforms[TRANSFORM_U] = glGetUniformLocation(m_program, "transform");
+void ZFX::Shader::setUniforms(const Uniforms& uniforms)
+{
+    m_hasTransform = setSingleUniform("transform");
+
+    for (const auto& u : uniforms)
+    {
+        setSingleUniform(u);
+    }
+}
+
+bool ZFX::Shader::setSingleUniform(const std::string name)
+{
+    GLint location = glGetUniformLocation(m_program, name.c_str());
+    if (location != -1)
+    {
+        m_uniforms.push_back(location);
+        return true;
+    }
+    return false;
 }
 
 void ZFX::Shader::bind()
@@ -69,13 +93,19 @@ void ZFX::Shader::bind()
 
 void ZFX::Shader::update(const Transform& transform, const Camera& camera)
 {
-    glm::mat4 model = camera.getViewProjection() * transform.getModel();
-    glUniformMatrix4fv(m_uniforms[TRANSFORM_U], 1, GL_FALSE, &model[0][0]);
+    if (m_hasTransform)
+    {
+        glm::mat4 model = camera.getViewProjection() * transform.getModel();
+        glUniformMatrix4fv(m_uniforms[U_TRANSFORM], 1, GL_FALSE, &model[0][0]);
+    }
 }
 
 void ZFX::Shader::update(const glm::mat4& transform)
 {
-    glUniformMatrix4fv(m_uniforms[TRANSFORM_U], 1, GL_FALSE, &transform[0][0]);
+    if (m_hasTransform)
+    {
+        glUniformMatrix4fv(m_uniforms[U_TRANSFORM], 1, GL_FALSE, &transform[0][0]);
+    }
 }
 
 void ZFX::Shader::checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg)
