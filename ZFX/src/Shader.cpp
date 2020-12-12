@@ -4,13 +4,16 @@
 #include <stdexcept>
 #include <fstream>
 
+const std::string ZFX::TRANSFORM_UNIFORM = "transform";
+const ZFX::Uniforms ZFX::DEFAULT_UNIFORMS = { ZFX::TRANSFORM_UNIFORM };
+
 ZFX::Shader::Shader(const std::string& filename, const VertexAttributes& attributes):
-    Shader{ filename, attributes, {} }
+    Shader{ filename, attributes, DEFAULT_UNIFORMS }
 {
 }
 
 ZFX::Shader::Shader(const std::string& filename, const VertexAttributes& attributes, const Uniforms& uniforms) :
-    m_hasTransform{ false }, m_program{ 0 }, m_uniforms{}
+    m_program{ 0 }, m_uniforms{}
 {
     createAndAttach(filename);
 
@@ -21,15 +24,7 @@ ZFX::Shader::Shader(const std::string& filename, const VertexAttributes& attribu
     }
 
     compile();
-    setUniforms(uniforms);
-}
-
-ZFX::Shader::Shader(const std::string& filename, ShaderType type) : m_program{ 0 }
-{
-    createAndAttach(filename);
-    glBindAttribLocation(m_program, 0, "vertex");
-    compile();
-    setUniforms({});
+    saveUniformLocations(uniforms);
 }
 
 ZFX::Shader::~Shader()
@@ -65,22 +60,20 @@ void ZFX::Shader::compile()
     checkError(m_program, GL_VALIDATE_STATUS, true, "glValidateProgram failed: ");
 }
 
-void ZFX::Shader::setUniforms(const Uniforms& uniforms)
+void ZFX::Shader::saveUniformLocations(const Uniforms& uniforms)
 {
-    m_hasTransform = setSingleUniform("transform");
-
     for (const auto& u : uniforms)
     {
-        setSingleUniform(u);
+        saveSingleUniform(u);
     }
 }
 
-bool ZFX::Shader::setSingleUniform(const std::string name)
+bool ZFX::Shader::saveSingleUniform(const std::string name)
 {
     GLint location = glGetUniformLocation(m_program, name.c_str());
-    if (location != -1)
+    if (UNIFORM_NOT_FOUND != location)
     {
-        m_uniforms.push_back(location);
+        m_uniforms.insert( { name, location } );
         return true;
     }
     return false;
@@ -93,19 +86,31 @@ void ZFX::Shader::bind()
 
 void ZFX::Shader::update(const Transform& transform, const Camera& camera)
 {
-    if (m_hasTransform)
+    GLint location = uniformLocation(TRANSFORM_UNIFORM);
+    if (UNIFORM_NOT_FOUND != location)
     {
         glm::mat4 model = camera.getViewProjection() * transform.getModel();
-        glUniformMatrix4fv(m_uniforms[U_TRANSFORM], 1, GL_FALSE, &model[0][0]);
+        glUniformMatrix4fv(location, 1, GL_FALSE, &model[0][0]);
     }
 }
 
 void ZFX::Shader::update(const glm::mat4& transform)
 {
-    if (m_hasTransform)
+    GLint location = uniformLocation(TRANSFORM_UNIFORM);
+    if (UNIFORM_NOT_FOUND != location)
     {
-        glUniformMatrix4fv(m_uniforms[U_TRANSFORM], 1, GL_FALSE, &transform[0][0]);
+        glUniformMatrix4fv(location, 1, GL_FALSE, &transform[0][0]);
     }
+}
+
+GLint ZFX::Shader::uniformLocation(const std::string& uniform) const
+{
+    if (m_uniforms.find(uniform) != m_uniforms.end())
+    {
+        return m_uniforms.at(uniform);
+    }
+
+    return UNIFORM_NOT_FOUND;
 }
 
 void ZFX::Shader::checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg)

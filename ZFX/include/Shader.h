@@ -2,6 +2,7 @@
 #include "Vertex.h"
 #include "zfxdefs.h"
 #include <glm/glm.hpp>
+#include <unordered_map>
 
 
 namespace ZFX
@@ -11,10 +12,12 @@ namespace ZFX
 
     using Uniforms = std::vector<std::string>;
 
+    extern const std::string TRANSFORM_UNIFORM;
+    extern const Uniforms DEFAULT_UNIFORMS;
+
     class Shader
     {
-        /* Transform uniform is always the first uniform */
-        static constexpr uint32_t U_TRANSFORM = 0;
+        using UniformMap = std::unordered_map<std::string, GLint>;
 
     public:
         Shader(const std::string& filename, const VertexAttributes& attributes);
@@ -31,6 +34,7 @@ namespace ZFX
         void update(const glm::mat4& transform);
 
         GLuint programId() const { return m_program; }
+        GLint uniformLocation(const std::string& uniform) const;
 
     protected:
         enum
@@ -41,26 +45,19 @@ namespace ZFX
             NUM_SHADERS
         };
 
-        enum class ShaderType
-        {
-            Freetype
-        };
-
-        Shader(const std::string& filename, ShaderType type);
         void createAndAttach(const std::string& filename);
         void compile();
-        void setUniforms(const Uniforms& uniforms);
-        bool setSingleUniform(const std::string name);
+        void saveUniformLocations(const Uniforms& uniforms);
+        bool saveSingleUniform(const std::string name);
 
         static void checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg);
         static std::string load(const std::string& fileName);
         static GLuint create(const std::string& text, GLenum shaderType);
 
     protected:
-        bool m_hasTransform;
         GLuint m_program;
         GLuint m_shaders[NUM_SHADERS];
-        std::vector<GLint> m_uniforms;
+        UniformMap m_uniforms;
     };
 }
 

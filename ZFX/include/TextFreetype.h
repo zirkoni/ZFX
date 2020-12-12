@@ -7,6 +7,8 @@
 
 namespace ZFX
 {
+    extern const std::string TEXTCOLOUR_UNIFORM;
+
     class TextFreetype
     {
         struct Character
@@ -20,7 +22,8 @@ namespace ZFX
         class TextShader : public Shader
         {
         public:
-            TextShader(const std::string& filename) : Shader{ filename, ShaderType::Freetype } {}
+            TextShader(const std::string& filename) :
+                Shader{ filename, {{ "vertex", 4 }}, { TRANSFORM_UNIFORM, TEXTCOLOUR_UNIFORM } } {}
         };
 
     public:

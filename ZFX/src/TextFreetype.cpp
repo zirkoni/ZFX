@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <iostream>
 
+const std::string ZFX::TEXTCOLOUR_UNIFORM = "textColour";
 
 ZFX::TextFreetype::TextFreetype(const std::string& font, const std::string& shader) :
     m_vao{ 0 }, m_vbo{ 0 }, m_shader{ shader }
@@ -101,7 +102,7 @@ void ZFX::TextFreetype::loadCharacters(const FT_Face& face, uint32_t numCharacte
 void ZFX::TextFreetype::drawText(const std::string& text, float x, float y, float scale, glm::vec3 colour)
 {
     m_shader.bind();
-    glUniform3f(glGetUniformLocation(m_shader.programId(), "textColour"), colour.x, colour.y, colour.z);
+    glUniform3f(m_shader.uniformLocation(TEXTCOLOUR_UNIFORM), colour.x, colour.y, colour.z);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(m_vao);
 
