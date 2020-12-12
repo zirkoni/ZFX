@@ -20,11 +20,9 @@ void mainLoop(ZFX::Window& window)
     bool wireframeOn = false;
     bool wireframeOnOldValue = wireframeOn;
 
-    Demo* activeDemo = nullptr;
     DemoList demos;
     addDemos(demos, camera);
-    uint32_t activeDemoveIndex = 0;
-    activeDemo = demos.at(activeDemoveIndex).get();
+    auto activeDemo = demos.begin();
 
     bool exitRequested = false;
     SDL_Event e;
@@ -47,13 +45,11 @@ void mainLoop(ZFX::Window& window)
                 /* Switch to different demo by pressing space */
                 else if (e.key.keysym.scancode == SDL_SCANCODE_SPACE)
                 {
-                    ++activeDemoveIndex;
-                    if (activeDemoveIndex == demos.size())
+                    ++activeDemo;
+                    if (activeDemo == demos.end())
                     {
-                        activeDemoveIndex = 0;
+                        activeDemo = demos.begin();
                     }
-
-                    activeDemo = demos.at(activeDemoveIndex).get();
                 }
             }
         }
@@ -67,7 +63,7 @@ void mainLoop(ZFX::Window& window)
 
         window.clear(0.0f, 0.0f, 0.0f, 1.0f);
 
-        activeDemo->draw();
+        activeDemo->get()->draw();
 
         window.update();
 

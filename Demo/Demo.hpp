@@ -1,5 +1,6 @@
 #pragma once
 #include "ZFX.h"
+#include <memory>
 
 
 struct BasicShape
