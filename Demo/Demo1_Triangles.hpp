@@ -5,38 +5,25 @@
 
 class Demo1 : public Demo
 {
-    static constexpr uint32_t NUM_TRIANGLES = 5;
-
 public:
     Demo1(ZFX::Camera& camera) : Demo{ camera }
     {
-        for (uint32_t i = 0; i < NUM_TRIANGLES; ++i)
-        {
-            /* All objects should be usually created around the origin (0,0,0) */
-            auto triangle = addTriangle();
-
-            // Their positions are set with transform
-            triangle->transform.position().x -= ((float)i - (NUM_TRIANGLES - 1) / 2.0f) * 0.2f;
-
-            m_triangles.push_back(std::move(triangle));
-        }
-
-        m_texturedTriangle = addTexturedTriangle();
+        m_triangles.push_back(std::move(addTriangle()));
+        m_triangles.push_back(std::move(addTexturedTriangle()));
+        m_triangles.push_back(std::move(addTexturedTriangleWithColour()));
     }
 
     void draw() override
     {
-        m_triangles.back()->transform.position().x = sin(m_counter);
-        m_texturedTriangle->transform.position().y = sin(m_counter);
+        m_triangles[0]->transform.position().x = sin(m_counter);
+        m_triangles[1]->transform.position().y = sin(m_counter);
         m_counter += 0.001f;
 
         /* Draw opaque triangle 1st */
-        m_texturedTriangle->draw(m_camera);
+        m_triangles[1]->draw(m_camera);
 
-        for (const auto& t : m_triangles)
-        {
-            t->draw(m_camera);
-        }
+        m_triangles[0]->draw(m_camera);
+        m_triangles[2]->draw(m_camera);
     }
 
 private:
@@ -91,7 +78,7 @@ private:
             {
             //    x      y      texture coordinates
                 -0.5f, -0.5f,     0.0f, 0.0f,
-                 0.0f,  0.5f,     0.5f, 1.0f,
+                 0.0f,  0.5f,     0.0f, 0.0f,
                  0.5f, -0.5f,     1.0f, 0.0f
             },
 
@@ -107,8 +94,33 @@ private:
         return std::make_unique<TexturedShape>(vertices, indeces);
     }
 
+    std::unique_ptr<TexturedShape> addTexturedTriangleWithColour()
+    {
+        /* The 3 corners of a triangle */
+        /* Texture coordinates have (0, 0) at the lower left corder and (1, 1) at the upper right corner */
+        ZFX::Verteces vertices =
+        {
+            ZFX::VertexData
+            {
+            //    x      y     red  green  blue  alpha   texture coordinates
+               -0.5f, -0.5f,   1.0f, 0.0f, 0.0f, 0.8f,     0.0f, 0.0f,
+                0.0f,  0.5f,   0.0f, 1.0f, 0.0f, 0.8f,     0.0f, 0.0f,
+                0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 0.8f,     1.0f, 0.0f
+            },
+
+            ZFX::VertexAttributes{ {"positionIn", 2}, {"colourIn", 4}, {"texCoordIn", 2} }
+        };
+
+        /* For a triangle these don't really matter. Check out square! */
+        ZFX::Indeces indeces =
+        {
+            0, 1, 2
+        };
+
+        return std::make_unique<TexturedShape>(vertices, indeces, "textureAndColour");
+    }
+
 private:
     float m_counter;
     std::vector<std::unique_ptr<BasicShape> > m_triangles;
-    std::unique_ptr<TexturedShape> m_texturedTriangle;
 };

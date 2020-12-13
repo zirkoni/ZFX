@@ -6,12 +6,14 @@
 
 struct BasicShape
 {
-    BasicShape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces) :
+    BasicShape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces, const std::string shaderName = "colour") :
         mesh{ vertices, indeces },
-        shader{ SHADERS_PATH + "colour", vertices.attributes() },
+        shader{ SHADERS_PATH + shaderName, vertices.attributes() },
         transform{} {}
+    
+    virtual ~BasicShape() {}
 
-    void draw(const ZFX::Camera& camera)
+    virtual void draw(const ZFX::Camera& camera)
     {
         shader.bind();
         shader.update(transform, camera);
@@ -23,15 +25,13 @@ struct BasicShape
     ZFX::Transform transform;
 };
 
-struct TexturedShape
+struct TexturedShape: public BasicShape
 {
-    TexturedShape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces) :
-        mesh{ vertices, indeces },
-        shader{ SHADERS_PATH + "texture", vertices.attributes() },
-        transform{},
+    TexturedShape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces, const std::string shaderName = "texture") :
+        BasicShape{ vertices, indeces, shaderName },
         texture{ TEXTURES_PATH + "texture.png" } {}
 
-    void draw(const ZFX::Camera& camera)
+    void draw(const ZFX::Camera& camera) override
     {
         shader.bind();
         shader.update(transform, camera);
@@ -39,9 +39,6 @@ struct TexturedShape
         mesh.draw();
     }
 
-    ZFX::Mesh mesh;
-    ZFX::Shader shader;
-    ZFX::Transform transform;
     ZFX::Texture texture;
 };
 
