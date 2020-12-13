@@ -36,11 +36,13 @@ private:
             ZFX::VertexAttributes{ {"positionIn", 2}, {"colourIn", 4} }
         };
 
-        /* Now we use indeces to define our shape (square is made of 2 triangles that have 2 common verteces) */
+        /* Now we use indeces to define our shape (square is made of 2 triangles that have 2 common verteces)
+         * and set counter clockwise winding.
+         */
         ZFX::Indeces indeces =
         {
-            0, 1, 2, // 1st triangle: (-0.5, -0.5), (-0.5, 0.5), (0.5, 0.5)
-            0, 2, 3  // 2nd triangle: (-0.5, -0.5), (0.5, 0.5), (0.5, -0.5)
+            0, 2, 1, // 1st triangle: [-0.5, -0.5], [0.5f, 0.5f], [-0.5f, 0.5f]
+            0, 3, 2  // 2nd triangle: [-0.5, -0.5], [0.5f, -0.5f], [0.5f, 0.5f]
         };
 
         return std::make_unique<BasicShape>(vertices, indeces);

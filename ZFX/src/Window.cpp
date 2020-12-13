@@ -63,9 +63,7 @@ ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::stri
         // for simple object these are enough
         // Cull faces that are facing away from the camera
         glEnable(GL_CULL_FACE);
-        glFrontFace(GL_CW); // Winding order of vertices is clockwise
-        glCullFace(GL_BACK); // We could also use the default winding (GL_CCW) and cull GL_FRONT
-        // (or really use CCW winding for vertices and cull GL_BACK)
+        glCullFace(GL_BACK);
 
         // Enable transparency (alpha channel)
         glEnable(GL_BLEND);

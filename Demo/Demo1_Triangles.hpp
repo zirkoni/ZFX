@@ -30,7 +30,6 @@ private:
     std::unique_ptr<BasicShape> addTriangle()
     {
         /* The 3 corners of a triangle (clockwise) */
-#if 1
         ZFX::Verteces vertices =
         {
             ZFX::VertexData
@@ -43,26 +42,13 @@ private:
 
             ZFX::VertexAttributes{ {"positionIn", 2}, {"colourIn", 4} }
         };
-#else
-        /* Counter clockwise => Window.cpp sets clockwise winding => this triangle is not visible */
-        ZFX::Verteces vertices =
-        {
-            ZFX::VertexData
-            {
-            //    x      y      red  green  blue  alpha
-                -0.5f, -0.5f,   1.0f, 0.0f, 0.0f, 0.1f,
-                 0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 1.0f,
-                 0.0f,  0.5f,   0.0f, 1.0f, 0.0f, 0.5f
-            },
 
-            ZFX::VertexAttributes{ {"positionIn", 2}, {"colourIn", 4} }
-        };
-#endif
-
-        /* For a triangle these don't really matter. Check out square! */
+        /* With indeces we must choose the vertices in counter clockwise order
+         * because we are culling back faces and by default OpenGL winding order is counter clockwise.
+         */
         ZFX::Indeces indeces =
         {
-            0, 1, 2
+            0, 2, 1
         };
 
         return std::make_unique<BasicShape>(vertices, indeces);
@@ -70,7 +56,7 @@ private:
 
     std::unique_ptr<TexturedShape> addTexturedTriangle()
     {
-        /* The 3 corners of a triangle */
+        /* The 3 corners of a triangle (counter clockwise) */
         /* Texture coordinates have (0, 0) at the lower left corder and (1, 1) at the upper right corner */
         ZFX::Verteces vertices =
         {
@@ -78,14 +64,14 @@ private:
             {
             //    x      y      texture coordinates
                 -0.5f, -0.5f,     0.0f, 0.0f,
-                 0.0f,  0.5f,     0.0f, 0.0f,
-                 0.5f, -0.5f,     1.0f, 0.0f
+                 0.5f, -0.5f,     1.0f, 0.0f,
+                 0.0f,  0.5f,     0.0f, 0.0f
             },
 
             ZFX::VertexAttributes{ {"positionIn", 2}, {"texCoordIn", 2} }
         };
 
-        /* For a triangle these don't really matter. Check out square! */
+        /* Now indeces are different! */
         ZFX::Indeces indeces =
         {
             0, 1, 2
@@ -96,22 +82,19 @@ private:
 
     std::unique_ptr<TexturedShape> addTexturedTriangleWithColour()
     {
-        /* The 3 corners of a triangle */
-        /* Texture coordinates have (0, 0) at the lower left corder and (1, 1) at the upper right corner */
         ZFX::Verteces vertices =
         {
             ZFX::VertexData
             {
             //    x      y     red  green  blue  alpha   texture coordinates
                -0.5f, -0.5f,   1.0f, 0.0f, 0.0f, 0.8f,     0.0f, 0.0f,
+                0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 0.8f,     1.0f, 0.0f,
                 0.0f,  0.5f,   0.0f, 1.0f, 0.0f, 0.8f,     0.0f, 0.0f,
-                0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 0.8f,     1.0f, 0.0f
             },
 
             ZFX::VertexAttributes{ {"positionIn", 2}, {"colourIn", 4}, {"texCoordIn", 2} }
         };
 
-        /* For a triangle these don't really matter. Check out square! */
         ZFX::Indeces indeces =
         {
             0, 1, 2

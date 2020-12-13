@@ -117,7 +117,8 @@ void ZFX::TextFreetype::drawText(const std::string& text, float x, float y, floa
         float h = ch.size.y * scale;
 
         // update VBO for each character, CCW
-        /*float vertices[6][4] =
+#if 1
+        float vertices[6][4] =
         {
             { xpos,     ypos + h,   0.0f, 0.0f },
             { xpos,     ypos,       0.0f, 1.0f },
@@ -126,8 +127,8 @@ void ZFX::TextFreetype::drawText(const std::string& text, float x, float y, floa
             { xpos,     ypos + h,   0.0f, 0.0f },
             { xpos + w, ypos,       1.0f, 1.0f },
             { xpos + w, ypos + h,   1.0f, 0.0f }
-        };*/
-
+        };
+#else
         // CW
         float vertices[6][4] =
         {
@@ -139,6 +140,7 @@ void ZFX::TextFreetype::drawText(const std::string& text, float x, float y, floa
             { xpos + w, ypos + h,   1.0f, 0.0f },
             { xpos + w, ypos,       1.0f, 1.0f }
         };
+#endif
 
         // render glyph texture over quad
         glBindTexture(GL_TEXTURE_2D, ch.textureID);
