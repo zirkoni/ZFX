@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Demo\Constants.cpp" />
     <ClCompile Include="..\..\Demo\Demo.hpp" />
     <ClCompile Include="..\..\Demo\main.cpp" />
     <ClCompile Include="..\..\ZFX\src\Mesh.cpp" />
@@ -29,6 +30,7 @@
     <ClCompile Include="..\..\ZFX\src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Demo\Constants.h" />
     <ClInclude Include="..\..\Demo\Demo1_Triangles.hpp" />
     <ClInclude Include="..\..\Demo\Demo2_Square.hpp" />
     <ClInclude Include="..\..\Demo\Demo3_Text_Freetype.hpp" />

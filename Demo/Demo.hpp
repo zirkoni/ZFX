@@ -1,5 +1,6 @@
 #pragma once
 #include "ZFX.h"
+#include "Constants.h"
 #include <memory>
 
 
@@ -7,7 +8,7 @@ struct BasicShape
 {
     BasicShape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces) :
         mesh{ vertices, indeces },
-        shader{ "../../../Shaders/basicShader", vertices.attributes() },
+        shader{ SHADERS_PATH + "colour", vertices.attributes() },
         transform{} {}
 
     void draw(const ZFX::Camera& camera)
@@ -26,9 +27,9 @@ struct TexturedShape
 {
     TexturedShape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces) :
         mesh{ vertices, indeces },
-        shader{ "../../../Shaders/basicShaderTexture", vertices.attributes() },
+        shader{ SHADERS_PATH + "texture", vertices.attributes() },
         transform{},
-        texture{ "../../../Demo/Textures/texture.png" } {}
+        texture{ TEXTURES_PATH + "texture.png" } {}
 
     void draw(const ZFX::Camera& camera)
     {

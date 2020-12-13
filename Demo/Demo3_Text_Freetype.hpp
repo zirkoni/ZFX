@@ -2,8 +2,8 @@
 #include "Demo.hpp"
 #include "Window.h"
 
-static const std::string FONT = "../../../Demo/Fonts/arial.ttf"; // "C:\\Windows\\Fonts\\arial.ttf";
-static const std::string SHADER = "../../../Shaders/freetype";
+static const std::string FONT = FONTS_PATH + "arial.ttf";
+static const std::string SHADER = SHADERS_PATH + "freetype";
 
 class Demo3 : public Demo
 {
