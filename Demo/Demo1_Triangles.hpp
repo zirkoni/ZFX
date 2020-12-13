@@ -5,25 +5,38 @@
 
 class Demo1 : public Demo
 {
+    static constexpr uint32_t IDX_X_MOVE = 0;
+    static constexpr uint32_t IDX_Y_MOVE = 1;
+
+    const glm::vec4 RED    = glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f };
+    const glm::vec4 GREEN  = glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f };
+    const glm::vec4 BLUE   = glm::vec4{ 0.0f, 0.0f, 1.0f, 1.0f };
+    const glm::vec4 YELLOW = glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f };
+
 public:
     Demo1(ZFX::Camera& camera) : Demo{ camera }
     {
         m_triangles.push_back(std::move(addTriangle()));
         m_triangles.push_back(std::move(addTexturedTriangle()));
         m_triangles.push_back(std::move(addTexturedTriangleWithColour()));
+        
+        /* Triangles with a single solid colour */
+        m_triangles.push_back(std::move(addTriangle( RED,   glm::vec2{ -1.0f,  1.0f }, 0.1f )));
+        m_triangles.push_back(std::move(addTriangle( GREEN, glm::vec2{  1.0f,  1.0f }, 0.2f )));
+        m_triangles.push_back(std::move(addTriangle( BLUE,  glm::vec2{ -1.0f, -1.0f }, 0.3f )));
+        m_triangles.push_back(std::move(addTriangle(YELLOW, glm::vec2{  1.0f, -1.0f }, 0.5f)));
     }
 
     void draw() override
     {
-        m_triangles[0]->transform.position().x = sin(m_counter);
-        m_triangles[1]->transform.position().y = sin(m_counter);
+        m_triangles.at(IDX_X_MOVE)->transform.position().x = sin(m_counter);
+        m_triangles.at(IDX_Y_MOVE)->transform.position().y = sin(m_counter);
         m_counter += 0.001f;
 
-        /* Draw opaque triangle 1st */
-        m_triangles[1]->draw(m_camera);
-
-        m_triangles[0]->draw(m_camera);
-        m_triangles[2]->draw(m_camera);
+        for (auto& t : m_triangles)
+        {
+            t->draw(m_camera);
+        }
     }
 
 private:
@@ -54,9 +67,51 @@ private:
         return std::make_unique<BasicShape>(vertices, indeces);
     }
 
-    std::unique_ptr<TexturedShape> addTexturedTriangle()
+    std::unique_ptr<BasicShape> addTriangle(const glm::vec4& colour, const glm::vec2& position, float scale)
     {
         /* The 3 corners of a triangle (counter clockwise) */
+        ZFX::Verteces vertices =
+        {
+            ZFX::VertexData
+            {
+                //    x      y
+                    -0.5f, -0.5f,
+                     0.5f, -0.5f,
+                     0.0f,  0.5f,
+                },
+
+                ZFX::VertexAttributes{ {"positionIn", 2} }
+        };
+
+        /* Now indeces are different! */
+        ZFX::Indeces indeces =
+        {
+            0, 1, 2
+        };
+
+        // Save uniform locations in Shader object
+        const std::string colourUniform = "colour";
+        const ZFX::Uniforms uniforms = { ZFX::TRANSFORM_UNIFORM, colourUniform };
+        auto triangle = std::make_unique<BasicShape>(vertices, indeces, uniforms);
+
+        // Now get colour uniform location from the shader
+        triangle->shader.bind();
+        GLint location = triangle->shader.uniformLocation(colourUniform);
+
+        // and set the colour
+        glUniform4f(location, colour.r, colour.g, colour.b, colour.a);
+
+        // set location
+        triangle->transform.position() = glm::vec3{ position.x, position.y, 0.0f };
+
+        // set size
+        triangle->transform.scale() = glm::vec3{ scale };
+
+        return triangle;
+    }
+
+    std::unique_ptr<TexturedShape> addTexturedTriangle()
+    {
         /* Texture coordinates have (0, 0) at the lower left corder and (1, 1) at the upper right corner */
         ZFX::Verteces vertices =
         {
@@ -71,7 +126,6 @@ private:
             ZFX::VertexAttributes{ {"positionIn", 2}, {"texCoordIn", 2} }
         };
 
-        /* Now indeces are different! */
         ZFX::Indeces indeces =
         {
             0, 1, 2

@@ -10,6 +10,12 @@ struct BasicShape
         mesh{ vertices, indeces },
         shader{ SHADERS_PATH + shaderName, vertices.attributes() },
         transform{} {}
+
+    BasicShape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces, const ZFX::Uniforms& uniforms,
+        const std::string shaderName = "colour2" ) :
+        mesh{ vertices, indeces },
+        shader{ SHADERS_PATH + shaderName, vertices.attributes(), uniforms },
+        transform{} {}
     
     virtual ~BasicShape() {}
 
