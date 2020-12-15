@@ -30,9 +30,6 @@
     <ClCompile Include="..\..\Demo\main.cpp">
       <Filter>Demo</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Demo\Demo.hpp">
-      <Filter>Demo</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ZFX\src\TextFreetype.cpp">
       <Filter>ZFX\src</Filter>
     </ClCompile>
@@ -40,6 +37,9 @@
       <Filter>ZFX\src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Demo\Constants.cpp">
+      <Filter>Demo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Demo\Demo.h">
       <Filter>Demo</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,22 +71,25 @@
     <ClInclude Include="..\..\ZFX\include\stb_image.h">
       <Filter>ZFX\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Demo\Demo1_Triangles.hpp">
-      <Filter>Demo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Demo\Demo2_Square.hpp">
-      <Filter>Demo</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\ZFX\include\TextFreetype.h">
       <Filter>ZFX\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Demo\Demo3_Text_Freetype.hpp">
-      <Filter>Demo</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ZFX\include\Vertex.h">
       <Filter>ZFX\include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Demo\Constants.h">
+      <Filter>Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Demo\Demo4_Circles.h">
+      <Filter>Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Demo\Demo1_Triangles.h">
+      <Filter>Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Demo\Demo2_Square.h">
+      <Filter>Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Demo\Demo3_Text_Freetype.h">
       <Filter>Demo</Filter>
     </ClInclude>
   </ItemGroup>

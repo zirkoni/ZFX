@@ -1,5 +1,5 @@
 #pragma once
-#include "Demo.hpp"
+#include "Demo.h"
 #include <vector>
 
 
@@ -74,13 +74,13 @@ private:
         {
             ZFX::VertexData
             {
-                //    x      y
-                    -0.5f, -0.5f,
-                     0.5f, -0.5f,
-                     0.0f,  0.5f,
-                },
+            //    x      y
+                -0.5f, -0.5f,
+                 0.5f, -0.5f,
+                 0.0f,  0.5f,
+            },
 
-                ZFX::VertexAttributes{ {"positionIn", 2} }
+            ZFX::VertexAttributes{ {"positionIn", 2} }
         };
 
         /* Now indeces are different! */
@@ -120,7 +120,7 @@ private:
             //    x      y      texture coordinates
                 -0.5f, -0.5f,     0.0f, 0.0f,
                  0.5f, -0.5f,     1.0f, 0.0f,
-                 0.0f,  0.5f,     0.0f, 0.0f
+                 0.0f,  0.5f,     0.5f, 1.0f
             },
 
             ZFX::VertexAttributes{ {"positionIn", 2}, {"texCoordIn", 2} }
@@ -131,7 +131,7 @@ private:
             0, 1, 2
         };
 
-        return std::make_unique<TexturedShape>(vertices, indeces);
+        return std::make_unique<TexturedShape>(vertices, indeces, "texture.png");
     }
 
     std::unique_ptr<TexturedShape> addTexturedTriangleWithColour()
@@ -143,7 +143,7 @@ private:
             //    x      y     red  green  blue  alpha   texture coordinates
                -0.5f, -0.5f,   1.0f, 0.0f, 0.0f, 0.8f,     0.0f, 0.0f,
                 0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 0.8f,     1.0f, 0.0f,
-                0.0f,  0.5f,   0.0f, 1.0f, 0.0f, 0.8f,     0.0f, 0.0f,
+                0.0f,  0.5f,   0.0f, 1.0f, 0.0f, 0.8f,     0.5f, 1.0f,
             },
 
             ZFX::VertexAttributes{ {"positionIn", 2}, {"colourIn", 4}, {"texCoordIn", 2} }
@@ -154,7 +154,7 @@ private:
             0, 1, 2
         };
 
-        return std::make_unique<TexturedShape>(vertices, indeces, "textureAndColour");
+        return std::make_unique<TexturedShape>(vertices, indeces, "texture.png", "textureAndColour");
     }
 
 private:

@@ -1,5 +1,5 @@
 #pragma once
-#include "Demo.hpp"
+#include "Demo.h"
 
 
 class Demo2 : public Demo

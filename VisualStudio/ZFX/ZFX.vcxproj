@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Demo\Constants.cpp" />
-    <ClCompile Include="..\..\Demo\Demo.hpp" />
+    <ClCompile Include="..\..\Demo\Demo.h" />
     <ClCompile Include="..\..\Demo\main.cpp" />
     <ClCompile Include="..\..\ZFX\src\Mesh.cpp" />
     <ClCompile Include="..\..\ZFX\src\Shader.cpp" />
@@ -31,9 +31,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Demo\Constants.h" />
-    <ClInclude Include="..\..\Demo\Demo1_Triangles.hpp" />
-    <ClInclude Include="..\..\Demo\Demo2_Square.hpp" />
-    <ClInclude Include="..\..\Demo\Demo3_Text_Freetype.hpp" />
+    <ClInclude Include="..\..\Demo\Demo1_Triangles.h" />
+    <ClInclude Include="..\..\Demo\Demo2_Square.h" />
+    <ClInclude Include="..\..\Demo\Demo3_Text_Freetype.h" />
+    <ClInclude Include="..\..\Demo\Demo4_Circles.h" />
     <ClInclude Include="..\..\ZFX\include\Camera.h" />
     <ClInclude Include="..\..\ZFX\include\Mesh.h" />
     <ClInclude Include="..\..\ZFX\include\Shader.h" />

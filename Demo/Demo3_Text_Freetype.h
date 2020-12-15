@@ -1,5 +1,5 @@
 #pragma once
-#include "Demo.hpp"
+#include "Demo.h"
 #include "Window.h"
 
 static const std::string FONT = FONTS_PATH + "arial.ttf";

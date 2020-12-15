@@ -33,9 +33,10 @@ struct BasicShape
 
 struct TexturedShape: public BasicShape
 {
-    TexturedShape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces, const std::string shaderName = "texture") :
-        BasicShape{ vertices, indeces, shaderName },
-        texture{ TEXTURES_PATH + "texture.png" } {}
+    TexturedShape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces, const std::string& textureFile,
+        const std::string& shaderName = "texture") :
+            BasicShape{ vertices, indeces, shaderName },
+            texture{ TEXTURES_PATH + textureFile } {}
 
     void draw(const ZFX::Camera& camera) override
     {
