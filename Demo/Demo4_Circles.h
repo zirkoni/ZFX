@@ -75,13 +75,13 @@ private:
         // Save uniform locations in Shader object
         const std::string colourUniform = "colour";
         const ZFX::Uniforms uniforms = { ZFX::TRANSFORM_UNIFORM, colourUniform };
-        auto triangle = std::make_unique<BasicShape>(vertices, indeces, uniforms, "circle");
+        auto circle = std::make_unique<BasicShape>(vertices, indeces, uniforms, "circle");
         
-        triangle->shader.bind();
-        GLint location = triangle->shader.uniformLocation(colourUniform);
+        circle->shader.bind();
+        GLint location = circle->shader.uniformLocation(colourUniform);
         glUniform4f(location, 0.0f, 1.0f, 0.0f, 1.0f);
 
-        return triangle;
+        return circle;
     }
 
 private:

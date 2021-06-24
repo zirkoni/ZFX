@@ -37,6 +37,8 @@ ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::stri
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32); // 4 * 8 = 32 (RGBA)
 
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16); // If GL_DEPTH_TEST is enabled
+
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
     m_window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -64,6 +66,10 @@ ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::stri
         // Cull faces that are facing away from the camera
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
+
+        // Complex object require depth test:
+        // don't draw pixels that are behind pixels that are closer to the camera.
+        glEnable(GL_DEPTH_TEST);
 
         // Enable transparency (alpha channel)
         glEnable(GL_BLEND);

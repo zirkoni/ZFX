@@ -2,6 +2,7 @@
 #include "Demo2_Square.h"
 #include "Demo3_Text_Freetype.h"
 #include "Demo4_Circles.h"
+#include "Demo5_Cube.h"
 #include <iostream>
 #include <vector>
 
@@ -14,6 +15,7 @@ void addDemos(DemoList& demos, ZFX::Camera& camera)
     demos.emplace_back(std::make_unique<Demo2>(camera));
     demos.emplace_back(std::make_unique<Demo3>(camera));
     demos.emplace_back(std::make_unique<Demo4>(camera));
+    demos.emplace_back(std::make_unique<Demo5>(camera));
 }
 
 void mainLoop(ZFX::Window& window)
@@ -65,6 +67,7 @@ void mainLoop(ZFX::Window& window)
 
         window.clear(0.0f, 0.0f, 0.0f, 1.0f);
 
+        glClear(GL_DEPTH_BUFFER_BIT);
         activeDemo->get()->draw();
 
         window.update();

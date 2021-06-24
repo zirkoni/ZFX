@@ -112,7 +112,7 @@ private:
 
     std::unique_ptr<TexturedShape> addTexturedTriangle()
     {
-        /* Texture coordinates have (0, 0) at the lower left corder and (1, 1) at the upper right corner */
+        /* Texture coordinates have (0, 0) at the lower left corner and (1, 1) at the upper right corner */
         ZFX::Verteces vertices =
         {
             ZFX::VertexData

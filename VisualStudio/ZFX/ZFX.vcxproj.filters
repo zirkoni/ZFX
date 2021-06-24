@@ -92,5 +92,8 @@
     <ClInclude Include="..\..\Demo\Demo3_Text_Freetype.h">
       <Filter>Demo</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Demo\Demo5_Cube.h">
+      <Filter>Demo</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

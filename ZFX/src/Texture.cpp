@@ -51,6 +51,7 @@ ZFX::Texture::Texture(const std::string& filename) : m_texture{ 0 }
     int width;
     int height;
     int numComponents;
+    stbi_set_flip_vertically_on_load(true);
     unsigned char* imageData = stbi_load(filename.c_str(), &width, &height, &numComponents, 4);
 
     if (imageData == nullptr)

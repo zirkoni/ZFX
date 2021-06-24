@@ -1,6 +1,6 @@
 #pragma once
 #include <GL/glew.h>
-#define USE_SDL2_IMAGE
+//#define USE_SDL2_IMAGE
 
 namespace ZFX
 {

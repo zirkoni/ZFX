@@ -35,6 +35,7 @@
     <ClInclude Include="..\..\Demo\Demo2_Square.h" />
     <ClInclude Include="..\..\Demo\Demo3_Text_Freetype.h" />
     <ClInclude Include="..\..\Demo\Demo4_Circles.h" />
+    <ClInclude Include="..\..\Demo\Demo5_Cube.h" />
     <ClInclude Include="..\..\ZFX\include\Camera.h" />
     <ClInclude Include="..\..\ZFX\include\Mesh.h" />
     <ClInclude Include="..\..\ZFX\include\Shader.h" />
