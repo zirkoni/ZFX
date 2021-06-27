@@ -3,6 +3,8 @@
 #include "Demo3_Text_Freetype.h"
 #include "Demo4_Circles.h"
 #include "Demo5_Cube.h"
+#include "Demo6_BasicLighting.h"
+#include "Demo7_ObjectLoader.h"
 #include <iostream>
 #include <vector>
 
@@ -16,6 +18,8 @@ void addDemos(DemoList& demos, ZFX::Camera& camera)
     demos.emplace_back(std::make_unique<Demo3>(camera));
     demos.emplace_back(std::make_unique<Demo4>(camera));
     demos.emplace_back(std::make_unique<Demo5>(camera));
+    demos.emplace_back(std::make_unique<Demo6>(camera));
+    demos.emplace_back(std::make_unique<Demo7>(camera));
 }
 
 void mainLoop(ZFX::Window& window)

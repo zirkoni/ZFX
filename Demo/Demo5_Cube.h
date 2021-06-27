@@ -5,7 +5,7 @@
 class Demo5 : public Demo
 {
 public:
-    Demo5(ZFX::Camera& camera) : Demo{ camera }
+    Demo5(ZFX::Camera& camera) : Demo{ camera }, m_counter{0.0f}
     {
         m_cube = addCube();
         m_cube->transform.scale() = glm::vec3{ 0.5f };
@@ -28,19 +28,19 @@ private:
         {
             ZFX::VertexData
             {
-                //   x   y   z      r   g   b   a
-                    -1, -1, -1,     1,  0,  0,  1, // 0 left low
-                     1, -1, -1,     0,  1,  0,  1, // 1 right low
-                     1,  1, -1,     0,  0,  1,  1, // 2 right high
-                    -1,  1, -1,     1,  1,  0,  1, // 3 left high
+                //   x   y   z
+                    -1, -1, -1, // 0 left low
+                     1, -1, -1, // 1 right low
+                     1,  1, -1, // 2 right high
+                    -1,  1, -1, // 3 left high
 
-                    -1, -1,  1,     1,  0,  0,  1, // 4 left low
-                     1, -1,  1,     0,  1,  0,  1, // 5 right low
-                     1,  1,  1,     0,  0,  1,  1, // 6 right high
-                    -1,  1,  1,     1,  1,  0,  1  // 7 left high
-                },
+                    -1, -1,  1, // 4 left low
+                     1, -1,  1, // 5 right low
+                     1,  1,  1, // 6 right high
+                    -1,  1,  1, // 7 left high
+            },
 
-                ZFX::VertexAttributes{ {"positionIn", 3}, {"colourIn", 4} }
+            ZFX::VertexAttributes{ {"positionIn", 3} }
         };
 
         ZFX::Indeces indeces =
@@ -64,7 +64,20 @@ private:
             4, 0, 5, 0, 1, 5
         };
 
+//#define CHANGE_COLOUR
+#if defined(CHANGE_COLOUR)
+        const std::string colourUniform = "colour";
+        const ZFX::Uniforms uniforms = { ZFX::TRANSFORM_UNIFORM, colourUniform };
+        auto cube = std::make_unique<BasicShape>(vertices, indeces, uniforms, "colour3D");
+
+        cube->shader.bind();
+        GLint location = cube->shader.uniformLocation(colourUniform);
+        glUniform4f(location, 0.0f, 0.5f, 0.0f, 1.0f);
+
+        return cube;
+#else
         return std::make_unique<BasicShape>(vertices, indeces, "colour3D");
+#endif
     }
 
 private:

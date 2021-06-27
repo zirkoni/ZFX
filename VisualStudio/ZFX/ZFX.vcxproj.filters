@@ -42,6 +42,12 @@
     <ClCompile Include="..\..\Demo\Demo.h">
       <Filter>Demo</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\ZFX\src\ObjLoader.cpp">
+      <Filter>ZFX\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tinyobjloader\tiny_obj_loader.cc">
+      <Filter>ZFX\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ZFX\include\Mesh.h">
@@ -93,6 +99,18 @@
       <Filter>Demo</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Demo\Demo5_Cube.h">
+      <Filter>Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ZFX\include\ObjLoader.h">
+      <Filter>ZFX\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tinyobjloader\tiny_obj_loader.h">
+      <Filter>ZFX\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Demo\Demo7_ObjectLoader.h">
+      <Filter>Demo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Demo\Demo6_BasicLighting.h">
       <Filter>Demo</Filter>
     </ClInclude>
   </ItemGroup>

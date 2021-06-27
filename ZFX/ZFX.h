@@ -6,4 +6,5 @@
 #include "Camera.h"
 #include "Transform.h"
 #include "TextFreetype.h"
+#include "ObjLoader.h"
 #include <stdexcept>

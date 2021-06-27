@@ -22,7 +22,9 @@
     <ClCompile Include="..\..\Demo\Constants.cpp" />
     <ClCompile Include="..\..\Demo\Demo.h" />
     <ClCompile Include="..\..\Demo\main.cpp" />
+    <ClCompile Include="..\..\tinyobjloader\tiny_obj_loader.cc" />
     <ClCompile Include="..\..\ZFX\src\Mesh.cpp" />
+    <ClCompile Include="..\..\ZFX\src\ObjLoader.cpp" />
     <ClCompile Include="..\..\ZFX\src\Shader.cpp" />
     <ClCompile Include="..\..\ZFX\src\TextFreetype.cpp" />
     <ClCompile Include="..\..\ZFX\src\Texture.cpp" />
@@ -36,8 +38,12 @@
     <ClInclude Include="..\..\Demo\Demo3_Text_Freetype.h" />
     <ClInclude Include="..\..\Demo\Demo4_Circles.h" />
     <ClInclude Include="..\..\Demo\Demo5_Cube.h" />
+    <ClInclude Include="..\..\Demo\Demo6_BasicLighting.h" />
+    <ClInclude Include="..\..\Demo\Demo7_ObjectLoader.h" />
+    <ClInclude Include="..\..\tinyobjloader\tiny_obj_loader.h" />
     <ClInclude Include="..\..\ZFX\include\Camera.h" />
     <ClInclude Include="..\..\ZFX\include\Mesh.h" />
+    <ClInclude Include="..\..\ZFX\include\ObjLoader.h" />
     <ClInclude Include="..\..\ZFX\include\Shader.h" />
     <ClInclude Include="..\..\ZFX\include\stb_image.h" />
     <ClInclude Include="..\..\ZFX\include\TextFreetype.h" />
@@ -154,15 +160,15 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\dev\ZFX\ZFX;D:\dev\ZFX\ZFX\include;D:\dev\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\dev\libs\freetype\include;D:\dev\ZFX\ZFX;D:\dev\ZFX\ZFX\include;D:\dev\libs\SDL2_image\include;D:\dev\libs\SDL2\include;D:\dev\libs\glew\include;D:\dev\libs\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>D:\dev\libs\glew\lib\Release\x64;D:\dev\libs\SDL2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;SDL2.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\dev\libs\freetype\objs\x64\Release;D:\dev\libs\SDL2_image\lib\x64;D:\dev\libs\glew\lib\Release\x64;D:\dev\libs\SDL2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2main.lib;SDL2.lib;SDL2_image.lib;glew32.lib;opengl32.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

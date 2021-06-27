@@ -1,6 +1,10 @@
 #include "Vertex.h"
 
 
+ZFX::Verteces::Verteces(VertexData& data, VertexAttributes& attributes): m_data{data}, m_attributes{attributes}
+{
+}
+
 ZFX::Verteces::Verteces(VertexData&& data, VertexAttributes&& attributes)
 {
     m_data = std::move(data);

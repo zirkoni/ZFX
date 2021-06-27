@@ -19,6 +19,7 @@ namespace ZFX
     class Verteces
     {
     public:
+        Verteces(VertexData& data, VertexAttributes& attributes);
         Verteces(VertexData&& data, VertexAttributes&& attributes);
 
         const VertexData& data() const { return m_data; }
