@@ -70,9 +70,7 @@ private:
         const ZFX::Uniforms uniforms = { ZFX::TRANSFORM_UNIFORM, colourUniform };
         auto cube = std::make_unique<BasicShape>(vertices, indeces, uniforms, "colour3D");
 
-        cube->shader.bind();
-        GLint location = cube->shader.uniformLocation(colourUniform);
-        glUniform4f(location, 0.0f, 0.5f, 0.0f, 1.0f);
+        cube->shader.setUniformVec4(colourUniform, glm::vec4{ 0.0f, 0.5f, 0.0f, 1.0f });
 
         return cube;
 #else

@@ -113,6 +113,46 @@ GLint ZFX::Shader::uniformLocation(const std::string& uniform) const
     return UNIFORM_NOT_FOUND;
 }
 
+void ZFX::Shader::setUniformFloat(const std::string& uniform, float value)
+{
+    bind();
+    GLint loc = uniformLocation(uniform);
+    if (UNIFORM_NOT_FOUND != loc)
+    {
+        glUniform1f(loc, value);
+    }
+}
+
+void ZFX::Shader::setUniformVec2(const std::string& uniform, const glm::vec2& value)
+{
+    bind();
+    GLint loc = uniformLocation(uniform);
+    if (UNIFORM_NOT_FOUND != loc)
+    {
+        glUniform2f(loc, value.x, value.y);
+    }
+}
+
+void ZFX::Shader::setUniformVec3(const std::string& uniform, const glm::vec3& value)
+{
+    bind();
+    GLint loc = uniformLocation(uniform);
+    if (UNIFORM_NOT_FOUND != loc)
+    {
+        glUniform3f(loc, value.x, value.y, value.z);
+    }
+}
+
+void ZFX::Shader::setUniformVec4(const std::string& uniform, const glm::vec4& value)
+{
+    bind();
+    GLint loc = uniformLocation(uniform);
+    if (UNIFORM_NOT_FOUND != loc)
+    {
+        glUniform4f(loc, value.x, value.y, value.z, value.w);
+    }
+}
+
 void ZFX::Shader::checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg)
 {
     GLint success = 0;

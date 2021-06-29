@@ -94,12 +94,8 @@ private:
         const ZFX::Uniforms uniforms = { ZFX::TRANSFORM_UNIFORM, colourUniform };
         auto triangle = std::make_unique<BasicShape>(vertices, indeces, uniforms);
 
-        // Now get colour uniform location from the shader
-        triangle->shader.bind();
-        GLint location = triangle->shader.uniformLocation(colourUniform);
-
-        // and set the colour
-        glUniform4f(location, colour.r, colour.g, colour.b, colour.a);
+        // Set colour
+        triangle->shader.setUniformVec4(colourUniform, colour);
 
         // set location
         triangle->transform.position() = glm::vec3{ position.x, position.y, 0.0f };

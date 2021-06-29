@@ -77,9 +77,8 @@ private:
         const ZFX::Uniforms uniforms = { ZFX::TRANSFORM_UNIFORM, colourUniform };
         auto circle = std::make_unique<BasicShape>(vertices, indeces, uniforms, "circle");
         
-        circle->shader.bind();
-        GLint location = circle->shader.uniformLocation(colourUniform);
-        glUniform4f(location, 0.0f, 1.0f, 0.0f, 1.0f);
+        // Set colour
+        circle->shader.setUniformVec4(colourUniform, glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
 
         return circle;
     }
