@@ -12,7 +12,7 @@ namespace ZFX
     class Object
     {
     public:
-        Object(const std::string& filename);
+        Object(const std::string& filename, bool smoothNormals = true);
         ~Object();
 
         const Verteces* verteces() const { return m_verteces; }
@@ -22,6 +22,7 @@ namespace ZFX
         void loadObject(tinyobj::ObjReader& reader);
 
     private:
+        bool m_smoothNormals;
         VertexData m_data;
         VertexAttributes m_attributes;
         Verteces* m_verteces;

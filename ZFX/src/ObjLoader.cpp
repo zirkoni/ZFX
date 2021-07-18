@@ -8,7 +8,8 @@
 #include <algorithm>
 #include <unordered_map>
 
-ZFX::Object::Object(const std::string& filename): m_verteces{nullptr}
+ZFX::Object::Object(const std::string& filename, bool smoothNormals):
+    m_verteces{nullptr}, m_smoothNormals{smoothNormals}
 {
     tinyobj::ObjReader reader;
 
@@ -60,13 +61,20 @@ void ZFX::Object::loadObject(tinyobj::ObjReader& reader)
             const float z = attrib.vertices.at(3 * index.vertex_index + 2);
 
             glm::vec3 coordinate{ x, y, z };
-            /*auto it = std::find(uniqueVerteces.begin(), uniqueVerteces.end(), coordinate);
-            if (it != uniqueVerteces.end())
+
+            bool newVertex = true;
+            if (m_smoothNormals)
             {
-                uint32_t pos = uint32_t(it - uniqueVerteces.begin());
-                m_indeces.push_back(pos);
+                auto it = std::find(uniqueVerteces.begin(), uniqueVerteces.end(), coordinate);
+                if (it != uniqueVerteces.end())
+                {
+                    uint32_t pos = uint32_t(it - uniqueVerteces.begin());
+                    m_indeces.push_back(pos);
+                    newVertex = false;
+                }
             }
-            else // New unique vertex */
+            
+            if(newVertex)
             {
                 data.push_back(x);
                 data.push_back(y);

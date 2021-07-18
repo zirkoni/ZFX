@@ -23,6 +23,10 @@ public:
 private:
     std::unique_ptr<BasicShape> addCube()
     {
+        /* Duplicate some vertices to get clearly defined edges:
+        * - each corner has a normal vector in every cardinal (x,y,z) direction
+        * - 8 corners and 3 axis => 24 vertices
+        */
         ZFX::Verteces vertices =
         {
             ZFX::VertexData

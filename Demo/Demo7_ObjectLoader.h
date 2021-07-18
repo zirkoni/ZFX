@@ -23,9 +23,9 @@ public:
 private:
     std::unique_ptr<BasicShape> addCube()
     {
-        //ZFX::Object obj{ OBJS_PATH + "cube.obj" };
-        //ZFX::Object obj{ OBJS_PATH + "monkey/monkey3_normals.obj" };
-        ZFX::Object obj{ OBJS_PATH + "teamug/teamugobj.obj" };
+        //ZFX::Object obj{ OBJS_PATH + "cube.obj", false };
+        ZFX::Object obj{ OBJS_PATH + "monkey/monkey3_normals.obj" };
+        //ZFX::Object obj{ OBJS_PATH + "teamug/teamugobj.obj" };
 
         return std::make_unique<BasicShape>(*obj.verteces(), obj.indeces(), "colour3D_Lighting");
     }

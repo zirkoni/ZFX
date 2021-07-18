@@ -59,6 +59,21 @@ void mainLoop(ZFX::Window& window)
                         activeDemo = demos.begin();
                     }
                 }
+                else if (e.key.keysym.scancode == SDL_SCANCODE_Z)
+                {
+                    camera.resetZoom();
+                }
+            }
+            else if (e.type == SDL_MOUSEWHEEL)
+            {
+                if (e.wheel.y > 0)
+                {
+                    camera.zoomIn();
+                }
+                else if (e.wheel.y < 0)
+                {
+                    camera.zoomOut();
+                }
             }
         }
 
