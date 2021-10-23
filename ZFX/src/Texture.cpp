@@ -1,6 +1,6 @@
 #include "Texture.h"
 #include "zfxdefs.h"
-#include <SDL_image.h>
+#include <SDL2/SDL_image.h>
 #include <stdexcept>
 #include <cassert>
 

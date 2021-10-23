@@ -42,8 +42,8 @@ void ZFX::Shader::createAndAttach(const std::string& filename)
 {
     m_program = glCreateProgram();
 
-    m_shaders[VERTEX_SHADER] = create(load(filename + ".vs"), GL_VERTEX_SHADER);
-    m_shaders[FRAGMENT_SHADER] = create(load(filename + ".fs"), GL_FRAGMENT_SHADER);
+    m_shaders[VERTEX_SHADER] = create(filename + ".vs", GL_VERTEX_SHADER);
+    m_shaders[FRAGMENT_SHADER] = create(filename + ".fs", GL_FRAGMENT_SHADER);
 
     for (unsigned int i = 0; i < NUM_SHADERS; ++i)
     {
@@ -205,7 +205,7 @@ std::string ZFX::Shader::load(const std::string& fileName)
     return output;
 }
 
-GLuint ZFX::Shader::create(const std::string& text, GLenum shaderType)
+GLuint ZFX::Shader::create(const std::string& fileName, GLenum shaderType)
 {
     GLuint shader = glCreateShader(shaderType);
 
@@ -215,6 +215,7 @@ GLuint ZFX::Shader::create(const std::string& text, GLenum shaderType)
     }
     else
     {
+        const std::string text = load(fileName);
         const GLchar* p[1];
         p[0] = text.c_str();
         GLint lengths[1];
@@ -223,7 +224,7 @@ GLuint ZFX::Shader::create(const std::string& text, GLenum shaderType)
         glShaderSource(shader, 1, p, lengths);
         glCompileShader(shader);
 
-        checkError(shader, GL_COMPILE_STATUS, false, "Error compiling shader!");
+        checkError(shader, GL_COMPILE_STATUS, false, std::string("Error compiling shader: " + fileName + "\n").c_str());
     }
 
     return shader;

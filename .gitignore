@@ -348,3 +348,10 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# Make objects/dependency files
+*.o
+*.d
+
+# Linux binary
+zfx_demo
