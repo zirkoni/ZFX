@@ -12,7 +12,8 @@ namespace ZFX
         Window& operator=(const Window& other) = delete;
         ~Window();
 
-        void clear(float r, float g, float b, float a);
+        void clear(); // clear to black
+        void clear(float r, float g, float b, float a); // clear to user defined colour
         void update();
 
         static float aspectRatio() { return ((float)s_width / s_height); }

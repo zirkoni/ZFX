@@ -85,6 +85,11 @@ ZFX::Window::~Window()
     SDL_Quit();
 }
 
+void ZFX::Window::clear()
+{
+    clear(0.0f, 0.0f, 0.0f, 1.0f);
+}
+
 void ZFX::Window::clear(float r, float g, float b, float a)
 {
     glClearColor(r, g, b, a);

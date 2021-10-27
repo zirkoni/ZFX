@@ -68,15 +68,17 @@ void ZFX::Shader::saveUniformLocations(const Uniforms& uniforms)
     }
 }
 
-bool ZFX::Shader::saveSingleUniform(const std::string name)
+void ZFX::Shader::saveSingleUniform(const std::string name)
 {
     GLint location = glGetUniformLocation(m_program, name.c_str());
     if (UNIFORM_NOT_FOUND != location)
     {
         m_uniforms.insert( { name, location } );
-        return true;
     }
-    return false;
+    else
+    {
+        throw std::runtime_error{ "glGetUniformLocation failed: " + name };
+    }
 }
 
 void ZFX::Shader::bind()
@@ -87,70 +89,47 @@ void ZFX::Shader::bind()
 void ZFX::Shader::update(const Transform& transform, const Camera& camera)
 {
     GLint location = uniformLocation(TRANSFORM_UNIFORM);
-    if (UNIFORM_NOT_FOUND != location)
-    {
-        glm::mat4 model = camera.getViewProjection() * transform.getModel();
-        glUniformMatrix4fv(location, 1, GL_FALSE, &model[0][0]);
-    }
+    glm::mat4 model = camera.getViewProjection() * transform.getModel();
+    glUniformMatrix4fv(location, 1, GL_FALSE, &model[0][0]);
 }
 
 void ZFX::Shader::update(const glm::mat4& transform)
 {
     GLint location = uniformLocation(TRANSFORM_UNIFORM);
-    if (UNIFORM_NOT_FOUND != location)
-    {
-        glUniformMatrix4fv(location, 1, GL_FALSE, &transform[0][0]);
-    }
+    glUniformMatrix4fv(location, 1, GL_FALSE, &transform[0][0]);
 }
 
 GLint ZFX::Shader::uniformLocation(const std::string& uniform) const
 {
-    if (m_uniforms.find(uniform) != m_uniforms.end())
-    {
-        return m_uniforms.at(uniform);
-    }
-
-    return UNIFORM_NOT_FOUND;
+    return m_uniforms.at(uniform);
 }
 
 void ZFX::Shader::setUniformFloat(const std::string& uniform, float value)
 {
     bind();
     GLint loc = uniformLocation(uniform);
-    if (UNIFORM_NOT_FOUND != loc)
-    {
-        glUniform1f(loc, value);
-    }
+    glUniform1f(loc, value);
 }
 
 void ZFX::Shader::setUniformVec2(const std::string& uniform, const glm::vec2& value)
 {
     bind();
     GLint loc = uniformLocation(uniform);
-    if (UNIFORM_NOT_FOUND != loc)
-    {
-        glUniform2f(loc, value.x, value.y);
-    }
+    glUniform2f(loc, value.x, value.y);
 }
 
 void ZFX::Shader::setUniformVec3(const std::string& uniform, const glm::vec3& value)
 {
     bind();
     GLint loc = uniformLocation(uniform);
-    if (UNIFORM_NOT_FOUND != loc)
-    {
-        glUniform3f(loc, value.x, value.y, value.z);
-    }
+    glUniform3f(loc, value.x, value.y, value.z);
 }
 
 void ZFX::Shader::setUniformVec4(const std::string& uniform, const glm::vec4& value)
 {
     bind();
     GLint loc = uniformLocation(uniform);
-    if (UNIFORM_NOT_FOUND != loc)
-    {
-        glUniform4f(loc, value.x, value.y, value.z, value.w);
-    }
+    glUniform4f(loc, value.x, value.y, value.z, value.w);
 }
 
 void ZFX::Shader::checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg)

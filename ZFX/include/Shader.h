@@ -53,7 +53,7 @@ namespace ZFX
         void createAndAttach(const std::string& filename);
         void compile();
         void saveUniformLocations(const Uniforms& uniforms);
-        bool saveSingleUniform(const std::string name);
+        void saveSingleUniform(const std::string name);
 
         static void checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg);
         static std::string load(const std::string& fileName);

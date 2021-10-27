@@ -84,7 +84,7 @@ void mainLoop(ZFX::Window& window)
             wireframeOnOldValue = wireframeOn;
         }
 
-        window.clear(0.0f, 0.0f, 0.0f, 1.0f);
+        window.clear();
 
         glClear(GL_DEPTH_BUFFER_BIT);
         activeDemo->get()->draw();
@@ -100,6 +100,8 @@ int main(int argc, char* argv[])
     try
     {
         ZFX::Window window{ 800, 600, "Demo" };
+        window.clear();
+        window.update();
         mainLoop(window);
     }
     catch (const std::runtime_error& error) // TODO: maybe typedef type to e.g. ZFX::Exception?
