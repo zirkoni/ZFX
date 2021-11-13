@@ -8,7 +8,7 @@
 uint32_t ZFX::Window::s_width = 0;
 uint32_t ZFX::Window::s_height = 0;
 
-ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::string& title) :
+ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::string& title, bool vsync) :
     m_window{ nullptr },
     m_glContext{ nullptr }
 {
@@ -31,15 +31,7 @@ ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::stri
     }
 #endif
 
-    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32); // 4 * 8 = 32 (RGBA)
-
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16); // If GL_DEPTH_TEST is enabled
-
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    setGlAttributes();
 
     m_window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         s_width, s_height, SDL_WINDOW_OPENGL);
@@ -60,21 +52,9 @@ ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::stri
     {
         throw std::runtime_error{ "glewInit() failed" };
     }
-    else
-    {
-        // for simple object these are enough
-        // Cull faces that are facing away from the camera
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
 
-        // Complex object require depth test:
-        // don't draw pixels that are behind pixels that are closer to the camera.
-        glEnable(GL_DEPTH_TEST);
-
-        // Enable transparency (alpha channel)
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    }
+    setGlewAttributes();
+    setVsync(vsync);
 }
 
 ZFX::Window::~Window()
@@ -83,6 +63,40 @@ ZFX::Window::~Window()
     SDL_DestroyWindow(m_window);
 
     SDL_Quit();
+}
+
+void ZFX::Window::setGlAttributes()
+{
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32); // 4 * 8 = 32 (RGBA)
+
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16); // If GL_DEPTH_TEST is enabled
+
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+}
+
+void ZFX::Window::setGlewAttributes()
+{
+    // for simple object these are enough
+    // Cull faces that are facing away from the camera
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+
+    // Complex object require depth test:
+    // don't draw pixels that are behind pixels that are closer to the camera.
+    glEnable(GL_DEPTH_TEST);
+
+    // Enable transparency (alpha channel)
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void ZFX::Window::setVsync(bool enabled)
+{
+    SDL_GL_SetSwapInterval((enabled ? 1 : 0));
 }
 
 void ZFX::Window::clear()

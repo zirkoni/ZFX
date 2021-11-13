@@ -8,7 +8,7 @@ namespace ZFX
     class Window
     {
     public:
-        Window(const uint32_t width, const uint32_t height, const std::string& title);
+        Window(const uint32_t width, const uint32_t height, const std::string& title, bool vsync = true);
         Window(const Window& other) = delete;
         Window& operator=(const Window& other) = delete;
         ~Window();
@@ -18,10 +18,15 @@ namespace ZFX
         void clear(glm::vec4 bgColour); // clear to user defined colour
 
         void update();
+        void setVsync(bool enabled);
 
         static float aspectRatio() { return ((float)s_width / s_height); }
         static uint32_t width() { return s_width; }
         static uint32_t height() { return s_height; }
+
+    private:
+        void setGlAttributes();
+        void setGlewAttributes();
 
     private:
         SDL_Window* m_window;
