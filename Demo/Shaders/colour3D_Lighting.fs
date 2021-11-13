@@ -14,13 +14,13 @@ void main()
     // Ambient
     float ambientLightStrength = 0.5;
     vec3 ambient = ambientLightStrength * lightColour;
-    
+
     // Diffuse
     vec3 norm = normalize(normal);
     vec3 lightDirection = normalize(lightPosition - position);
     float diff = max(dot(norm, lightDirection), 0.0);
     vec3 diffuse = diff * lightColour;
-    
+
     vec3 result = (ambient + diffuse) * colour.xyz;
     fragColorOut = vec4(result, 1.0);
 }
