@@ -8,11 +8,11 @@ public:
     Demo4(ZFX::Camera& camera) : Demo{ camera }
     {
         m_textureCircle = addTexturedCircle();
-        m_textureCircle->transform.position().x = -0.5f;
+        m_textureCircle->transform.position().x = -0.2f;
         m_textureCircle->transform.scale() = glm::vec3{ 0.3f };
 
         m_shaderCircle = addShaderCircle();
-        m_shaderCircle->transform.position().x = 0.5f;
+        m_shaderCircle->transform.position().x = 0.2f;
         m_shaderCircle->transform.scale() = glm::vec3{ 0.3f };
     }
 
@@ -76,9 +76,9 @@ private:
         const std::string colourUniform = "colour";
         const ZFX::Uniforms uniforms = { ZFX::TRANSFORM_UNIFORM, colourUniform };
         auto circle = std::make_unique<BasicShape>(vertices, indeces, uniforms, "circle");
-        
+
         // Set colour
-        circle->shader.setUniformVec4(colourUniform, glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+        circle->shader.setUniformVec4(colourUniform, ZFX::GREEN);
 
         return circle;
     }

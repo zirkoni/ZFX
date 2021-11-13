@@ -96,6 +96,11 @@ void ZFX::Window::clear(float r, float g, float b, float a)
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
+void ZFX::Window::clear(glm::vec4 bgColour)
+{
+    clear(bgColour.r, bgColour.g, bgColour.b, bgColour.a);
+}
+
 void ZFX::Window::update()
 {
     SDL_GL_SwapWindow(m_window);

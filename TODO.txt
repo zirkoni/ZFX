@@ -1,0 +1,10 @@
+- Fix texture upside down => DONE: use std_image to flip the image (SDL2_Image implementation todo?)
+- Shader: add setters for generic uniforms (setFloat, setVec3, setVec4, etc...) => DONE: for 1-4 floats
+- cube demo => DONE
+- lighting => DONE
+- obj loader => DONE: still needs improving, indeces not used at the moment
+- materials
+- instancing
+- fps counter
+
+https://learnopengl.com/Advanced-OpenGL/Instancing

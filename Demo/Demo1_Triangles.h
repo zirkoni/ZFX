@@ -8,23 +8,18 @@ class Demo1 : public Demo
     static constexpr uint32_t IDX_X_MOVE = 0;
     static constexpr uint32_t IDX_Y_MOVE = 1;
 
-    const glm::vec4 RED    = glm::vec4{ 1.0f, 0.0f, 0.0f, 1.0f };
-    const glm::vec4 GREEN  = glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f };
-    const glm::vec4 BLUE   = glm::vec4{ 0.0f, 0.0f, 1.0f, 1.0f };
-    const glm::vec4 YELLOW = glm::vec4{ 1.0f, 1.0f, 0.0f, 1.0f };
-
 public:
     Demo1(ZFX::Camera& camera) : Demo{ camera }
     {
         m_triangles.push_back(std::move(addTriangle()));
         m_triangles.push_back(std::move(addTexturedTriangle()));
         m_triangles.push_back(std::move(addTexturedTriangleWithColour()));
-        
+
         /* Triangles with a single solid colour */
-        m_triangles.push_back(std::move(addTriangle( RED,   glm::vec2{ -1.0f,  1.0f }, 0.1f )));
-        m_triangles.push_back(std::move(addTriangle( GREEN, glm::vec2{  1.0f,  1.0f }, 0.2f )));
-        m_triangles.push_back(std::move(addTriangle( BLUE,  glm::vec2{ -1.0f, -1.0f }, 0.3f )));
-        m_triangles.push_back(std::move(addTriangle(YELLOW, glm::vec2{  1.0f, -1.0f }, 0.5f)));
+        m_triangles.push_back(std::move(addTriangle( ZFX::RED,    glm::vec2{ -1.0f,  1.0f }, 0.1f )));
+        m_triangles.push_back(std::move(addTriangle( ZFX::GREEN,  glm::vec2{  1.0f,  1.0f }, 0.2f )));
+        m_triangles.push_back(std::move(addTriangle( ZFX::BLUE,   glm::vec2{ -1.0f, -1.0f }, 0.3f )));
+        m_triangles.push_back(std::move(addTriangle( ZFX::YELLOW, glm::vec2{  1.0f, -1.0f }, 0.5f)));
     }
 
     void draw() override

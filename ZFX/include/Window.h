@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <SDL2/SDL.h>
+#include <glm/glm.hpp>
 
 namespace ZFX
 {
@@ -14,6 +15,8 @@ namespace ZFX
 
         void clear(); // clear to black
         void clear(float r, float g, float b, float a); // clear to user defined colour
+        void clear(glm::vec4 bgColour); // clear to user defined colour
+
         void update();
 
         static float aspectRatio() { return ((float)s_width / s_height); }

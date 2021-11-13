@@ -24,9 +24,11 @@ void addDemos(DemoList& demos, ZFX::Camera& camera)
 
 void mainLoop(ZFX::Window& window)
 {
-    ZFX::Camera camera{ glm::vec3{0.0f, 0.0f, 3.0f}, window.aspectRatio() };
     bool wireframeOn = false;
     bool wireframeOnOldValue = wireframeOn;
+    auto bgColour = ZFX::BLACK;
+
+    ZFX::Camera camera{ glm::vec3{0.0f, 0.0f, 3.0f}, window.aspectRatio() };
 
     DemoList demos;
     addDemos(demos, camera);
@@ -45,13 +47,11 @@ void mainLoop(ZFX::Window& window)
             }
             else if (e.type == SDL_KEYDOWN)
             {
-                /* Toggle wireframe mode on/off by pressing W */
-                if (e.key.keysym.scancode == SDL_SCANCODE_W)
+                if (e.key.keysym.scancode == SDL_SCANCODE_W) // Toggle wireframe mode on/off by pressing W
                 {
                     wireframeOn = !wireframeOn;
                 }
-                /* Switch to different demo by pressing space */
-                else if (e.key.keysym.scancode == SDL_SCANCODE_SPACE)
+                else if (e.key.keysym.scancode == SDL_SCANCODE_SPACE) // Switch to different demo by pressing space
                 {
                     ++activeDemo;
                     if (activeDemo == demos.end())
@@ -63,8 +63,13 @@ void mainLoop(ZFX::Window& window)
                 {
                     camera.resetZoom();
                 }
+                else if (e.key.keysym.scancode == SDL_SCANCODE_C) // Change background colour black <=> white
+                {
+                    if (bgColour == ZFX::BLACK) bgColour = ZFX::WHITE;
+                    else bgColour = ZFX::BLACK;
+                }
             }
-            else if (e.type == SDL_MOUSEWHEEL)
+            else if (e.type == SDL_MOUSEWHEEL) // Zoom in/out
             {
                 if (e.wheel.y > 0)
                 {
@@ -84,7 +89,7 @@ void mainLoop(ZFX::Window& window)
             wireframeOnOldValue = wireframeOn;
         }
 
-        window.clear();
+        window.clear(bgColour);
 
         glClear(GL_DEPTH_BUFFER_BIT);
         activeDemo->get()->draw();
