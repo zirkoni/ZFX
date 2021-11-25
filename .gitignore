@@ -356,4 +356,10 @@ MigrationBackup/
 # Linux binary
 zfx_demo
 
-CodeBlocks
+# Eclipse IDE
+.cproject
+.project
+.settings/
+
+run_with_mangohud.sh
+
