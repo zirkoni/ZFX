@@ -5,6 +5,7 @@
 #include "Demo5_Cube.h"
 #include "Demo6_BasicLighting.h"
 #include "Demo7_ObjectLoader.h"
+#include "Demo8_Instancing.h"
 #include <iostream>
 #include <vector>
 
@@ -20,6 +21,7 @@ void addDemos(DemoList& demos, ZFX::Camera& camera)
     demos.emplace_back(std::make_unique<Demo5>(camera));
     demos.emplace_back(std::make_unique<Demo6>(camera));
     demos.emplace_back(std::make_unique<Demo7>(camera));
+    demos.emplace_back(std::make_unique<Demo8>(camera));
 }
 
 void mainLoop(ZFX::Window& window)
@@ -58,6 +60,8 @@ void mainLoop(ZFX::Window& window)
                     {
                         activeDemo = demos.begin();
                     }
+
+                    camera.resetZoom();
                 }
                 else if (e.key.keysym.scancode == SDL_SCANCODE_Z)
                 {

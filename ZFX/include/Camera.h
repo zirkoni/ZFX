@@ -34,14 +34,14 @@ namespace ZFX
             return m_perspective * glm::lookAt(m_position, m_position + m_forward, m_up);
         }
 
-        void zoomIn()
+        void zoomIn(float amount = ZOOM_AMOUNT)
         {
-            zoom(ZOOM_AMOUNT);
+            zoom(amount);
         }
 
-        void zoomOut()
+        void zoomOut(float amount = ZOOM_AMOUNT)
         {
-            zoom(-ZOOM_AMOUNT);
+            zoom(-amount);
         }
 
         void resetZoom()
@@ -54,18 +54,11 @@ namespace ZFX
         {
             bool doZoom = true;
             
-            if (amount > 0)
-            {
-                if (m_position.z - amount < 0.2f) doZoom = false;
-            }
-            else if (amount < 0)
-            {
-                if (m_position.z + amount > 5.0f) doZoom = false;
-            }
-            
             if (doZoom)
             {
-                m_position += m_forward * amount;
+                float distance = abs(m_zoomOriginZ - m_position.z);
+
+                m_position += m_forward * amount * (distance + 1.0f);
             }
         }
 
