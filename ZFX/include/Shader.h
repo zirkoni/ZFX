@@ -32,6 +32,7 @@ namespace ZFX
         /* Apply transformations */
         void update(const Transform& transform, const Camera& camera);
         void update(const glm::mat4& transform);
+        void update(const Camera& camera, const std::string& uniform);
 
         GLuint programId() const { return m_program; }
         GLint uniformLocation(const std::string& uniform) const;
@@ -53,7 +54,7 @@ namespace ZFX
         void createAndAttach(const std::string& filename);
         void compile();
         void saveUniformLocations(const Uniforms& uniforms);
-        void saveSingleUniform(const std::string name);
+        void saveSingleUniform(const std::string& name);
 
         static void checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg);
         static std::string load(const std::string& fileName);

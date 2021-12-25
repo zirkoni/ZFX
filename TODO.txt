@@ -4,7 +4,7 @@
 - lighting => DONE
 - obj loader => DONE: still needs improving, indeces not used at the moment
 - materials
-- instancing
+- instancing => DONE: but without movement
 - fps counter
 
 https://learnopengl.com/Advanced-OpenGL/Instancing

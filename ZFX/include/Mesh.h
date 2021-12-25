@@ -1,5 +1,6 @@
 #pragma once
 #include "Vertex.h"
+#include <glm/glm.hpp>
 
 
 namespace ZFX
@@ -8,26 +9,29 @@ namespace ZFX
 
     class Mesh
     {
+        Mesh(const Verteces& vertices, const Indeces& indeces, unsigned numBuffers);
+
     public:
         Mesh(const Verteces& vertices, const Indeces& indeces);
+        Mesh(const Verteces& vertices, const Indeces& indeces, const std::vector<glm::mat4>& modelMatrices);
         Mesh(const Mesh& other) = delete;
         Mesh& operator=(const Mesh& other) = delete;
         ~Mesh();
 
         void draw();
+        void draw(GLsizei amount);
 
     private:
         enum
         {
             VERTEX_BUFFER,
             INDEX_BUFFER,
-
-            NUM_BUFFERS
+            INSTANCE_BUFFER
         };
 
         GLsizei m_numIndeces;
         GLuint m_vertexArrayObject;
-        GLuint m_vertexArrayBuffers[NUM_BUFFERS];
+        std::vector<GLuint> m_vertexArrayBuffers;
     };
 }
 

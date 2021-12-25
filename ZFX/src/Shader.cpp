@@ -68,7 +68,7 @@ void ZFX::Shader::saveUniformLocations(const Uniforms& uniforms)
     }
 }
 
-void ZFX::Shader::saveSingleUniform(const std::string name)
+void ZFX::Shader::saveSingleUniform(const std::string& name)
 {
     GLint location = glGetUniformLocation(m_program, name.c_str());
     if (UNIFORM_NOT_FOUND != location)
@@ -97,6 +97,12 @@ void ZFX::Shader::update(const glm::mat4& transform)
 {
     GLint location = uniformLocation(TRANSFORM_UNIFORM);
     glUniformMatrix4fv(location, 1, GL_FALSE, &transform[0][0]);
+}
+
+void ZFX::Shader::update(const Camera& camera, const std::string& uniform)
+{
+    GLint location = uniformLocation(uniform);
+    glUniformMatrix4fv(location, 1, GL_FALSE, &camera.getViewProjection()[0][0]);
 }
 
 GLint ZFX::Shader::uniformLocation(const std::string& uniform) const
