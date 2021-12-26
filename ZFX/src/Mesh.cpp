@@ -86,3 +86,10 @@ void ZFX::Mesh::draw(GLsizei amount)
     glDrawElementsInstanced(GL_TRIANGLES, m_numIndeces, GL_UNSIGNED_INT, 0, amount);
     glBindVertexArray(0);
 }
+
+void ZFX::Mesh::updateModels(const std::vector<glm::mat4>& modelMatrices)
+{
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexArrayBuffers.at(INSTANCE_BUFFER));
+    glBufferSubData(GL_ARRAY_BUFFER, 0, modelMatrices.size() * sizeof(modelMatrices.at(0)), modelMatrices.data());
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}

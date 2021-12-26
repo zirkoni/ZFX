@@ -21,6 +21,8 @@ namespace ZFX
         void draw();
         void draw(GLsizei amount);
 
+        void updateModels(const std::vector<glm::mat4>& modelMatrices);
+
     private:
         enum
         {

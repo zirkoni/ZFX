@@ -31,11 +31,18 @@ class Demo8 : public Demo
         ZFX::Shader shader;
     };
 
+    struct InstanceTransform
+    {
+        float angle;
+        float xDisplacement;
+        float yDisplacement;
+        float zDisplacement;
+        ZFX::Transform transform;
+    };
+
 public:
     Demo8(ZFX::Camera& camera) : Demo{ camera }
     {
-        std::vector<glm::mat4> instanceMatrix;
-
         for(unsigned i = 0; i < NUM_OBJECTS; ++i)
         {
             ZFX::Transform transform;
@@ -51,20 +58,44 @@ public:
 
             transform.scale() = glm::vec3{ (rand() % 20) / 50.0f + 0.05f };
             transform.rotation().y = rand() % 360;
-            instanceMatrix.push_back(transform.getModel());
+            m_instanceMatrix.push_back(transform.getModel());
+            m_transforms.push_back({angle, xDisplacement, yDisplacement, zDisplacement, transform});
         }
 
-        m_cube = addCube(instanceMatrix);
+        m_cube = addCube();
+    }
+
+    void update()
+    {
+        for (unsigned i = 0; i < NUM_OBJECTS; ++i)
+        {
+            auto& t = m_transforms.at(i);
+            auto& model = m_instanceMatrix.at(i);
+
+            // Move in a circle
+            t.transform.position().x = sin(t.angle + m_counter / 10) * RADIUS + t.xDisplacement;
+            t.transform.position().z = cos(t.angle + m_counter / 10) * RADIUS + t.zDisplacement;
+            t.transform.position().y = (t.yDisplacement - t.transform.position().z) * 0.4f;
+
+            // Rotate cube around its center
+            t.transform.rotation().z = m_counter;
+            t.transform.rotation().x = m_counter;
+
+            model = t.transform.getModel();
+        }
+
+        m_counter += 0.01f;
+        m_cube->mesh.updateModels(m_instanceMatrix);
     }
 
     void draw() override
     {
-        // No movement!
+        update();
         m_cube->draw(m_camera);
     }
 
 private:
-    std::unique_ptr<Shape> addCube(const std::vector<glm::mat4>& instanceMatrix)
+    std::unique_ptr<Shape> addCube()
     {
         ZFX::Verteces vertices =
         {
@@ -109,13 +140,16 @@ private:
             20, 21, 22, 21, 23, 22
         };
 
-        return std::make_unique<Shape>(vertices, indeces, instanceMatrix, ZFX::Uniforms{"viewProjection"});
+        return std::make_unique<Shape>(vertices, indeces, m_instanceMatrix, ZFX::Uniforms{"viewProjection"});
     }
 
 private:
+    float m_counter;
     std::unique_ptr<Shape> m_cube;
+    std::vector<InstanceTransform> m_transforms;
+    std::vector<glm::mat4> m_instanceMatrix;
 };
-#else // Each cube has its own draw call => slow.
+#else // Each cube has its own Mesh and draw call => slow.
 class Demo8 : public Demo
 {
     static constexpr unsigned NUM_OBJECTS = 6200; // Higher than ~this not reaching 60fps anymore (GTX 1660 Super)
@@ -171,7 +205,7 @@ public:
     {
         for(auto& c : m_cubes)
         {
-//            c.update(m_counter); // Movement
+            c.update(m_counter); // Movement
             c.shape->draw(m_camera);
         }
 
