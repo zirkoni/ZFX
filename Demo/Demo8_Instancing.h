@@ -8,7 +8,7 @@
 class Demo8 : public Demo
 {
     static constexpr unsigned NUM_OBJECTS = 6200; // Can be increased much higher without drop in frame rate!
-    static constexpr float RADIUS = 30.0;
+    static constexpr float RADIUS = 30.0f;
     static constexpr float OFFSET = 3.5f;
 
     struct Shape
@@ -90,7 +90,7 @@ public:
 
     void draw() override
     {
-        update();
+        //update();
         m_cube->draw(m_camera);
     }
 
