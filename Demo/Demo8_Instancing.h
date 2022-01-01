@@ -90,7 +90,7 @@ public:
 
     void draw() override
     {
-        //update();
+        update();
         m_cube->draw(m_camera);
     }
 

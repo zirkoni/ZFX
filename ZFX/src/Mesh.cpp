@@ -1,6 +1,7 @@
 #include "Mesh.h"
 #include "zfxdefs.h"
 #include <algorithm>
+#include <cstring>
 
 
 ZFX::Mesh::Mesh(const Verteces& vertices, const Indeces& indeces, unsigned numBuffers) :
@@ -89,7 +90,14 @@ void ZFX::Mesh::draw(GLsizei amount)
 
 void ZFX::Mesh::updateModels(const std::vector<glm::mat4>& modelMatrices)
 {
+#if 0
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexArrayBuffers.at(INSTANCE_BUFFER));
     glBufferSubData(GL_ARRAY_BUFFER, 0, modelMatrices.size() * sizeof(modelMatrices.at(0)), modelMatrices.data());
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+#else
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexArrayBuffers.at(INSTANCE_BUFFER));
+    void *ptr = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+    std::memcpy(ptr, modelMatrices.data(), modelMatrices.size() * sizeof(modelMatrices.at(0)));
+    glUnmapBuffer(GL_ARRAY_BUFFER);
+#endif
 }

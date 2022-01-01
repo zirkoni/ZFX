@@ -14,6 +14,7 @@ using DemoList = std::vector<std::unique_ptr<Demo> >;
 
 void addDemos(DemoList& demos, ZFX::Camera& camera)
 {
+    demos.emplace_back(std::make_unique<Demo8>(camera)); // Something is wrong, Demo6 and Demo7 break movement in Demo8.
     demos.emplace_back(std::make_unique<Demo1>(camera));
     demos.emplace_back(std::make_unique<Demo2>(camera));
     demos.emplace_back(std::make_unique<Demo3>(camera));
@@ -21,7 +22,6 @@ void addDemos(DemoList& demos, ZFX::Camera& camera)
     demos.emplace_back(std::make_unique<Demo5>(camera));
     demos.emplace_back(std::make_unique<Demo6>(camera));
     demos.emplace_back(std::make_unique<Demo7>(camera));
-    demos.emplace_back(std::make_unique<Demo8>(camera));
 }
 
 void mainLoop(ZFX::Window& window)
@@ -34,7 +34,7 @@ void mainLoop(ZFX::Window& window)
 
     DemoList demos;
     addDemos(demos, camera);
-    auto activeDemo = demos.begin();
+    auto activeDemo = demos.begin() + 1;
 
     bool exitRequested = false;
     SDL_Event e;
