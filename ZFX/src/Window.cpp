@@ -1,5 +1,6 @@
 #include "Window.h"
 #include "zfxdefs.h"
+#include "glDebug.h"
 #include <GL/glew.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>
@@ -8,7 +9,7 @@
 uint32_t ZFX::Window::s_width = 0;
 uint32_t ZFX::Window::s_height = 0;
 
-ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::string& title, bool vsync) :
+ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::string& title, bool vsync, bool glDebug) :
     m_window{ nullptr },
     m_glContext{ nullptr }
 {
@@ -55,6 +56,11 @@ ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::stri
 
     setGlewAttributes();
     setVsync(vsync);
+
+    if(glDebug)
+    {
+        enableGlDebug();
+    }
 }
 
 ZFX::Window::~Window()
@@ -107,7 +113,7 @@ void ZFX::Window::clear()
 void ZFX::Window::clear(float r, float g, float b, float a)
 {
     glClearColor(r, g, b, a);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void ZFX::Window::clear(glm::vec4 bgColour)

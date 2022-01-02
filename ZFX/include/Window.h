@@ -8,7 +8,7 @@ namespace ZFX
     class Window
     {
     public:
-        Window(const uint32_t width, const uint32_t height, const std::string& title, bool vsync = true);
+        Window(const uint32_t width, const uint32_t height, const std::string& title, bool vsync = true, bool glDebug = false);
         Window(const Window& other) = delete;
         Window& operator=(const Window& other) = delete;
         ~Window();

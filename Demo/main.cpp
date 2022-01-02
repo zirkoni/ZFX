@@ -106,9 +106,12 @@ void mainLoop(ZFX::Window& window)
 
 int main(int argc, char* argv[])
 {
+    const bool vsync = true;
+    const bool glDebug = true;
+
     try
     {
-        ZFX::Window window{ 800, 600, "Demo" };
+        ZFX::Window window{ 800, 600, "Demo", vsync, glDebug };
         window.clear();
         window.update();
         mainLoop(window);
