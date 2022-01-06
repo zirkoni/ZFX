@@ -48,7 +48,7 @@ private:
                  0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 1.0f
             },
 
-            ZFX::VertexAttributes{ {"positionIn", 2}, {"colourIn", 4} }
+            ZFX::VertexAttributes{ {2}, {4} }
         };
 
         /* With indeces we must choose the vertices in counter clockwise order
@@ -75,7 +75,7 @@ private:
                  0.0f,  0.5f,
             },
 
-            ZFX::VertexAttributes{ {"positionIn", 2} }
+            ZFX::VertexAttributes{ {2} }
         };
 
         /* Now indeces are different! */
@@ -114,7 +114,7 @@ private:
                  0.0f,  0.5f,     0.5f, 1.0f
             },
 
-            ZFX::VertexAttributes{ {"positionIn", 2}, {"texCoordIn", 2} }
+            ZFX::VertexAttributes{ {2}, {2} }
         };
 
         ZFX::Indeces indeces =
@@ -137,7 +137,7 @@ private:
                 0.0f,  0.5f,   0.0f, 1.0f, 0.0f, 0.8f,     0.5f, 1.0f,
             },
 
-            ZFX::VertexAttributes{ {"positionIn", 2}, {"colourIn", 4}, {"texCoordIn", 2} }
+            ZFX::VertexAttributes{ {2}, {4}, {2} }
         };
 
         ZFX::Indeces indeces =

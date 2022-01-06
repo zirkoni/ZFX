@@ -23,7 +23,7 @@ namespace ZFX
         {
         public:
             TextShader(const std::string& filename) :
-                Shader{ filename, {{ "vertex", 4 }}, { TRANSFORM_UNIFORM, TEXTCOLOUR_UNIFORM } } {}
+                Shader{ filename, { TRANSFORM_UNIFORM, TEXTCOLOUR_UNIFORM } } {}
         };
 
     public:

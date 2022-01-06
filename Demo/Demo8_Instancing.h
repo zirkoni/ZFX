@@ -16,7 +16,7 @@ class Demo8 : public Demo
         Shape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces,
                 const std::vector<glm::mat4>& instanceMatrix, const ZFX::Uniforms& uniforms) :
             mesh{ vertices, indeces, instanceMatrix },
-            shader{ SHADERS_PATH + "instancing", vertices.attributes(), uniforms } {}
+            shader{ SHADERS_PATH + "instancing", uniforms } {}
 
         ~Shape() {}
 
@@ -127,7 +127,7 @@ private:
                  1.0f, -1.0f, -1.0f,    0.0f, 0.0f, -1.0f
             },
 
-            ZFX::VertexAttributes{ {"positionIn", 3}, {"normalIn", 3} }
+            ZFX::VertexAttributes{ {3}, {3} }
         };
 
         ZFX::Indeces indeces =
@@ -245,7 +245,7 @@ private:
                  1.0f, -1.0f, -1.0f,    0.0f, 0.0f, -1.0f
             },
 
-            ZFX::VertexAttributes{ {"positionIn", 3}, {"normalIn", 3} }
+            ZFX::VertexAttributes{ {3}, {3} }
         };
 
         ZFX::Indeces indeces =

@@ -33,7 +33,7 @@ private:
                  0.5f, -0.5f,   0.8f, 0.8f, 0.8f, 1.0f
             },
 
-            ZFX::VertexAttributes{ {"positionIn", 2}, {"colourIn", 4} }
+            ZFX::VertexAttributes{ {2}, {4} }
         };
 
         /* Now we use indeces to define our shape (square is made of 2 triangles that have 2 common verteces)

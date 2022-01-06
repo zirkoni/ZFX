@@ -7,12 +7,11 @@
 const std::string ZFX::TRANSFORM_UNIFORM = "transform";
 const ZFX::Uniforms ZFX::DEFAULT_UNIFORMS = { ZFX::TRANSFORM_UNIFORM };
 
-ZFX::Shader::Shader(const std::string& filename, const VertexAttributes& attributes):
-    Shader{ filename, attributes, DEFAULT_UNIFORMS }
+ZFX::Shader::Shader(const std::string& filename): Shader{ filename, DEFAULT_UNIFORMS }
 {
 }
 
-ZFX::Shader::Shader(const std::string& filename, const VertexAttributes& attributes, const Uniforms& uniforms) :
+ZFX::Shader::Shader(const std::string& filename, const Uniforms& uniforms) :
     m_program{ 0 }, m_uniforms{}
 {
     GLuint vertexShader;
@@ -20,11 +19,13 @@ ZFX::Shader::Shader(const std::string& filename, const VertexAttributes& attribu
 
     createAndAttach(filename, vertexShader, fragmentShader);
 
+    /* Use "layout(location = #)" in vertex shader, no need to call glBindAttribLocation
+     * "const VertexAttributes& attributes" removed from constructor parameters
     GLuint index = 0;
     for (const auto& attribute : attributes)
     {
         glBindAttribLocation(m_program, index, attribute.name.c_str());
-    }
+    }*/
 
     compile();
 

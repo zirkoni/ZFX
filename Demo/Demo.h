@@ -8,13 +8,13 @@ struct BasicShape
 {
     BasicShape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces, const std::string shaderName = "colour") :
         mesh{ vertices, indeces },
-        shader{ SHADERS_PATH + shaderName, vertices.attributes() },
+        shader{ SHADERS_PATH + shaderName },
         transform{} {}
 
     BasicShape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces, const ZFX::Uniforms& uniforms,
         const std::string shaderName = "colour2" ) :
         mesh{ vertices, indeces },
-        shader{ SHADERS_PATH + shaderName, vertices.attributes(), uniforms },
+        shader{ SHADERS_PATH + shaderName, uniforms },
         transform{} {}
     
     virtual ~BasicShape() {}

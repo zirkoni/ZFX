@@ -9,7 +9,6 @@ namespace ZFX
 {
     struct VertexAttribute
     {
-        std::string name;
         GLint numElements;
     };
 

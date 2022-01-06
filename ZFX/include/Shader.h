@@ -20,8 +20,8 @@ namespace ZFX
         using UniformMap = std::unordered_map<std::string, GLint>;
 
     public:
-        Shader(const std::string& filename, const VertexAttributes& attributes);
-        Shader(const std::string& filename, const VertexAttributes& attributes, const Uniforms& uniforms);
+        Shader(const std::string& filename);
+        Shader(const std::string& filename, const Uniforms& uniforms);
         Shader(const Shader& other) = delete;
         Shader& operator=(const Shader& other) = delete;
         virtual ~Shader();

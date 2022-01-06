@@ -154,11 +154,11 @@ void ZFX::Object::loadObject(tinyobj::ObjReader& reader)
     }
 #endif
 
-    attributes.push_back(VertexAttribute{ "positionIn", 3 });
+    attributes.push_back(VertexAttribute{ 3 });
 
     if (hasNormals)
     {
-        attributes.push_back(VertexAttribute{ "normalIn", 3 });
+        attributes.push_back(VertexAttribute{ 3 });
     }
 
     m_verteces = new Verteces{data, attributes};
