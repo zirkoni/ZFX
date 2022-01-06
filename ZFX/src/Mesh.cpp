@@ -2,6 +2,7 @@
 #include "zfxdefs.h"
 #include <algorithm>
 #include <cstring>
+#include <SDL2/SDL.h>
 
 
 ZFX::Mesh::Mesh(const Verteces& vertices, const Indeces& indeces, unsigned numBuffers) :
@@ -90,14 +91,20 @@ void ZFX::Mesh::draw(GLsizei amount)
 
 void ZFX::Mesh::updateModels(const std::vector<glm::mat4>& modelMatrices)
 {
+    if(m_numBuffers > INSTANCE_BUFFER)
+    {
 #if 0
-    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffers[INSTANCE_BUFFER]);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, modelMatrices.size() * sizeof(modelMatrices.at(0)), modelMatrices.data());
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffers[INSTANCE_BUFFER]);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, modelMatrices.size() * sizeof(modelMatrices.at(0)), modelMatrices.data());
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
 #else
-    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffers[INSTANCE_BUFFER]);
-    void *ptr = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-    std::memcpy(ptr, modelMatrices.data(), modelMatrices.size() * sizeof(modelMatrices.at(0)));
-    glUnmapBuffer(GL_ARRAY_BUFFER);
+        glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffers[INSTANCE_BUFFER]);
+        void *ptr = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+        std::memcpy(ptr, modelMatrices.data(), modelMatrices.size() * sizeof(modelMatrices.at(0)));
+        glUnmapBuffer(GL_ARRAY_BUFFER);
 #endif
+    } else
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "ZFX::Mesh::updateModels called while numBuffers=%u. Do nothing!", m_numBuffers);
+    }
 }
