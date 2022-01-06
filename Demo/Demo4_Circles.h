@@ -37,7 +37,7 @@ private:
                  0.5f, -0.5f,   1.0f, 0.0f
             },
 
-            ZFX::VertexAttributes{ {2}, {2} }
+            ZFX::AttributeSizes{2, 2}
         };
 
         ZFX::Indeces indeces =
@@ -63,7 +63,7 @@ private:
                  0.5f, -0.5f
             },
 
-            ZFX::VertexAttributes{ {2} }
+            ZFX::AttributeSizes{2}
         };
 
         ZFX::Indeces indeces =

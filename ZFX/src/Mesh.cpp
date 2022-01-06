@@ -20,14 +20,14 @@ ZFX::Mesh::Mesh(const Verteces& vertices, const Indeces& indeces, unsigned numBu
     uint64_t offset = 0;
     uint32_t numElementsPerVertex = vertices.numElementsPerVertex();
 
-    for (const auto& attribute : vertices.attributes())
+    for (const auto& size : vertices.attributes())
     {
         glEnableVertexAttribArray(index);
-        glVertexAttribPointer(index, attribute.numElements, GL_FLOAT, GL_FALSE,
+        glVertexAttribPointer(index, size, GL_FLOAT, GL_FALSE,
             numElementsPerVertex * sizeof(float), (GLvoid*)offset);
         
         ++index;
-        offset += attribute.numElements * sizeof(float);
+        offset += size * sizeof(float);
     }
 
     // indeces

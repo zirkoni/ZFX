@@ -7,27 +7,22 @@
 
 namespace ZFX
 {
-    struct VertexAttribute
-    {
-        GLint numElements;
-    };
-
     using VertexData = std::vector<float>;
-    using VertexAttributes = std::vector<VertexAttribute>;
+    using AttributeSizes = std::vector<GLint>;
 
     class Verteces
     {
     public:
-        Verteces(VertexData& data, VertexAttributes& attributes);
-        Verteces(VertexData&& data, VertexAttributes&& attributes);
+        Verteces(VertexData& data, AttributeSizes& attributes);
+        Verteces(VertexData&& data, AttributeSizes&& attributes);
 
         const VertexData& data() const { return m_data; }
-        const VertexAttributes& attributes() const { return m_attributes; }
+        const AttributeSizes& attributes() const { return m_attributes; }
         uint32_t numElementsPerVertex() const;
 
     private:
         VertexData m_data;
-        VertexAttributes m_attributes;
+        AttributeSizes m_attributes;
     };
 }
 

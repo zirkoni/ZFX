@@ -19,14 +19,6 @@ ZFX::Shader::Shader(const std::string& filename, const Uniforms& uniforms) :
 
     createAndAttach(filename, vertexShader, fragmentShader);
 
-    /* Use "layout(location = #)" in vertex shader, no need to call glBindAttribLocation
-     * "const VertexAttributes& attributes" removed from constructor parameters
-    GLuint index = 0;
-    for (const auto& attribute : attributes)
-    {
-        glBindAttribLocation(m_program, index, attribute.name.c_str());
-    }*/
-
     compile();
 
     glDeleteShader(vertexShader);

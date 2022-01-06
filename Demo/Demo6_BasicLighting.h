@@ -70,7 +70,7 @@ private:
                  1.0f, -1.0f, -1.0f,    0.0f, 0.0f, -1.0f
             },
 
-            ZFX::VertexAttributes{ {3}, {3} }
+            ZFX::AttributeSizes{3, 3}
         };
 
         ZFX::Indeces indeces =

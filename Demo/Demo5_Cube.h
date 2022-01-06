@@ -40,7 +40,7 @@ private:
                     -1,  1,  1, // 7 left high
             },
 
-            ZFX::VertexAttributes{ {3} }
+            ZFX::AttributeSizes{3}
         };
 
         ZFX::Indeces indeces =

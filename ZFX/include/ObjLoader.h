@@ -24,7 +24,7 @@ namespace ZFX
     private:
         bool m_smoothNormals;
         VertexData m_data;
-        VertexAttributes m_attributes;
+        AttributeSizes m_attributes;
         Verteces* m_verteces;
         Indeces  m_indeces;
     };

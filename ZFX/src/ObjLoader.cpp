@@ -43,7 +43,7 @@ ZFX::Object::~Object()
 void ZFX::Object::loadObject(tinyobj::ObjReader& reader)
 {
     VertexData data;
-    VertexAttributes attributes;
+    AttributeSizes attributes;
     std::vector<glm::vec3> uniqueVerteces;
     bool hasNormals = false;
     bool hasUvs = false;
@@ -154,11 +154,11 @@ void ZFX::Object::loadObject(tinyobj::ObjReader& reader)
     }
 #endif
 
-    attributes.push_back(VertexAttribute{ 3 });
+    attributes.push_back(3);
 
     if (hasNormals)
     {
-        attributes.push_back(VertexAttribute{ 3 });
+        attributes.push_back(3);
     }
 
     m_verteces = new Verteces{data, attributes};
