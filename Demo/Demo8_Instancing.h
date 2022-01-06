@@ -43,6 +43,8 @@ class Demo8 : public Demo
 public:
     Demo8(ZFX::Camera& camera) : Demo{ camera }
     {
+        srand(SDL_GetTicks());
+
         for(unsigned i = 0; i < NUM_OBJECTS; ++i)
         {
             ZFX::Transform transform;
