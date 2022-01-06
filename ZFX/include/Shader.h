@@ -43,15 +43,7 @@ namespace ZFX
         void setUniformVec4(const std::string& uniform, const glm::vec4& value);
 
     protected:
-        enum
-        {
-            VERTEX_SHADER,
-            FRAGMENT_SHADER,
-
-            NUM_SHADERS
-        };
-
-        void createAndAttach(const std::string& filename);
+        void createAndAttach(const std::string& filename, GLuint& vertexShader, GLuint& fragmentShader);
         void compile();
         void saveUniformLocations(const Uniforms& uniforms);
         void saveSingleUniform(const std::string& name);
@@ -62,7 +54,6 @@ namespace ZFX
 
     protected:
         GLuint m_program;
-        GLuint m_shaders[NUM_SHADERS];
         UniformMap m_uniforms;
     };
 }

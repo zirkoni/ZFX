@@ -15,7 +15,10 @@ ZFX::Shader::Shader(const std::string& filename, const VertexAttributes& attribu
 ZFX::Shader::Shader(const std::string& filename, const VertexAttributes& attributes, const Uniforms& uniforms) :
     m_program{ 0 }, m_uniforms{}
 {
-    createAndAttach(filename);
+    GLuint vertexShader;
+    GLuint fragmentShader;
+
+    createAndAttach(filename, vertexShader, fragmentShader);
 
     GLuint index = 0;
     for (const auto& attribute : attributes)
@@ -24,31 +27,27 @@ ZFX::Shader::Shader(const std::string& filename, const VertexAttributes& attribu
     }
 
     compile();
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
     saveUniformLocations(uniforms);
 }
 
 ZFX::Shader::~Shader()
 {
-    for (uint32_t i = 0; i < NUM_SHADERS; i++)
-    {
-        glDetachShader(m_program, m_shaders[i]);
-        glDeleteShader(m_shaders[i]);
-    }
-
     glDeleteProgram(m_program);
 }
 
-void ZFX::Shader::createAndAttach(const std::string& filename)
+void ZFX::Shader::createAndAttach(const std::string& filename, GLuint& vertexShader, GLuint& fragmentShader)
 {
     m_program = glCreateProgram();
 
-    m_shaders[VERTEX_SHADER] = create(filename + ".vs", GL_VERTEX_SHADER);
-    m_shaders[FRAGMENT_SHADER] = create(filename + ".fs", GL_FRAGMENT_SHADER);
+    vertexShader = create(filename + ".vs", GL_VERTEX_SHADER);
+    fragmentShader = create(filename + ".fs", GL_FRAGMENT_SHADER);
 
-    for (unsigned int i = 0; i < NUM_SHADERS; ++i)
-    {
-        glAttachShader(m_program, m_shaders[i]);
-    }
+    glAttachShader(m_program, vertexShader);
+    glAttachShader(m_program, fragmentShader);
 }
 
 void ZFX::Shader::compile()
