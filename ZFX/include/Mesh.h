@@ -28,12 +28,16 @@ namespace ZFX
         {
             VERTEX_BUFFER,
             INDEX_BUFFER,
-            INSTANCE_BUFFER
+            INSTANCE_BUFFER,
+
+            MAX_NUM_BUFFERS
         };
 
-        GLsizei m_numIndeces;
+        GLsizei  m_numIndeces;
+        unsigned m_numBuffers;
+
         GLuint m_vertexArrayObject;
-        std::vector<GLuint> m_vertexArrayBuffers;
+        GLuint m_vertexBuffers[MAX_NUM_BUFFERS];
     };
 }
 
