@@ -9,6 +9,8 @@ public:
     {
         m_cube = addCube();
         m_cube->transform.scale() = glm::vec3{ 0.5f };
+
+        m_light = addLight();
     }
 
     void draw() override
@@ -17,6 +19,10 @@ public:
         m_cube->transform.rotation().x = m_counter;
         m_counter += 0.001f;
 
+        m_cube->shader.setUniformVec3("viewPosition", m_camera.getPosition());
+        m_cube->shader.setUniformVec3("lightPosition", m_light->transform.position());
+
+        m_light->draw(m_camera);
         m_cube->draw(m_camera);
     }
 
@@ -94,10 +100,71 @@ private:
             20, 21, 22, 21, 23, 22
         };
 
-        return std::make_unique<BasicShape>(vertices, indeces, "colour3D_Lighting");
+        const std::string viewPosUniform = "viewPosition";
+        const std::string lightPosUniform = "lightPosition";
+        const ZFX::Uniforms uniforms = { ZFX::MODEL_UNIFORM, ZFX::VIEW_PROJECTION_UNIFORM, viewPosUniform, lightPosUniform };
+
+        return std::make_unique<BasicShape>(vertices, indeces, uniforms, "colour3D_Lighting");
+    }
+
+    std::unique_ptr<BasicShape> addLight()
+    {
+        /* The 8 corners of a cube */
+        ZFX::Verteces vertices =
+        {
+            ZFX::VertexData
+            {
+                //   x   y   z
+                    -1, -1, -1, // 0 left low
+                     1, -1, -1, // 1 right low
+                     1,  1, -1, // 2 right high
+                    -1,  1, -1, // 3 left high
+
+                    -1, -1,  1, // 4 left low
+                     1, -1,  1, // 5 right low
+                     1,  1,  1, // 6 right high
+                    -1,  1,  1, // 7 left high
+            },
+
+            ZFX::AttributeSizes{3}
+        };
+
+        ZFX::Indeces indeces =
+        {
+            /* Back */
+            0, 3, 1, 3, 2, 1,
+
+            /* Right */
+            1, 2, 5, 2, 6, 5,
+
+            /* Front */
+            5, 6, 4, 6, 7, 4,
+
+            /* Left */
+            4, 7, 0, 7, 3, 0,
+
+            /* Top */
+            3, 7, 2, 7, 6, 2,
+
+            /* Bottom */
+            4, 0, 5, 0, 1, 5
+        };
+
+        const std::string colourUniform = "colour";
+        const ZFX::Uniforms uniforms = { ZFX::MODEL_UNIFORM, ZFX::VIEW_PROJECTION_UNIFORM, colourUniform };
+        auto cube = std::make_unique<BasicShape>(vertices, indeces, uniforms, "colour3D");
+
+        cube->shader.setUniformVec4(colourUniform, glm::vec4{ 1.0f });
+        cube->transform.scale() = glm::vec3{ 0.1f };
+        cube->transform.position().x = 1.2f;
+        cube->transform.position().y = 1.0f;
+        cube->transform.position().z = 2.0f;
+
+        return cube;
     }
 
 private:
     float m_counter;
     std::unique_ptr<BasicShape> m_cube;
+    std::unique_ptr<BasicShape> m_light;
 };

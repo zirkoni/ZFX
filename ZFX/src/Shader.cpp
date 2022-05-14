@@ -130,6 +130,13 @@ void ZFX::Shader::setUniformVec4(const std::string& uniform, const glm::vec4& va
     glUniform4f(loc, value.x, value.y, value.z, value.w);
 }
 
+void ZFX::Shader::setUniformMat4(const std::string& uniform, const glm::mat4& value)
+{
+    bind();
+    GLint loc = uniformLocation(uniform);
+    glUniformMatrix4fv(loc, 1, GL_FALSE, &value[0][0]);
+}
+
 void ZFX::Shader::checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg)
 {
     GLint success = 0;

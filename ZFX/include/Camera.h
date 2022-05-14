@@ -70,6 +70,11 @@ namespace ZFX
             updateCameraVectors();
         }
 
+        const glm::vec3& getPosition() const
+        {
+            return m_position;
+        }
+
         void zoomIn(float amount = ZOOM_AMOUNT)
         {
             zoom(amount);

@@ -43,6 +43,8 @@ namespace ZFX
         void setUniformVec3(const std::string& uniform, const glm::vec3& value);
         void setUniformVec4(const std::string& uniform, const glm::vec4& value);
 
+        void setUniformMat4(const std::string& uniform, const glm::mat4& value);
+
     protected:
         void createAndAttach(const std::string& filename, GLuint& vertexShader, GLuint& fragmentShader);
         void compile();

@@ -11,9 +11,8 @@ uniform mat4 viewProjection;
 
 void main()
 {
-	gl_Position = viewProjection * model * vec4(positionIn, 1.0);
-//    normal = (transform * vec4(normalIn, 0.0)).xyz;
+    position = vec3(model * vec4(positionIn, 1.0));
     normal = mat3(transpose(inverse(model))) * normalIn;
-    position = gl_Position.xyz;
+    gl_Position = viewProjection * vec4(position, 1.0);
 }
 
