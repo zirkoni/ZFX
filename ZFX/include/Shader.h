@@ -12,7 +12,8 @@ namespace ZFX
 
     using Uniforms = std::vector<std::string>;
 
-    extern const std::string TRANSFORM_UNIFORM;
+    extern const std::string MODEL_UNIFORM;
+    extern const std::string VIEW_PROJECTION_UNIFORM;
     extern const Uniforms DEFAULT_UNIFORMS;
 
     class Shader

@@ -4,8 +4,9 @@
 #include <stdexcept>
 #include <fstream>
 
-const std::string ZFX::TRANSFORM_UNIFORM = "transform";
-const ZFX::Uniforms ZFX::DEFAULT_UNIFORMS = { ZFX::TRANSFORM_UNIFORM };
+const std::string ZFX::MODEL_UNIFORM = "model";
+const std::string ZFX::VIEW_PROJECTION_UNIFORM = "viewProjection";
+const ZFX::Uniforms ZFX::DEFAULT_UNIFORMS = { ZFX::MODEL_UNIFORM, ZFX::VIEW_PROJECTION_UNIFORM };
 
 ZFX::Shader::Shader(const std::string& filename): Shader{ filename, DEFAULT_UNIFORMS }
 {
@@ -80,21 +81,20 @@ void ZFX::Shader::bind()
 
 void ZFX::Shader::update(const Transform& transform, const Camera& camera)
 {
-    GLint location = uniformLocation(TRANSFORM_UNIFORM);
-    glm::mat4 model = camera.getViewProjection() * transform.getModel();
-    glUniformMatrix4fv(location, 1, GL_FALSE, &model[0][0]);
+    update(transform.getModel());
+    update(camera, VIEW_PROJECTION_UNIFORM);
 }
 
 void ZFX::Shader::update(const glm::mat4& transform)
 {
-    GLint location = uniformLocation(TRANSFORM_UNIFORM);
-    glUniformMatrix4fv(location, 1, GL_FALSE, &transform[0][0]);
+    GLint modelLocation = uniformLocation(MODEL_UNIFORM);
+    glUniformMatrix4fv(modelLocation, 1, GL_FALSE, &transform[0][0]);
 }
 
 void ZFX::Shader::update(const Camera& camera, const std::string& uniform)
 {
-    GLint location = uniformLocation(uniform);
-    glUniformMatrix4fv(location, 1, GL_FALSE, &camera.getViewProjection()[0][0]);
+    GLint vpLocation = uniformLocation(VIEW_PROJECTION_UNIFORM);
+    glUniformMatrix4fv(vpLocation, 1, GL_FALSE, &camera.getViewProjection()[0][0]);
 }
 
 GLint ZFX::Shader::uniformLocation(const std::string& uniform) const

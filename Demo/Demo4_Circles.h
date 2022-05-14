@@ -74,7 +74,7 @@ private:
 
         // Save uniform locations in Shader object
         const std::string colourUniform = "colour";
-        const ZFX::Uniforms uniforms = { ZFX::TRANSFORM_UNIFORM, colourUniform };
+        const ZFX::Uniforms uniforms = { ZFX::MODEL_UNIFORM, ZFX::VIEW_PROJECTION_UNIFORM, colourUniform };
         auto circle = std::make_unique<BasicShape>(vertices, indeces, uniforms, "circle");
 
         // Set colour
