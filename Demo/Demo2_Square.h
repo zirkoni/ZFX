@@ -5,7 +5,7 @@
 class Demo2 : public Demo
 {
 public:
-    Demo2(ZFX::Camera& camera) : Demo{ camera }
+    Demo2(ZFX::Camera& camera) : Demo{ camera, "Demo2" }
     {
         m_square = addSquare();
     }

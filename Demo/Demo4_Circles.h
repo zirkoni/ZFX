@@ -5,7 +5,7 @@
 class Demo4 : public Demo
 {
 public:
-    Demo4(ZFX::Camera& camera) : Demo{ camera }
+    Demo4(ZFX::Camera& camera) : Demo{ camera, "Demo4" }
     {
         m_textureCircle = addTexturedCircle();
         m_textureCircle->transform.position().x = -0.2f;

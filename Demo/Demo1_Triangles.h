@@ -9,7 +9,7 @@ class Demo1 : public Demo
     static constexpr uint32_t IDX_Y_MOVE = 1;
 
 public:
-    Demo1(ZFX::Camera& camera) : Demo{ camera }
+    Demo1(ZFX::Camera& camera) : Demo{ camera, "Demo1" }
     {
         m_triangles.push_back(std::move(addTriangle()));
         m_triangles.push_back(std::move(addTexturedTriangle()));

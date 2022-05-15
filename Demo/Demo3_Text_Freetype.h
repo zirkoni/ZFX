@@ -8,7 +8,7 @@ static const std::string SHADER = SHADERS_PATH + "freetype";
 class Demo3 : public Demo
 {
 public:
-    Demo3(ZFX::Camera& camera) : Demo{ camera },
+    Demo3(ZFX::Camera& camera) : Demo{ camera, "Demo3" },
         m_textRenderer{ FONT, SHADER }
     {
     }

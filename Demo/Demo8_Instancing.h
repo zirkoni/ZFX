@@ -41,7 +41,7 @@ class Demo8 : public Demo
     };
 
 public:
-    Demo8(ZFX::Camera& camera) : Demo{ camera }, m_counter{0.0f}
+    Demo8(ZFX::Camera& camera) : Demo{ camera, "Demo8" }, m_counter{0.0f}
     {
         srand(SDL_GetTicks());
 

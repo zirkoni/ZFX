@@ -37,10 +37,19 @@ void mainLoop(ZFX::Window& window)
     auto activeDemo = demos.begin();
 
     bool exitRequested = false;
+    bool middleButtonDown = false;
     SDL_Event e;
+
+    Uint64 now = SDL_GetPerformanceCounter();
+    Uint64 last = 0;
+    float deltaTime = 0.0f;
 
     while (!exitRequested)
     {
+        last = now;
+        now = SDL_GetPerformanceCounter();
+        deltaTime = (now - last) * 1000 / (float)SDL_GetPerformanceFrequency();
+
         while (SDL_PollEvent(&e))
         {
             if (e.type == SDL_QUIT)
@@ -61,6 +70,14 @@ void mainLoop(ZFX::Window& window)
                         activeDemo = demos.begin();
                     }
 
+                    if (activeDemo->get()->name() == "Demo8")
+                    {
+                        camera.position().z = 80.0f;
+                    } else
+                    {
+                        camera.position().z = 3.0f;
+                    }
+
                     camera.resetZoom();
                 }
                 else if (e.key.keysym.scancode == SDL_SCANCODE_Z)
@@ -72,8 +89,24 @@ void mainLoop(ZFX::Window& window)
                     if (bgColour == ZFX::BLACK) bgColour = ZFX::WHITE;
                     else bgColour = ZFX::BLACK;
                 }
+                else if (e.key.keysym.scancode == SDL_SCANCODE_UP)
+                {
+                    camera.move(ZFX::Camera::Direction::FORWARD, deltaTime);
+                }
+                else if (e.key.keysym.scancode == SDL_SCANCODE_DOWN)
+                {
+                    camera.move(ZFX::Camera::Direction::BACKWARD, deltaTime);
+                }
+                else if (e.key.keysym.scancode == SDL_SCANCODE_LEFT)
+                {
+                    camera.move(ZFX::Camera::Direction::LEFT, deltaTime);
+                }
+                else if (e.key.keysym.scancode == SDL_SCANCODE_RIGHT)
+                {
+                    camera.move(ZFX::Camera::Direction::RIGHT, deltaTime);
+                }
             }
-            else if (e.type == SDL_MOUSEWHEEL) // Zoom in/out
+            else if (e.type == SDL_MOUSEWHEEL)
             {
                 if (e.wheel.y > 0)
                 {
@@ -82,6 +115,21 @@ void mainLoop(ZFX::Window& window)
                 else if (e.wheel.y < 0)
                 {
                     camera.zoomOut();
+                }
+            }
+            else if (e.type == SDL_MOUSEBUTTONDOWN)
+            {
+                if (e.button.button == SDL_BUTTON_MIDDLE) middleButtonDown = true;
+            }
+            else if (e.type == SDL_MOUSEBUTTONUP)
+            {
+                if (e.button.button == SDL_BUTTON_MIDDLE) middleButtonDown = false;
+            }
+            else if (e.type == SDL_MOUSEMOTION)
+            {
+                if (middleButtonDown)
+                {
+                    camera.turn(e.motion.xrel, e.motion.yrel);
                 }
             }
         }

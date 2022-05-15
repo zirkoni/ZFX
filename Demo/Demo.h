@@ -53,11 +53,15 @@ struct TexturedShape: public BasicShape
 class Demo
 {
 public:
-    Demo(ZFX::Camera& camera) : m_camera{ camera } {}
+    Demo(ZFX::Camera& camera, const std::string& name) : m_camera{ camera }, m_name{ name } {}
     virtual ~Demo() {}
 
+    //virtual void update(float deltaTime) = 0; // TODO
     virtual void draw() = 0;
+
+    const std::string& name() { return m_name; }
 
 protected:
     ZFX::Camera& m_camera;
+    std::string m_name;
 };
