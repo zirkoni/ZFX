@@ -11,9 +11,8 @@ uniform mat4 viewProjection;
 
 void main()
 {
-	mat4 transform = viewProjection * modelMatrixIn;
-	gl_Position = transform * vec4(positionIn, 1.0);
-    normal = (transform * vec4(normalIn, 0.0)).xyz;
-    position = gl_Position.xyz;
+    position = vec3(modelMatrixIn * vec4(positionIn, 1.0));
+    normal = mat3(transpose(inverse(modelMatrixIn))) * normalIn; // TODO: inverse is slow => calculate normal matrix on CPU
+    gl_Position = viewProjection * vec4(position, 1.0);
 }
 
