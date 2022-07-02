@@ -19,6 +19,8 @@ public:
         m_cube->transform.rotation().x = m_counter;
         m_counter += 0.001f;
 
+        m_light->transform.position().x = sin(50 * m_counter);
+
         m_cube->shader.setUniformVec3("viewPosition", m_camera.getPosition());
         m_cube->shader.setUniformVec3("lightPosition", m_light->transform.position());
 
@@ -155,10 +157,10 @@ private:
         auto cube = std::make_unique<BasicShape>(vertices, indeces, uniforms, "colour3D");
 
         cube->shader.setUniformVec4(colourUniform, glm::vec4{ 1.0f });
-        cube->transform.scale() = glm::vec3{ 0.1f };
-        cube->transform.position().x = 1.2f;
-        cube->transform.position().y = 1.0f;
-        cube->transform.position().z = 2.0f;
+        cube->transform.scale() = glm::vec3{ 0.01f };
+        cube->transform.position().x = 0.0f;
+        cube->transform.position().y = 0.0f;
+        cube->transform.position().z = 0.9f;
 
         return cube;
     }
