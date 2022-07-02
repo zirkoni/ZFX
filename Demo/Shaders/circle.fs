@@ -18,7 +18,8 @@ void main()
     float distance = distance(position, vec2(0.0, 0.0));
     float delta = fwidth(distance);
     float alpha = smoothstep(radius - delta, radius, distance);
-    fragColorOut = mix(colour, fragColorOut, alpha);
+    vec4 bgColour = vec4(0.0);
+    fragColorOut = mix(colour, bgColour, alpha);
 #endif
 
 }
