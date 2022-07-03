@@ -72,13 +72,10 @@ private:
             0, 3, 2
         };
 
-        // Save uniform locations in Shader object
-        const std::string colourUniform = "colour";
-        const ZFX::Uniforms uniforms = { ZFX::MODEL_UNIFORM, ZFX::VIEW_PROJECTION_UNIFORM, colourUniform };
-        auto circle = std::make_unique<BasicShape>(vertices, indeces, uniforms, "circle");
+        auto circle = std::make_unique<BasicShape>(vertices, indeces, "circle");
 
         // Set colour
-        circle->shader.setUniformVec4(colourUniform, ZFX::GREEN);
+        circle->shader.setUniformVec4("colour", ZFX::GREEN);
 
         return circle;
     }

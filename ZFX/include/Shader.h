@@ -10,19 +10,12 @@ namespace ZFX
     class Camera;
     class Transform;
 
-    using Uniforms = std::vector<std::string>;
-
-    extern const std::string MODEL_UNIFORM;
-    extern const std::string VIEW_PROJECTION_UNIFORM;
-    extern const Uniforms DEFAULT_UNIFORMS;
-
     class Shader
     {
-        using UniformMap = std::unordered_map<std::string, GLint>;
+        using UniformMap = std::unordered_map<std::string, const GLint>;
 
     public:
         Shader(const std::string& filename);
-        Shader(const std::string& filename, const Uniforms& uniforms);
         Shader(const Shader& other) = delete;
         Shader& operator=(const Shader& other) = delete;
         virtual ~Shader();
@@ -48,8 +41,8 @@ namespace ZFX
     protected:
         void createAndAttach(const std::string& filename, GLuint& vertexShader, GLuint& fragmentShader);
         void compile();
-        void saveUniformLocations(const Uniforms& uniforms);
-        void saveSingleUniform(const std::string& name);
+        void saveUniformLocations();
+        void saveSingleUniform(const GLint BUF_SIZE, GLuint idx);
 
         static void checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg);
         static std::string load(const std::string& fileName);

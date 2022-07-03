@@ -84,13 +84,10 @@ private:
             0, 1, 2
         };
 
-        // Save uniform locations in Shader object
-        const std::string colourUniform = "colour";
-        const ZFX::Uniforms uniforms = { ZFX::MODEL_UNIFORM, ZFX::VIEW_PROJECTION_UNIFORM, colourUniform };
-        auto triangle = std::make_unique<BasicShape>(vertices, indeces, uniforms);
+        auto triangle = std::make_unique<BasicShape>(vertices, indeces, "colour2");
 
         // Set colour
-        triangle->shader.setUniformVec4(colourUniform, colour);
+        triangle->shader.setUniformVec4("colour", colour);
 
         // set location
         triangle->transform.position() = glm::vec3{ position.x, position.y, 0.0f };

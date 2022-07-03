@@ -102,11 +102,7 @@ private:
             20, 21, 22, 21, 23, 22
         };
 
-        const std::string viewPosUniform = "viewPosition";
-        const std::string lightPosUniform = "lightPosition";
-        const ZFX::Uniforms uniforms = { ZFX::MODEL_UNIFORM, ZFX::VIEW_PROJECTION_UNIFORM, viewPosUniform, lightPosUniform };
-
-        return std::make_unique<BasicShape>(vertices, indeces, uniforms, "colour3D_Lighting");
+        return std::make_unique<BasicShape>(vertices, indeces, "colour3D_Lighting");
     }
 
     std::unique_ptr<BasicShape> addLight()
@@ -152,11 +148,9 @@ private:
             4, 0, 5, 0, 1, 5
         };
 
-        const std::string colourUniform = "colour";
-        const ZFX::Uniforms uniforms = { ZFX::MODEL_UNIFORM, ZFX::VIEW_PROJECTION_UNIFORM, colourUniform };
-        auto cube = std::make_unique<BasicShape>(vertices, indeces, uniforms, "colour3D");
+        auto cube = std::make_unique<BasicShape>(vertices, indeces, "colour3D");
 
-        cube->shader.setUniformVec4(colourUniform, glm::vec4{ 1.0f });
+        cube->shader.setUniformVec4("colour", glm::vec4{ 1.0f });
         cube->transform.scale() = glm::vec3{ 0.01f };
         cube->transform.position().x = 0.0f;
         cube->transform.position().y = 0.0f;

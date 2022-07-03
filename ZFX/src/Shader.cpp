@@ -4,16 +4,8 @@
 #include <stdexcept>
 #include <fstream>
 
-const std::string ZFX::MODEL_UNIFORM = "model";
-const std::string ZFX::VIEW_PROJECTION_UNIFORM = "viewProjection";
-const ZFX::Uniforms ZFX::DEFAULT_UNIFORMS = { ZFX::MODEL_UNIFORM, ZFX::VIEW_PROJECTION_UNIFORM };
 
-ZFX::Shader::Shader(const std::string& filename): Shader{ filename, DEFAULT_UNIFORMS }
-{
-}
-
-ZFX::Shader::Shader(const std::string& filename, const Uniforms& uniforms) :
-    m_program{ 0 }, m_uniforms{}
+ZFX::Shader::Shader(const std::string& filename)
 {
     GLuint vertexShader;
     GLuint fragmentShader;
@@ -25,7 +17,7 @@ ZFX::Shader::Shader(const std::string& filename, const Uniforms& uniforms) :
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    saveUniformLocations(uniforms);
+    saveUniformLocations();
 }
 
 ZFX::Shader::~Shader()
@@ -53,25 +45,43 @@ void ZFX::Shader::compile()
     checkError(m_program, GL_VALIDATE_STATUS, true, "glValidateProgram failed: ");
 }
 
-void ZFX::Shader::saveUniformLocations(const Uniforms& uniforms)
+void ZFX::Shader::saveUniformLocations()
 {
-    for (const auto& u : uniforms)
+    GLint uniformMaxLength = 0;
+    GLint numUniforms = 0;
+
+    glGetProgramiv(m_program, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformMaxLength);
+    glGetProgramiv(m_program, GL_ACTIVE_UNIFORMS, &numUniforms);
+
+    for(GLuint i = 0; i < numUniforms; ++i)
     {
-        saveSingleUniform(u);
+        saveSingleUniform(uniformMaxLength, i);
     }
 }
 
-void ZFX::Shader::saveSingleUniform(const std::string& name)
+void ZFX::Shader::saveSingleUniform(const GLint BUF_SIZE, GLuint idx)
 {
-    GLint location = glGetUniformLocation(m_program, name.c_str());
-    if (UNIFORM_NOT_FOUND != location)
+    char buffer[BUF_SIZE];
+    GLsizei uLength = 0;
+    GLint uSize = 0;
+    GLenum uType = 0;
+
+    glGetActiveUniform(m_program, idx, (GLsizei)sizeof(buffer), &uLength, &uSize, &uType, buffer);
+
+    if(uLength == 0)
     {
-        m_uniforms.insert( { name, location } );
+        throw std::runtime_error{ "glGetActiveUniform returned uniform name with length 0" };
     }
-    else
+
+    const GLint uniformLocation = glGetUniformLocation(m_program, buffer);
+    std::string uniformName{ buffer };
+
+    if(uniformLocation == UNIFORM_NOT_FOUND)
     {
-        throw std::runtime_error{ "glGetUniformLocation failed: " + name };
+    	throw std::runtime_error{ "glGetUniformLocation failed to get uniform: " + uniformName };
     }
+
+    m_uniforms.insert( { uniformName, uniformLocation } );
 }
 
 void ZFX::Shader::bind()
@@ -82,24 +92,30 @@ void ZFX::Shader::bind()
 void ZFX::Shader::update(const Transform& transform, const Camera& camera)
 {
     update(transform.getModel());
-    update(camera, VIEW_PROJECTION_UNIFORM);
+    update(camera, "viewProjection");
 }
 
 void ZFX::Shader::update(const glm::mat4& transform)
 {
-    GLint modelLocation = uniformLocation(MODEL_UNIFORM);
+    GLint modelLocation = uniformLocation("model");
     glUniformMatrix4fv(modelLocation, 1, GL_FALSE, &transform[0][0]);
 }
 
 void ZFX::Shader::update(const Camera& camera, const std::string& uniform)
 {
-    GLint vpLocation = uniformLocation(VIEW_PROJECTION_UNIFORM);
+    GLint vpLocation = uniformLocation(uniform);
     glUniformMatrix4fv(vpLocation, 1, GL_FALSE, &camera.getViewProjection()[0][0]);
 }
 
 GLint ZFX::Shader::uniformLocation(const std::string& uniform) const
 {
-    return m_uniforms.at(uniform);
+	auto iter = m_uniforms.find(uniform);
+	if(iter == m_uniforms.end())
+	{
+		throw std::runtime_error{ "No such uniform: " + uniform };
+	}
+
+    return iter->second;
 }
 
 void ZFX::Shader::setUniformFloat(const std::string& uniform, float value)

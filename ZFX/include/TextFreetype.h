@@ -22,8 +22,7 @@ namespace ZFX
         class TextShader : public Shader
         {
         public:
-            TextShader(const std::string& filename) :
-                Shader{ filename, { MODEL_UNIFORM, TEXTCOLOUR_UNIFORM } } {}
+            TextShader(const std::string& filename) : Shader{ filename } {}
         };
 
     public:

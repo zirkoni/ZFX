@@ -14,9 +14,9 @@ class Demo8 : public Demo
     struct Shape
     {
         Shape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces,
-                const std::vector<glm::mat4>& instanceMatrix, const ZFX::Uniforms& uniforms) :
+                const std::vector<glm::mat4>& instanceMatrix) :
             mesh{ vertices, indeces, instanceMatrix },
-            shader{ SHADERS_PATH + "instancing", uniforms } {}
+            shader{ SHADERS_PATH + "instancing" } {}
 
         ~Shape() {}
 
@@ -142,7 +142,7 @@ private:
             20, 21, 22, 21, 23, 22
         };
 
-        return std::make_unique<Shape>(vertices, indeces, m_instanceMatrix, ZFX::Uniforms{"viewProjection"});
+        return std::make_unique<Shape>(vertices, indeces, m_instanceMatrix);
     }
 
 private:
@@ -194,7 +194,7 @@ class Demo8 : public Demo
     };
 
 public:
-    Demo8(ZFX::Camera& camera) : Demo{ camera }, m_counter{ 0.0f }
+    Demo8(ZFX::Camera& camera) : Demo{ camera, "Demo8" }, m_counter{ 0.0f }
     {
         for(unsigned i = 0; i < NUM_OBJECTS; ++i)
         {
