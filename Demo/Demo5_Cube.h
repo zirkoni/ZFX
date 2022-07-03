@@ -5,7 +5,7 @@
 class Demo5 : public Demo
 {
 public:
-    Demo5(ZFX::Camera& camera) : Demo{ camera, "Demo5" }, m_counter{0.0f}
+    Demo5(ZFX::Camera& camera) : Demo{ camera, "Demo5" }
     {
         m_cube = addCube();
         m_cube->transform.scale() = glm::vec3{ 0.5f };
@@ -79,6 +79,5 @@ private:
     }
 
 private:
-    float m_counter;
     std::unique_ptr<BasicShape> m_cube;
 };

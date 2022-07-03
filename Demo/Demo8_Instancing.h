@@ -41,7 +41,7 @@ class Demo8 : public Demo
     };
 
 public:
-    Demo8(ZFX::Camera& camera) : Demo{ camera, "Demo8" }, m_counter{0.0f}
+    Demo8(ZFX::Camera& camera) : Demo{ camera, "Demo8" }
     {
         srand(SDL_GetTicks());
 
@@ -146,7 +146,6 @@ private:
     }
 
 private:
-    float m_counter;
     std::unique_ptr<Shape> m_cube;
     std::vector<InstanceTransform> m_transforms;
     std::vector<glm::mat4> m_instanceMatrix;
@@ -194,7 +193,7 @@ class Demo8 : public Demo
     };
 
 public:
-    Demo8(ZFX::Camera& camera) : Demo{ camera, "Demo8" }, m_counter{ 0.0f }
+    Demo8(ZFX::Camera& camera) : Demo{ camera, "Demo8" }
     {
         for(unsigned i = 0; i < NUM_OBJECTS; ++i)
         {
@@ -264,7 +263,6 @@ private:
     }
 
 private:
-    float m_counter;
     std::vector<Cube> m_cubes;
 };
 #endif

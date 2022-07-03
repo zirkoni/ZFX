@@ -49,6 +49,5 @@ private:
     }
 
 private:
-    float m_counter;
     std::unique_ptr<BasicShape> m_square;
 };
