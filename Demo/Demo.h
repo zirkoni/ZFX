@@ -40,6 +40,15 @@ struct TexturedShape: public BasicShape
         mesh.draw();
     }
 
+    void draw(const ZFX::Camera& camera, ZFX::Texture* texture2)
+	{
+		shader.bind();
+		shader.update(transform, camera);
+		texture.bind(0);
+		texture2->bind(1);
+		mesh.draw();
+	}
+
     ZFX::Texture texture;
 };
 

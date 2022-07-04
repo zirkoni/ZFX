@@ -118,6 +118,13 @@ GLint ZFX::Shader::uniformLocation(const std::string& uniform) const
     return iter->second;
 }
 
+void ZFX::Shader::setUniformInt(const std::string& uniform, int value)
+{
+	bind();
+	GLint loc = uniformLocation(uniform);
+	glUniform1i(loc, value);
+}
+
 void ZFX::Shader::setUniformFloat(const std::string& uniform, float value)
 {
     bind();

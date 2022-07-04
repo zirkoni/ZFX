@@ -31,6 +31,7 @@ namespace ZFX
         GLuint programId() const { return m_program; }
         GLint uniformLocation(const std::string& uniform) const;
 
+        void setUniformInt(const std::string& uniform, int value);
         void setUniformFloat(const std::string& uniform, float value);
         void setUniformVec2(const std::string& uniform, const glm::vec2& value);
         void setUniformVec3(const std::string& uniform, const glm::vec3& value);
