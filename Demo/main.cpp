@@ -6,6 +6,7 @@
 #include "Demo6_BasicLighting.h"
 #include "Demo6B_Materials.h"
 #include "Demo6C_LightMaps.h"
+#include "Demo6D_LightCasters.h"
 #include "Demo7_ObjectLoader.h"
 #include "Demo8_Instancing.h"
 #include <iostream>
@@ -24,6 +25,7 @@ void addDemos(DemoList& demos, ZFX::Camera& camera)
     demos.emplace_back(std::make_unique<Demo6>(camera));
     demos.emplace_back(std::make_unique<Demo6B>(camera));
     demos.emplace_back(std::make_unique<Demo6C>(camera));
+    demos.emplace_back(std::make_unique<Demo6D>(camera));
     demos.emplace_back(std::make_unique<Demo7>(camera));
     demos.emplace_back(std::make_unique<Demo8>(camera));
 }

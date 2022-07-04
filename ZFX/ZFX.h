@@ -8,4 +8,5 @@
 #include "Transform.h"
 #include "TextFreetype.h"
 #include "ObjLoader.h"
+#include "Light.h"
 #include <stdexcept>
