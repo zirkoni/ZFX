@@ -10,7 +10,7 @@ varying vec2 texCoord;
 
 void main()
 {
-	gl_Position = viewProjection * model * vec4(positionIn, 0.0, 1.0);
+    gl_Position = viewProjection * model * vec4(positionIn, 0.0, 1.0);
     colour = colourIn;
     texCoord = texCoordIn;
 }

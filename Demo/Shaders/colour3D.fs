@@ -5,5 +5,5 @@ uniform vec4 colour = vec4(0.5, 0.5, 0.5, 1.0); // default colour, grey
 
 void main()
 {
-	fragColorOut = colour;
+    fragColorOut = colour;
 }

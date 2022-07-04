@@ -6,5 +6,5 @@ out vec4 fragColorOut;
 
 void main()
 {
-	fragColorOut = colour;
+    fragColorOut = colour;
 }

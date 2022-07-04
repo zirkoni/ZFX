@@ -12,8 +12,8 @@ void main()
 
 #ifndef ANTIALIASED
     float distance = length(vec3(position, 0.0));
-	float inside = 1.0 - step(radius, distance);
-	fragColorOut = colour * inside;
+    float inside = 1.0 - step(radius, distance);
+    fragColorOut = colour * inside;
 #else
     float distance = distance(position, vec2(0.0, 0.0));
     float delta = fwidth(distance);

@@ -174,13 +174,13 @@ private:
 
     void setLightColour(const glm::vec3& colour)
     {
-    	// Different components have different intensities
-    	m_cube->shader.setUniformVec3("light.ambient",  colour * glm::vec3{ 0.2f });
-    	m_cube->shader.setUniformVec3("light.diffuse",  colour * glm::vec3{ 0.5f });
-    	m_cube->shader.setUniformVec3("light.specular", colour * glm::vec3{ 1.0f });
+        // Different components have different intensities
+        m_cube->shader.setUniformVec3("light.ambient",  colour * glm::vec3{ 0.2f });
+        m_cube->shader.setUniformVec3("light.diffuse",  colour * glm::vec3{ 0.5f });
+        m_cube->shader.setUniformVec3("light.specular", colour * glm::vec3{ 1.0f });
 
-    	// Also set the light object colour
-    	m_light->shader.setUniformVec4("colour", glm::vec4{ colour, 1.0f } );
+        // Also set the light object colour
+        m_light->shader.setUniformVec4("colour", glm::vec4{ colour, 1.0f } );
     }
 
 private:

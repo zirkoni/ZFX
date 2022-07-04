@@ -78,7 +78,7 @@ void ZFX::Shader::saveSingleUniform(const GLint BUF_SIZE, GLuint idx)
 
     if(uniformLocation == UNIFORM_NOT_FOUND)
     {
-    	throw std::runtime_error{ "glGetUniformLocation failed to get uniform: " + uniformName };
+        throw std::runtime_error{ "glGetUniformLocation failed to get uniform: " + uniformName };
     }
 
     m_uniforms.insert( { uniformName, uniformLocation } );
@@ -109,20 +109,20 @@ void ZFX::Shader::update(const Camera& camera, const std::string& uniform)
 
 GLint ZFX::Shader::uniformLocation(const std::string& uniform) const
 {
-	auto iter = m_uniforms.find(uniform);
-	if(iter == m_uniforms.end())
-	{
-		throw std::runtime_error{ "No such uniform: " + uniform };
-	}
+    auto iter = m_uniforms.find(uniform);
+    if(iter == m_uniforms.end())
+    {
+        throw std::runtime_error{ "No such uniform: " + uniform };
+    }
 
     return iter->second;
 }
 
 void ZFX::Shader::setUniformInt(const std::string& uniform, int value)
 {
-	bind();
-	GLint loc = uniformLocation(uniform);
-	glUniform1i(loc, value);
+    bind();
+    GLint loc = uniformLocation(uniform);
+    glUniform1i(loc, value);
 }
 
 void ZFX::Shader::setUniformFloat(const std::string& uniform, float value)
