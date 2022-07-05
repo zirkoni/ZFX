@@ -46,6 +46,8 @@ namespace ZFX
         }
 
         glm::vec3& position() { return m_position; }
+        const glm::vec3& position() const { return m_position; }
+        const glm::vec3& front() const { return m_front; }
 
         void move(const Direction dir, const float deltaTime, const float speed = 0.01f)
         {
@@ -68,11 +70,6 @@ namespace ZFX
             if(m_pitch < -89.0f) m_pitch = -89.0f;
 
             updateCameraVectors();
-        }
-
-        const glm::vec3& getPosition() const
-        {
-            return m_position;
         }
 
         void zoomIn(float amount = ZOOM_AMOUNT)

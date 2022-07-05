@@ -11,6 +11,7 @@ public:
         m_cube->transform.scale() = glm::vec3{ 0.5f };
         addDirectionalLight();
         addPointLights();
+        addSpotLight();
     }
 
     void draw() override
@@ -19,7 +20,7 @@ public:
         m_cube->transform.rotation().x = m_counter;
         m_counter += 0.001f;
 
-        m_cube->shader.setUniformVec3("viewPosition", m_camera.getPosition());
+        m_cube->shader.setUniformVec3("viewPosition", m_camera.position());
 
         // We have 2 textures: diffuse map and specular map => new draw method that takes
         // the specular map as an argument
@@ -27,7 +28,7 @@ public:
 
         for(auto& light : m_pointLights)
         {
-        	light->draw(m_camera);
+            light->draw(m_camera);
         }
     }
 
@@ -118,97 +119,112 @@ private:
 
     void addDirectionalLight()
     {
-    	// Local variable, only create and set once
-    	ZFX::DirectionalLight dirLight{ "dirLight", m_cube->shader };
-    	dirLight.setDirection( glm::vec3{-0.2f, -1.0f, -0.3f} );
-    	dirLight.setAmbient( glm::vec3{0.05f} );
-    	dirLight.setDiffuse( glm::vec3{0.4f} );
-    	dirLight.setSpecular( glm::vec3{0.5f} );
+        // Local variable, only create and set once
+        ZFX::DirectionalLight dirLight{ "dirLight", m_cube->shader };
+        dirLight.setDirection( glm::vec3{-0.2f, -1.0f, -0.3f} );
+        dirLight.setAmbient( glm::vec3{0.05f} );
+        dirLight.setDiffuse( glm::vec3{0.4f} );
+        dirLight.setSpecular( glm::vec3{0.5f} );
     }
 
     void addPointLights()
     {
-    	// Set 4 point lights (same number as in shader)
+        // Set 4 point lights (same number as in shader)
 
-    	glm::vec3 pointLightPositions[] =
-    	{
-			glm::vec3{  0.7f,  0.2f,  2.0f },
-			glm::vec3{  2.3f, -3.3f, -4.0f },
-			glm::vec3{ -2.0f,  2.0f, -2.0f },
-			glm::vec3{  0.0f,  0.0f, -3.0f }
-    	};
+        glm::vec3 pointLightPositions[] =
+        {
+            glm::vec3{  0.7f,  0.2f,  2.0f },
+            glm::vec3{  2.3f, -3.3f, -4.0f },
+            glm::vec3{ -2.0f,  2.0f, -2.0f },
+            glm::vec3{  0.0f,  0.0f, -3.0f }
+        };
 
-    	glm::vec3 pointLightColours[] =
-    	{
-			glm::vec3{ 1.0f, 0.0f, 0.0f },
-			glm::vec3{ 0.0f, 1.0f, 0.0f },
-			glm::vec3{ 0.0f, 0.0f, 1.0f },
-			glm::vec3{ 1.0f, 1.0f, 0.0f }
-    	};
+        glm::vec3 pointLightColours[] =
+        {
+            glm::vec3{ 1.0f, 0.0f, 0.0f },
+            glm::vec3{ 0.0f, 1.0f, 0.0f },
+            glm::vec3{ 0.0f, 0.0f, 1.0f },
+            glm::vec3{ 1.0f, 1.0f, 0.0f }
+        };
 
-    	for(int i = 0; i < 4; ++i)
-    	{
-    		ZFX::PointLight pLight{ "pointLights[" + std::to_string(i) + "]", m_cube->shader };
-    		pLight.setPosition(pointLightPositions[i]);
-    		pLight.setAmbient( pointLightColours[i] * glm::vec3{0.05f} );
-    		pLight.setDiffuse( pointLightColours[i] * glm::vec3{0.8f} );
-    		pLight.setSpecular( pointLightColours[i] * glm::vec3{1.0f} );
-    		pLight.setConstant(1.0f);
-    		pLight.setLinear(0.09f);
-    		pLight.setQuadratic(0.032f);
+        for(int i = 0; i < 4; ++i)
+        {
+            ZFX::PointLight pLight{ "pointLights[" + std::to_string(i) + "]", m_cube->shader };
+            pLight.setPosition(pointLightPositions[i]);
+            pLight.setAmbient( pointLightColours[i] * glm::vec3{0.05f} );
+            pLight.setDiffuse( pointLightColours[i] * glm::vec3{0.8f} );
+            pLight.setSpecular( pointLightColours[i] * glm::vec3{1.0f} );
+            pLight.setConstant(1.0f);
+            pLight.setLinear(0.09f);
+            pLight.setQuadratic(0.032f);
 
-    		addPointLightObject(pointLightPositions[i], pointLightColours[i]);
-    	}
+            addPointLightObject(pointLightPositions[i], pointLightColours[i]);
+        }
     }
 
     void addPointLightObject(const glm::vec3& position, const glm::vec3& colour)
     {
-    	ZFX::Verteces vertices =
-		{
-			ZFX::VertexData
-			{
-				//   x   y   z
-					-1, -1, -1, // 0 left low
-					 1, -1, -1, // 1 right low
-					 1,  1, -1, // 2 right high
-					-1,  1, -1, // 3 left high
+        ZFX::Verteces vertices =
+        {
+            ZFX::VertexData
+            {
+                //   x   y   z
+                    -1, -1, -1, // 0 left low
+                     1, -1, -1, // 1 right low
+                     1,  1, -1, // 2 right high
+                    -1,  1, -1, // 3 left high
 
-					-1, -1,  1, // 4 left low
-					 1, -1,  1, // 5 right low
-					 1,  1,  1, // 6 right high
-					-1,  1,  1, // 7 left high
-			},
+                    -1, -1,  1, // 4 left low
+                     1, -1,  1, // 5 right low
+                     1,  1,  1, // 6 right high
+                    -1,  1,  1, // 7 left high
+            },
 
-			ZFX::AttributeSizes{3}
-		};
+            ZFX::AttributeSizes{3}
+        };
 
-		ZFX::Indeces indeces =
-		{
-			/* Back */
-			0, 3, 1, 3, 2, 1,
+        ZFX::Indeces indeces =
+        {
+            /* Back */
+            0, 3, 1, 3, 2, 1,
 
-			/* Right */
-			1, 2, 5, 2, 6, 5,
+            /* Right */
+            1, 2, 5, 2, 6, 5,
 
-			/* Front */
-			5, 6, 4, 6, 7, 4,
+            /* Front */
+            5, 6, 4, 6, 7, 4,
 
-			/* Left */
-			4, 7, 0, 7, 3, 0,
+            /* Left */
+            4, 7, 0, 7, 3, 0,
 
-			/* Top */
-			3, 7, 2, 7, 6, 2,
+            /* Top */
+            3, 7, 2, 7, 6, 2,
 
-			/* Bottom */
-			4, 0, 5, 0, 1, 5
-		};
+            /* Bottom */
+            4, 0, 5, 0, 1, 5
+        };
 
-		auto cube = std::make_unique<BasicShape>(vertices, indeces, "colour3D");
-		cube->shader.setUniformVec4("colour", glm::vec4{ colour, 1.0f });
-		cube->transform.scale() = glm::vec3{ 0.05f };
-		cube->transform.position() = position;
+        auto cube = std::make_unique<BasicShape>(vertices, indeces, "colour3D");
+        cube->shader.setUniformVec4("colour", glm::vec4{ colour, 1.0f });
+        cube->transform.scale() = glm::vec3{ 0.05f };
+        cube->transform.position() = position;
 
-		m_pointLights.push_back(std::move(cube));
+        m_pointLights.push_back(std::move(cube));
+    }
+
+    void addSpotLight()
+    {
+        ZFX::SpotLight sLight{ "spotLight", m_cube->shader };
+        sLight.setPosition(m_camera.position());
+        sLight.setDirection(m_camera.front());
+        sLight.setAmbient( glm::vec3{0.0f} );
+        sLight.setDiffuse( glm::vec3{1.0f} );
+        sLight.setSpecular( glm::vec3{1.0f} );
+        sLight.setConstant(1.0f);
+        sLight.setLinear(0.09f);
+        sLight.setQuadratic(0.032f);
+        sLight.setCutOff(glm::cos(glm::radians(12.5f)));
+        sLight.setOuterCutOff(glm::cos(glm::radians(15.0f)));
     }
 
 private:

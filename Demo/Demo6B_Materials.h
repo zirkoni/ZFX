@@ -22,7 +22,7 @@ public:
 
         m_light->transform.position().x = sin(50 * m_counter);
 
-        m_cube->shader.setUniformVec3("viewPosition", m_camera.getPosition());
+        m_cube->shader.setUniformVec3("viewPosition", m_camera.position());
         m_cube->shader.setUniformVec3("light.position", m_light->transform.position());
 
         glm::vec3 lightColour;
