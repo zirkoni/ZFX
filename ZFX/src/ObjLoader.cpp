@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <unordered_map>
 
-ZFX::Object::Object(const std::string& filename, bool smoothNormals):
+ZFX::ObjectLoader::ObjectLoader(const std::string& filename, bool smoothNormals):
     m_verteces{nullptr}, m_smoothNormals{smoothNormals}
 {
     tinyobj::ObjReader reader;
@@ -31,7 +31,7 @@ ZFX::Object::Object(const std::string& filename, bool smoothNormals):
     loadObject(reader);
 }
 
-ZFX::Object::~Object()
+ZFX::ObjectLoader::~ObjectLoader()
 {
     if (m_verteces)
     {
@@ -40,7 +40,7 @@ ZFX::Object::~Object()
     }
 }
 
-void ZFX::Object::loadObject(tinyobj::ObjReader& reader)
+void ZFX::ObjectLoader::loadObject(tinyobj::ObjReader& reader)
 {
     VertexData data;
     AttributeSizes attributes;

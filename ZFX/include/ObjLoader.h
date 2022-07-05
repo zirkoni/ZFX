@@ -9,11 +9,11 @@ namespace tinyobj
 
 namespace ZFX
 {
-    class Object
+    class ObjectLoader
     {
     public:
-        Object(const std::string& filename, bool smoothNormals = true);
-        ~Object();
+        ObjectLoader(const std::string& filename, bool smoothNormals = true);
+        ~ObjectLoader();
 
         const Verteces* verteces() const { return m_verteces; }
         const Indeces& indeces() const { return m_indeces; }

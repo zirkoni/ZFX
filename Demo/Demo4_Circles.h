@@ -7,23 +7,23 @@ class Demo4 : public Demo
 public:
     Demo4(ZFX::Camera& camera) : Demo{ camera, "Demo4" }
     {
-        m_textureCircle = addTexturedCircle();
-        m_textureCircle->transform.position().x = -0.2f;
-        m_textureCircle->transform.scale() = glm::vec3{ 0.3f };
+        addTexturedCircle();
+        m_textureCircle.transform().position().x = -0.2f;
+        m_textureCircle.transform().scale() = glm::vec3{ 0.3f };
 
-        m_shaderCircle = addShaderCircle();
-        m_shaderCircle->transform.position().x = 0.2f;
-        m_shaderCircle->transform.scale() = glm::vec3{ 0.3f };
+        addShaderCircle();
+        m_shaderCircle.transform().position().x = 0.2f;
+        m_shaderCircle.transform().scale() = glm::vec3{ 0.3f };
     }
 
     void draw() override
     {
-        m_textureCircle->draw(m_camera);
-        m_shaderCircle->draw(m_camera);
+        m_textureCircle.draw(m_camera);
+        m_shaderCircle.draw(m_camera);
     }
 
 private:
-    std::unique_ptr<TexturedShape> addTexturedCircle()
+    void addTexturedCircle()
     {
         /* Create a square with texture that is a circle */
 
@@ -46,10 +46,11 @@ private:
             0, 3, 2
         };
 
-        return std::make_unique<TexturedShape>(vertices, indeces, "circle.png");
+        m_textureCircle.load(vertices, indeces, SHADERS_PATH + "texture");
+        m_textureCircle.loadTexture(TEXTURES_PATH + "circle.png");
     }
 
-    std::unique_ptr<BasicShape> addShaderCircle()
+    void addShaderCircle()
     {
         /* Create a square, fragment shader will draw it as a circle */
 
@@ -72,15 +73,13 @@ private:
             0, 3, 2
         };
 
-        auto circle = std::make_unique<BasicShape>(vertices, indeces, "circle");
+        m_shaderCircle.load(vertices, indeces, SHADERS_PATH + "circle");
 
         // Set colour
-        circle->shader.setUniformVec4("colour", ZFX::GREEN);
-
-        return circle;
+        m_shaderCircle.shader().setUniformVec4("colour", ZFX::GREEN);
     }
 
 private:
-    std::unique_ptr<TexturedShape> m_textureCircle;
-    std::unique_ptr<BasicShape> m_shaderCircle;
+    ZFX::Object m_textureCircle;
+    ZFX::Object m_shaderCircle;
 };

@@ -150,71 +150,75 @@ private:
     std::vector<InstanceTransform> m_transforms;
     std::vector<glm::mat4> m_instanceMatrix;
 };
-#else // Each cube has its own Mesh and draw call => slow.
+#else // Each cube has its own draw call => slow.
 class Demo8 : public Demo
 {
-    static constexpr unsigned NUM_OBJECTS = 6200; // Higher than ~this not reaching 60fps anymore (GTX 1660 Super)
+    static constexpr unsigned NUM_OBJECTS = 6200; // TODO: test again -- Higher than ~this not reaching 60fps anymore (GTX 1660 Super)
 
-    struct Cube
+    struct CubeInstance
     {
         static constexpr float RADIUS = 30.0;
         static constexpr float OFFSET = 3.5f;
 
-        Cube(std::unique_ptr<BasicShape> s, unsigned idx): shape{ std::move(s) }
+        CubeInstance(ZFX::Transform& transform, unsigned idx)
         {
             angle = (float)idx / (float)NUM_OBJECTS * 360.0f;
             xDisplacement = (rand() % (int)(2 * OFFSET * 100)) / 100.0f - OFFSET;
             yDisplacement = (rand() % (int)(2 * OFFSET * 100)) / 100.0f - OFFSET;
             zDisplacement = (rand() % (int)(2 * OFFSET * 100)) / 100.0f - OFFSET;
 
-            shape->transform.scale() = glm::vec3{ (rand() % 20) / 50.0f + 0.05f };
-            shape->transform.rotation().y = rand() % 360;
-            update(0.0f);
+            transform.scale() = glm::vec3{ (rand() % 20) / 50.0f + 0.05f };
+            transform.rotation().y = rand() % 360;
+            update(transform, 0.0f);
         }
 
-        void update(float counter)
+        void update(ZFX::Transform& transform, float counter)
         {
             // Move in a circle
-            shape->transform.position().x = sin(angle + counter / 10) * RADIUS + xDisplacement;
-            shape->transform.position().z = cos(angle + counter / 10) * RADIUS + zDisplacement;
-            shape->transform.position().y = (yDisplacement - shape->transform.position().z) * 0.4f;
+            transform.position().x = sin(angle + counter / 10) * RADIUS + xDisplacement;
+            transform.position().z = cos(angle + counter / 10) * RADIUS + zDisplacement;
+            transform.position().y = (yDisplacement - transform.position().z) * 0.4f;
 
             // Rotate cube around its center
-            shape->transform.rotation().z = counter;
-            shape->transform.rotation().x = counter;
+            transform.rotation().z = counter;
+            transform.rotation().x = counter;
         }
 
         float angle;
         float xDisplacement;
         float yDisplacement;
         float zDisplacement;
-
-        std::unique_ptr<BasicShape> shape;
     };
 
 public:
     Demo8(ZFX::Camera& camera) : Demo{ camera, "Demo8" }
     {
+        addCube();
+
         for(unsigned i = 0; i < NUM_OBJECTS; ++i)
         {
-            Cube cube{ addCube(), i };
-            m_cubes.push_back(std::move(cube));
+            m_transformations.emplace_back( CubeInstance{m_cube.transform(i), i} );
+
+            if(i < NUM_OBJECTS - 1) // Do not  duplicate on last loop iteration
+            {
+                m_cube.duplicate();
+            }
         }
     }
 
     void draw() override
     {
-        for(auto& c : m_cubes)
+        for(int i = 0; i < m_transformations.size(); ++i)
         {
-            c.update(m_counter); // Movement
-            c.shape->draw(m_camera);
+            m_transformations[i].update(m_cube.transform(i), m_counter); // Movement
         }
 
+        m_cube.draw(m_camera); // Here draw is called for each Transform
         m_counter += 0.01f;
     }
 
 private:
-    std::unique_ptr<BasicShape> addCube()
+    void addCube()
     {
         ZFX::Verteces vertices =
         {
@@ -259,11 +263,12 @@ private:
             20, 21, 22, 21, 23, 22
         };
 
-        return std::make_unique<BasicShape>(vertices, indeces, "colour3D_Lighting");
+        m_cube.load(vertices, indeces, SHADERS_PATH + "colour3D_Lighting");
     }
 
 private:
-    std::vector<Cube> m_cubes;
+    ZFX::Object m_cube;
+    std::vector<CubeInstance> m_transformations;
 };
 #endif
 

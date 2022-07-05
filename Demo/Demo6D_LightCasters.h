@@ -7,8 +7,8 @@ class Demo6D : public Demo
 public:
     Demo6D(ZFX::Camera& camera) : Demo{ camera, "Demo6D" }
     {
-        m_cube = addCube();
-        m_cube->transform.scale() = glm::vec3{ 0.5f };
+        addCube();
+        m_cube.transform().scale() = glm::vec3{ 0.5f };
         addDirectionalLight();
         addPointLights();
         addSpotLight();
@@ -16,24 +16,22 @@ public:
 
     void draw() override
     {
-        m_cube->transform.rotation().z = m_counter;
-        m_cube->transform.rotation().x = m_counter;
+        m_cube.transform().rotation().z = m_counter;
+        m_cube.transform().rotation().x = m_counter;
         m_counter += 0.001f;
 
-        m_cube->shader.setUniformVec3("viewPosition", m_camera.position());
+        m_cube.shader().setUniformVec3("viewPosition", m_camera.position());
 
-        // We have 2 textures: diffuse map and specular map => new draw method that takes
-        // the specular map as an argument
-        m_cube->draw(m_camera, m_specularMap.get());
+        m_cube.draw(m_camera);
 
         for(auto& light : m_pointLights)
         {
-            light->draw(m_camera);
+            light.draw(m_camera);
         }
     }
 
 private:
-    std::unique_ptr<TexturedShape> addCube()
+    void addCube()
     {
         /* Duplicate some vertices to get clearly defined edges:
         * - each corner has a normal vector in every cardinal (x,y,z) direction
@@ -106,21 +104,20 @@ private:
             20, 21, 22, 21, 23, 22
         };
 
-        auto cube = std::make_unique<TexturedShape>(vertices, indeces, "container.png", "colour3D_LightCasters");
-        m_specularMap = std::make_unique<ZFX::Texture>(TEXTURES_PATH + "container_specular.png");
+        m_cube.load(vertices, indeces, SHADERS_PATH + "colour3D_LightCasters");
+        m_cube.loadTexture(TEXTURES_PATH + "container.png");
+        m_cube.loadTexture(TEXTURES_PATH + "container_specular.png");
         
-        cube->shader.setUniformVec3("material.ambient",  glm::vec3{ 0.25f, 0.25f, 0.25f });
-        cube->shader.setUniformInt("material.diffuse",  0);
-        cube->shader.setUniformInt("material.specular", 1);
-        cube->shader.setUniformFloat("material.shininess", 0.6f * 128);
-
-        return cube;
+        m_cube.shader().setUniformVec3("material.ambient",  glm::vec3{ 0.25f, 0.25f, 0.25f });
+        m_cube.shader().setUniformInt("material.diffuse",  0);
+        m_cube.shader().setUniformInt("material.specular", 1);
+        m_cube.shader().setUniformFloat("material.shininess", 0.6f * 128);
     }
 
     void addDirectionalLight()
     {
         // Local variable, only create and set once
-        ZFX::DirectionalLight dirLight{ "dirLight", m_cube->shader };
+        ZFX::DirectionalLight dirLight{ "dirLight", m_cube.shader() };
         dirLight.setDirection( glm::vec3{-0.2f, -1.0f, -0.3f} );
         dirLight.setAmbient( glm::vec3{0.05f} );
         dirLight.setDiffuse( glm::vec3{0.4f} );
@@ -149,7 +146,7 @@ private:
 
         for(int i = 0; i < 4; ++i)
         {
-            ZFX::PointLight pLight{ "pointLights[" + std::to_string(i) + "]", m_cube->shader };
+            ZFX::PointLight pLight{ "pointLights[" + std::to_string(i) + "]", m_cube.shader() };
             pLight.setPosition(pointLightPositions[i]);
             pLight.setAmbient( pointLightColours[i] * glm::vec3{0.05f} );
             pLight.setDiffuse( pointLightColours[i] * glm::vec3{0.8f} );
@@ -158,6 +155,7 @@ private:
             pLight.setLinear(0.09f);
             pLight.setQuadratic(0.032f);
 
+            // All of these use the same data & shader => could be optimized but different colour...
             addPointLightObject(pointLightPositions[i], pointLightColours[i]);
         }
     }
@@ -204,17 +202,18 @@ private:
             4, 0, 5, 0, 1, 5
         };
 
-        auto cube = std::make_unique<BasicShape>(vertices, indeces, "colour3D");
-        cube->shader.setUniformVec4("colour", glm::vec4{ colour, 1.0f });
-        cube->transform.scale() = glm::vec3{ 0.05f };
-        cube->transform.position() = position;
+        ZFX::Object cube;
+        cube.load(vertices, indeces, SHADERS_PATH + "colour3D");
+        cube.shader().setUniformVec4("colour", glm::vec4{ colour, 1.0f });
+        cube.transform().scale() = glm::vec3{ 0.05f };
+        cube.transform().position() = position;
 
         m_pointLights.push_back(std::move(cube));
     }
 
     void addSpotLight()
     {
-        ZFX::SpotLight sLight{ "spotLight", m_cube->shader };
+        ZFX::SpotLight sLight{ "spotLight", m_cube.shader() };
         sLight.setPosition(m_camera.position());
         sLight.setDirection(m_camera.front());
         sLight.setAmbient( glm::vec3{0.0f} );
@@ -228,7 +227,6 @@ private:
     }
 
 private:
-    std::unique_ptr<TexturedShape> m_cube;
-    std::unique_ptr<ZFX::Texture> m_specularMap;
-    std::vector<std::unique_ptr<BasicShape> > m_pointLights;
+    ZFX::Object m_cube;
+    std::vector<ZFX::Object> m_pointLights;
 };

@@ -1,11 +1,8 @@
 #pragma once
 #include "colours.h"
 #include "Window.h"
-#include "Mesh.h"
-#include "Shader.h"
-#include "Texture.h"
+#include "Object.h"
 #include "Camera.h"
-#include "Transform.h"
 #include "TextFreetype.h"
 #include "ObjLoader.h"
 #include "Light.h"

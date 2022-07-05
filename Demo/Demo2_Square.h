@@ -7,19 +7,19 @@ class Demo2 : public Demo
 public:
     Demo2(ZFX::Camera& camera) : Demo{ camera, "Demo2" }
     {
-        m_square = addSquare();
+        addSquare();
     }
 
     void draw() override
     {
-        m_square->transform.rotation().z = m_counter;
+        m_square.transform().rotation().z = m_counter;
         m_counter += 0.001f;
 
-        m_square->draw(m_camera);
+        m_square.draw(m_camera);
     }
 
 private:
-    std::unique_ptr<BasicShape> addSquare()
+    void addSquare()
     {
         /* The 4 corners of a square, starting from left lower corner in clockwise order */
         ZFX::Verteces vertices =
@@ -45,9 +45,9 @@ private:
             0, 3, 2  // 2nd triangle: [-0.5, -0.5], [0.5f, -0.5f], [0.5f, 0.5f]
         };
 
-        return std::make_unique<BasicShape>(vertices, indeces);
+        m_square.load(vertices, indeces, SHADERS_PATH + "colour");
     }
 
 private:
-    std::unique_ptr<BasicShape> m_square;
+    ZFX::Object m_square;
 };

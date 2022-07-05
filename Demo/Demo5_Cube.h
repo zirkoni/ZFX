@@ -7,21 +7,21 @@ class Demo5 : public Demo
 public:
     Demo5(ZFX::Camera& camera) : Demo{ camera, "Demo5" }
     {
-        m_cube = addCube();
-        m_cube->transform.scale() = glm::vec3{ 0.5f };
+        addCube();
+        m_cube.transform().scale() = glm::vec3{ 0.5f };
     }
 
     void draw() override
     {
-        m_cube->transform.rotation().z = m_counter;
-        m_cube->transform.rotation().x = m_counter;
+        m_cube.transform().rotation().z = m_counter;
+        m_cube.transform().rotation().x = m_counter;
         m_counter += 0.001f;
 
-        m_cube->draw(m_camera);
+        m_cube.draw(m_camera);
     }
 
 private:
-    std::unique_ptr<BasicShape> addCube()
+    void addCube()
     {
         /* The 8 corners of a cube */
         ZFX::Verteces vertices =
@@ -64,20 +64,14 @@ private:
             4, 0, 5, 0, 1, 5
         };
 
+        m_cube.load(vertices, indeces, SHADERS_PATH + "colour3D");
+
 //#define CHANGE_COLOUR
 #if defined(CHANGE_COLOUR)
-        const std::string colourUniform = "colour";
-        const ZFX::Uniforms uniforms = { ZFX::TRANSFORM_UNIFORM, colourUniform };
-        auto cube = std::make_unique<BasicShape>(vertices, indeces, uniforms, "colour3D");
-
-        cube->shader.setUniformVec4(colourUniform, glm::vec4{ 0.0f, 0.5f, 0.0f, 1.0f });
-
-        return cube;
-#else
-        return std::make_unique<BasicShape>(vertices, indeces, "colour3D");
+        m_cube.shader().setUniformVec4("colour", glm::vec4{ 0.0f, 0.5f, 0.0f, 1.0f });
 #endif
     }
 
 private:
-    std::unique_ptr<BasicShape> m_cube;
+    ZFX::Object m_cube;
 };
