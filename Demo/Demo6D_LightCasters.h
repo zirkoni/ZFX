@@ -22,8 +22,11 @@ public:
         m_cube.transform().rotation().x = m_counter;
         m_counter += 0.001f;
 
-        m_cube.shader().setUniformVec3("viewPosition", m_camera.position());
+        // Spotlight always comes 'out-of-camera'
+        m_spotLight->setPosition(m_camera.position());
+        m_spotLight->setDirection(m_camera.front());
 
+        m_cube.shader().setUniformVec3("viewPosition", m_camera.position());
         m_cube.draw(m_camera);
 
         for(auto& light : m_pointLights)
@@ -215,20 +218,21 @@ private:
 
     void addSpotLight()
     {
-        ZFX::SpotLight sLight{ "spotLight", m_cube.shader() };
-        sLight.setPosition(m_camera.position());
-        sLight.setDirection(m_camera.front());
-        sLight.setAmbient( glm::vec3{0.0f} );
-        sLight.setDiffuse( glm::vec3{1.0f} );
-        sLight.setSpecular( glm::vec3{1.0f} );
-        sLight.setConstant(1.0f);
-        sLight.setLinear(0.09f);
-        sLight.setQuadratic(0.032f);
-        sLight.setCutOff(glm::cos(glm::radians(12.5f)));
-        sLight.setOuterCutOff(glm::cos(glm::radians(15.0f)));
+        m_spotLight = std::make_unique<ZFX::SpotLight>("spotLight", m_cube.shader());
+        m_spotLight->setPosition(m_camera.position());
+        m_spotLight->setDirection(m_camera.front());
+        m_spotLight->setAmbient( glm::vec3{0.0f} );
+        m_spotLight->setDiffuse( glm::vec3{1.0f} );
+        m_spotLight->setSpecular( glm::vec3{1.0f} );
+        m_spotLight->setConstant(1.0f);
+        m_spotLight->setLinear(0.09f);
+        m_spotLight->setQuadratic(0.032f);
+        m_spotLight->setCutOff(glm::cos(glm::radians(12.5f)));
+        m_spotLight->setOuterCutOff(glm::cos(glm::radians(15.0f)));
     }
 
 private:
     ZFX::Object m_cube;
     std::vector<ZFX::Object> m_pointLights;
+    std::unique_ptr<ZFX::SpotLight> m_spotLight;
 };
