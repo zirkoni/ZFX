@@ -7,8 +7,12 @@ class Demo6B : public Demo
 public:
     Demo6B(ZFX::Camera& camera) : Demo{ camera, "Demo6B" }
     {
-        addCube();
-        m_cube.transform().scale() = glm::vec3{ 0.5f };
+        addCubes();
+        m_shinyCube.transform().scale() = glm::vec3{ 0.5f };
+        m_dimCube.transform().scale() = glm::vec3{ 0.5f };
+
+        m_shinyCube.transform().position().x = 0.7f;
+        m_dimCube.transform().position().x = -0.7f;
 
         addLight();
         setLightColour( glm::vec3{ 1.0f } );
@@ -16,14 +20,16 @@ public:
 
     void draw() override
     {
-        m_cube.transform().rotation().z = m_counter;
-        m_cube.transform().rotation().x = m_counter;
+        m_shinyCube.transform().rotation().z = m_counter;
+        m_shinyCube.transform().rotation().x = m_counter;
         m_counter += 0.001f;
 
         m_light.transform().position().x = sin(50 * m_counter);
 
-        m_cube.shader().setUniformVec3("viewPosition", m_camera.position());
-        m_cube.shader().setUniformVec3("light.position", m_light.transform().position());
+        m_shinyCube.shader().setUniformVec3("viewPosition", m_camera.position());
+        m_shinyCube.shader().setUniformVec3("light.position", m_light.transform().position());
+        m_dimCube.shader().setUniformVec3("viewPosition", m_camera.position());
+        m_dimCube.shader().setUniformVec3("light.position", m_light.transform().position());
 
         glm::vec3 lightColour;
         lightColour.r = 1.0f - sin(m_counter);
@@ -32,11 +38,12 @@ public:
         setLightColour(lightColour);
 
         m_light.draw(m_camera);
-        m_cube.draw(m_camera);
+        m_shinyCube.draw(m_camera);
+        m_dimCube.draw(m_camera);
     }
 
 private:
-    void addCube()
+    void addCubes()
     {
         /* Duplicate some vertices to get clearly defined edges:
         * - each corner has a normal vector in every cardinal (x,y,z) direction
@@ -109,12 +116,18 @@ private:
             20, 21, 22, 21, 23, 22
         };
 
-        m_cube.load(vertices, indeces, SHADERS_PATH + "colour3D_Materials");
-        
-        m_cube.shader().setUniformVec3("material.ambient",  glm::vec3{ 0.25f, 0.25f, 0.25f });
-        m_cube.shader().setUniformVec3("material.diffuse",  glm::vec3{ 0.4f, 0.4f, 0.4f });
-        m_cube.shader().setUniformVec3("material.specular", glm::vec3{ 0.774597f, 0.774597f, 0.774597f });
-        m_cube.shader().setUniformFloat("material.shininess", 0.6f * 128);
+        m_shinyCube.load(vertices, indeces, SHADERS_PATH + "colour3D_Materials");
+        m_shinyCube.shader().setUniformVec3("material.ambient",  glm::vec3{ 0.25f, 0.25f, 0.25f });
+        m_shinyCube.shader().setUniformVec3("material.diffuse",  glm::vec3{ 0.4f, 0.4f, 0.4f });
+        m_shinyCube.shader().setUniformVec3("material.specular", glm::vec3{ 0.774597f, 0.774597f, 0.774597f });
+        m_shinyCube.shader().setUniformFloat("material.shininess", 0.6f * 128);
+
+        // We could duplicate the shiny cube but then both cubes would have the same material
+        m_dimCube.load(vertices, indeces, SHADERS_PATH + "colour3D_Materials");
+        m_dimCube.shader().setUniformVec3("material.ambient",  glm::vec3{ 0.02f, 0.02f, 0.02f });
+        m_dimCube.shader().setUniformVec3("material.diffuse",  glm::vec3{ 0.01f, 0.01f, 0.01f });
+        m_dimCube.shader().setUniformVec3("material.specular", glm::vec3{ 0.4f, 0.4f, 0.4f });
+        m_dimCube.shader().setUniformFloat("material.shininess", 0.078125f * 128);
     }
 
     void addLight()
@@ -171,15 +184,20 @@ private:
     void setLightColour(const glm::vec3& colour)
     {
         // Different components have different intensities
-        m_cube.shader().setUniformVec3("light.ambient",  colour * glm::vec3{ 0.2f });
-        m_cube.shader().setUniformVec3("light.diffuse",  colour * glm::vec3{ 0.5f });
-        m_cube.shader().setUniformVec3("light.specular", colour * glm::vec3{ 1.0f });
+        m_shinyCube.shader().setUniformVec3("light.ambient",  colour * glm::vec3{ 0.2f });
+        m_shinyCube.shader().setUniformVec3("light.diffuse",  colour * glm::vec3{ 0.5f });
+        m_shinyCube.shader().setUniformVec3("light.specular", colour * glm::vec3{ 1.0f });
+
+        m_dimCube.shader().setUniformVec3("light.ambient",  colour * glm::vec3{ 0.2f });
+        m_dimCube.shader().setUniformVec3("light.diffuse",  colour * glm::vec3{ 0.5f });
+        m_dimCube.shader().setUniformVec3("light.specular", colour * glm::vec3{ 1.0f });
 
         // Also set the light object colour
         m_light.shader().setUniformVec4("colour", glm::vec4{ colour, 1.0f } );
     }
 
 private:
-    ZFX::Object m_cube;
+    ZFX::Object m_shinyCube;
+    ZFX::Object m_dimCube;
     ZFX::Object m_light;
 };

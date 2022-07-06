@@ -9,6 +9,8 @@ public:
     {
         addCube();
         m_cube.transform().scale() = glm::vec3{ 0.5f };
+        m_cube.transform().position().x = 0.7f;
+        m_cube.duplicate().position().x = -0.7f;
         addDirectionalLight();
         addPointLights();
         addSpotLight();
