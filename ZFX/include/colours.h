@@ -14,12 +14,12 @@ static const glm::vec4 CYAN     { 0.0f, 1.0f, 1.0f, 1.0f };
 static const glm::vec4 MAGENTA  { 1.0f, 0.0f, 1.0f, 1.0f };
 
 // Grays
-glm::vec4 makeGray(float lightAmount)
+glm::vec4 makeGray(float lightAmount, float alpha = 1.0f)
 {
     assert(lightAmount > 0.0f && lightAmount < 1.0f);
 
     glm::vec4 colour = lightAmount * WHITE;
-    colour.a = 1.0f;
+    colour.a = alpha;
     return colour;
 }
 
