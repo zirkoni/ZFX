@@ -30,12 +30,126 @@ void addDemos(DemoList& demos, ZFX::Camera& camera)
     demos.emplace_back(std::make_unique<Demo8>(camera));
 }
 
+void toggleWireframe()
+{
+    if(ZFX::drawFilled)
+    {
+        ZFX::wireframeMode();
+    } else
+    {
+        ZFX::filledMode();
+    }
+}
+
+void changeActiveDemo(ZFX::Camera& camera, DemoList& demos, DemoList::iterator& activeDemo)
+{
+    ++activeDemo;
+    if (activeDemo == demos.end())
+    {
+        activeDemo = demos.begin();
+    }
+
+    if (activeDemo->get()->name() == "Demo8")
+    {
+        camera.position().z = 80.0f;
+    } else
+    {
+        camera.position().z = 3.0f;
+    }
+
+    camera.resetZoom();
+}
+
+void checkKeyboardInput(const SDL_Event& e, ZFX::Camera& camera, DemoList& demos,
+        DemoList::iterator& activeDemo, glm::vec4& bgColour, float deltaTime)
+{
+    if (e.key.keysym.scancode == SDL_SCANCODE_W) // Toggle wireframe mode on/off by pressing W
+    {
+        toggleWireframe();
+    }
+    else if (e.key.keysym.scancode == SDL_SCANCODE_SPACE) // Switch to different demo by pressing space
+    {
+        changeActiveDemo(camera, demos, activeDemo);
+    }
+    else if (e.key.keysym.scancode == SDL_SCANCODE_Z)
+    {
+        camera.resetZoom();
+    }
+    else if (e.key.keysym.scancode == SDL_SCANCODE_C) // Change background colour black <=> white
+    {
+        if (bgColour == ZFX::BLACK) bgColour = ZFX::WHITE;
+        else bgColour = ZFX::BLACK;
+    }
+    else if (e.key.keysym.scancode == SDL_SCANCODE_UP)
+    {
+        camera.move(ZFX::Camera::Direction::FORWARD, deltaTime);
+    }
+    else if (e.key.keysym.scancode == SDL_SCANCODE_DOWN)
+    {
+        camera.move(ZFX::Camera::Direction::BACKWARD, deltaTime);
+    }
+    else if (e.key.keysym.scancode == SDL_SCANCODE_LEFT)
+    {
+        camera.move(ZFX::Camera::Direction::LEFT, deltaTime);
+    }
+    else if (e.key.keysym.scancode == SDL_SCANCODE_RIGHT)
+    {
+        camera.move(ZFX::Camera::Direction::RIGHT, deltaTime);
+    }
+}
+
+void checkMouseInput(const SDL_Event& e, ZFX::Camera& camera)
+{
+    static bool middleButtonDown = false;
+
+    if (e.type == SDL_MOUSEWHEEL)
+    {
+        if (e.wheel.y > 0)
+        {
+            camera.zoomIn();
+        } else if (e.wheel.y < 0)
+        {
+            camera.zoomOut();
+        }
+    } else if (e.type == SDL_MOUSEBUTTONDOWN)
+    {
+        if (e.button.button == SDL_BUTTON_MIDDLE) middleButtonDown = true;
+    } else if (e.type == SDL_MOUSEBUTTONUP)
+    {
+        if (e.button.button == SDL_BUTTON_MIDDLE) middleButtonDown = false;
+    } else if (e.type == SDL_MOUSEMOTION)
+    {
+        if (middleButtonDown)
+        {
+            camera.turn(e.motion.xrel, e.motion.yrel);
+        }
+    }
+}
+
+bool checkInput(ZFX::Camera& camera, DemoList& demos, DemoList::iterator& activeDemo,
+        glm::vec4& bgColour, float deltaTime)
+{
+    SDL_Event e;
+
+    while (SDL_PollEvent(&e))
+    {
+        if (e.type == SDL_QUIT)
+        {
+            return true;
+        } else if (e.type == SDL_KEYDOWN)
+        {
+            checkKeyboardInput(e, camera, demos, activeDemo, bgColour, deltaTime);
+        } else
+        {
+            checkMouseInput(e, camera);
+        }
+    }
+
+    return false;
+}
+
 void mainLoop(ZFX::Window& window)
 {
-    bool wireframeOn = false;
-    bool wireframeOnOldValue = wireframeOn;
-    auto bgColour = ZFX::BLACK;
-
     ZFX::Camera camera{ glm::vec3{0.0f, 0.0f, 3.0f}, window.aspectRatio() };
 
     DemoList demos;
@@ -43,8 +157,7 @@ void mainLoop(ZFX::Window& window)
     auto activeDemo = demos.begin();
 
     bool exitRequested = false;
-    bool middleButtonDown = false;
-    SDL_Event e;
+    auto bgColour = ZFX::BLACK;
 
     Uint64 now = SDL_GetPerformanceCounter();
     Uint64 last = 0;
@@ -56,101 +169,10 @@ void mainLoop(ZFX::Window& window)
         now = SDL_GetPerformanceCounter();
         deltaTime = (now - last) * 1000 / (float)SDL_GetPerformanceFrequency();
 
-        while (SDL_PollEvent(&e))
-        {
-            if (e.type == SDL_QUIT)
-            {
-                exitRequested = true;
-            }
-            else if (e.type == SDL_KEYDOWN)
-            {
-                if (e.key.keysym.scancode == SDL_SCANCODE_W) // Toggle wireframe mode on/off by pressing W
-                {
-                    wireframeOn = !wireframeOn;
-                }
-                else if (e.key.keysym.scancode == SDL_SCANCODE_SPACE) // Switch to different demo by pressing space
-                {
-                    ++activeDemo;
-                    if (activeDemo == demos.end())
-                    {
-                        activeDemo = demos.begin();
-                    }
-
-                    if (activeDemo->get()->name() == "Demo8")
-                    {
-                        camera.position().z = 80.0f;
-                    } else
-                    {
-                        camera.position().z = 3.0f;
-                    }
-
-                    camera.resetZoom();
-                }
-                else if (e.key.keysym.scancode == SDL_SCANCODE_Z)
-                {
-                    camera.resetZoom();
-                }
-                else if (e.key.keysym.scancode == SDL_SCANCODE_C) // Change background colour black <=> white
-                {
-                    if (bgColour == ZFX::BLACK) bgColour = ZFX::WHITE;
-                    else bgColour = ZFX::BLACK;
-                }
-                else if (e.key.keysym.scancode == SDL_SCANCODE_UP)
-                {
-                    camera.move(ZFX::Camera::Direction::FORWARD, deltaTime);
-                }
-                else if (e.key.keysym.scancode == SDL_SCANCODE_DOWN)
-                {
-                    camera.move(ZFX::Camera::Direction::BACKWARD, deltaTime);
-                }
-                else if (e.key.keysym.scancode == SDL_SCANCODE_LEFT)
-                {
-                    camera.move(ZFX::Camera::Direction::LEFT, deltaTime);
-                }
-                else if (e.key.keysym.scancode == SDL_SCANCODE_RIGHT)
-                {
-                    camera.move(ZFX::Camera::Direction::RIGHT, deltaTime);
-                }
-            }
-            else if (e.type == SDL_MOUSEWHEEL)
-            {
-                if (e.wheel.y > 0)
-                {
-                    camera.zoomIn();
-                }
-                else if (e.wheel.y < 0)
-                {
-                    camera.zoomOut();
-                }
-            }
-            else if (e.type == SDL_MOUSEBUTTONDOWN)
-            {
-                if (e.button.button == SDL_BUTTON_MIDDLE) middleButtonDown = true;
-            }
-            else if (e.type == SDL_MOUSEBUTTONUP)
-            {
-                if (e.button.button == SDL_BUTTON_MIDDLE) middleButtonDown = false;
-            }
-            else if (e.type == SDL_MOUSEMOTION)
-            {
-                if (middleButtonDown)
-                {
-                    camera.turn(e.motion.xrel, e.motion.yrel);
-                }
-            }
-        }
-
-        if (wireframeOn != wireframeOnOldValue)
-        {
-            if (wireframeOn) ZFX::wireframeMode();
-            if (not wireframeOn) ZFX::filledMode();
-            wireframeOnOldValue = wireframeOn;
-        }
+        exitRequested = checkInput(camera, demos, activeDemo, bgColour, deltaTime);
 
         window.clear(bgColour);
-
         activeDemo->get()->draw();
-
         window.update();
 
         SDL_Delay(1);
@@ -166,7 +188,7 @@ int main(int argc, char* argv[])
     {
         ZFX::Window window{ 800, 600, "Demo", vsync, glDebug };
         window.clear();
-        window.update();
+        window.update(); // Show black screen while loading...
         mainLoop(window);
     }
     catch (const std::runtime_error& error) // TODO: maybe typedef type to e.g. ZFX::Exception?
