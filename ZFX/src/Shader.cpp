@@ -5,12 +5,43 @@
 #include <fstream>
 
 
-ZFX::Shader::Shader(const std::string& filename)
+ZFX::Shader::Shader(const std::string& baseFileName): Shader{ baseFileName + ".vs", baseFileName + ".fs" }
+{
+}
+
+ZFX::Shader::Shader(const std::string& vertexFileName, const std::string& fragFileName)
 {
     GLuint vertexShader;
     GLuint fragmentShader;
 
-    createAndAttach(filename, vertexShader, fragmentShader);
+    m_program = glCreateProgram();
+
+    vertexShader = create(true, vertexFileName, GL_VERTEX_SHADER);
+    fragmentShader = create(true, fragFileName, GL_FRAGMENT_SHADER);
+
+    glAttachShader(m_program, vertexShader);
+    glAttachShader(m_program, fragmentShader);
+
+    compile();
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    saveUniformLocations();
+}
+
+ZFX::Shader::Shader(const std::string& vertexSource, const std::string& fragSource, bool dummy)
+{
+    GLuint vertexShader;
+    GLuint fragmentShader;
+
+    m_program = glCreateProgram();
+
+    vertexShader = create(false, vertexSource, GL_VERTEX_SHADER);
+    fragmentShader = create(false, fragSource, GL_FRAGMENT_SHADER);
+
+    glAttachShader(m_program, vertexShader);
+    glAttachShader(m_program, fragmentShader);
 
     compile();
 
@@ -25,24 +56,13 @@ ZFX::Shader::~Shader()
     glDeleteProgram(m_program);
 }
 
-void ZFX::Shader::createAndAttach(const std::string& filename, GLuint& vertexShader, GLuint& fragmentShader)
-{
-    m_program = glCreateProgram();
-
-    vertexShader = create(filename + ".vs", GL_VERTEX_SHADER);
-    fragmentShader = create(filename + ".fs", GL_FRAGMENT_SHADER);
-
-    glAttachShader(m_program, vertexShader);
-    glAttachShader(m_program, fragmentShader);
-}
-
 void ZFX::Shader::compile()
 {
     glLinkProgram(m_program);
-    checkError(m_program, GL_LINK_STATUS, true, "glLinkProgram failed: ");
+    checkError(m_program, GL_LINK_STATUS, true, "glLinkProgram failed");
 
     glValidateProgram(m_program);
-    checkError(m_program, GL_VALIDATE_STATUS, true, "glValidateProgram failed: ");
+    checkError(m_program, GL_VALIDATE_STATUS, true, "glValidateProgram failed");
 }
 
 void ZFX::Shader::saveUniformLocations()
@@ -160,7 +180,8 @@ void ZFX::Shader::setUniformMat4(const std::string& uniform, const glm::mat4& va
     glUniformMatrix4fv(loc, 1, GL_FALSE, &value[0][0]);
 }
 
-void ZFX::Shader::checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg)
+void ZFX::Shader::checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg,
+        const std::string& errorMsg2)
 {
     GLint success = 0;
     GLchar error[1024] = { 0 };
@@ -185,11 +206,11 @@ void ZFX::Shader::checkError(GLuint shader, GLuint flag, bool isProgram, const s
             glGetShaderInfoLog(shader, sizeof(error), NULL, error);
         }
 
-        throw std::runtime_error{ errorMsg + ": " + error };
+        throw std::runtime_error{ errorMsg + ":\n" + errorMsg2 + "\n" + error };
     }
 }
 
-std::string ZFX::Shader::load(const std::string& fileName)
+void ZFX::Shader::loadFromFile(const std::string& fileName, GLuint shader)
 {
     std::ifstream file(fileName.c_str());
 
@@ -209,10 +230,21 @@ std::string ZFX::Shader::load(const std::string& fileName)
         throw std::runtime_error{ "Unable to load shader: " + fileName };
     }
 
-    return output;
+    loadFromString(output, shader);
 }
 
-GLuint ZFX::Shader::create(const std::string& fileName, GLenum shaderType)
+void ZFX::Shader::loadFromString(const std::string& source, GLuint shader)
+{
+    const GLchar* p[1];
+    p[0] = source.c_str();
+    GLint lengths[1];
+    lengths[0] = (GLint)source.length();
+
+    glShaderSource(shader, 1, p, lengths);
+    glCompileShader(shader);
+}
+
+GLuint ZFX::Shader::create(bool isFile, const std::string& source, GLenum shaderType)
 {
     GLuint shader = glCreateShader(shaderType);
 
@@ -222,16 +254,15 @@ GLuint ZFX::Shader::create(const std::string& fileName, GLenum shaderType)
     }
     else
     {
-        const std::string text = load(fileName);
-        const GLchar* p[1];
-        p[0] = text.c_str();
-        GLint lengths[1];
-        lengths[0] = (GLint)text.length();
+        if(isFile)
+        {
+            loadFromFile(source, shader);
+        } else
+        {
+            loadFromString(source, shader);
+        }
 
-        glShaderSource(shader, 1, p, lengths);
-        glCompileShader(shader);
-
-        checkError(shader, GL_COMPILE_STATUS, false, std::string("Error compiling shader: " + fileName + "\n").c_str());
+        checkError(shader, GL_COMPILE_STATUS, false, std::string{"Error compiling shader"}, source);
     }
 
     return shader;

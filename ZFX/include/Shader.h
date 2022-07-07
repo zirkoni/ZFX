@@ -15,7 +15,16 @@ namespace ZFX
         using UniformMap = std::unordered_map<std::string, const GLint>;
 
     public:
-        Shader(const std::string& filename);
+
+        // 2 files without extension: baseFileName.vs & baseFileName.fs
+        Shader(const std::string& baseFileName);
+
+        // 2 files with extension, filenames can be whatever
+        Shader(const std::string& vertexFileName, const std::string& fragFileName);
+
+        // Pass the source directly (no files). Dummy argument unused
+        Shader(const std::string& vertexSource, const std::string& fragSource, bool dummy);
+
         Shader(const Shader& other) = delete;
         Shader& operator=(const Shader& other) = delete;
         virtual ~Shader();
@@ -40,14 +49,15 @@ namespace ZFX
         void setUniformMat4(const std::string& uniform, const glm::mat4& value);
 
     protected:
-        void createAndAttach(const std::string& filename, GLuint& vertexShader, GLuint& fragmentShader);
         void compile();
         void saveUniformLocations();
         void saveSingleUniform(const GLint BUF_SIZE, GLuint idx);
 
-        static void checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg);
-        static std::string load(const std::string& fileName);
-        static GLuint create(const std::string& fileName, GLenum shaderType);
+        static void checkError(GLuint shader, GLuint flag, bool isProgram,
+                const std::string& errorMsg, const std::string& errorMsg2 = "");
+        static void loadFromFile(const std::string& fileName, GLuint shader);
+        static void loadFromString(const std::string& source, GLuint shader);
+        static GLuint create(bool isFile, const std::string& source, GLenum shaderType);
 
     protected:
         GLuint m_program;
