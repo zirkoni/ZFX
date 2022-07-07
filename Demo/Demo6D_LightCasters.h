@@ -112,8 +112,7 @@ private:
         m_cube.load(vertices, indeces, SHADERS_PATH + "colour3D_LightCasters");
         m_cube.loadTexture(TEXTURES_PATH + "container.png");
         m_cube.loadTexture(TEXTURES_PATH + "container_specular.png");
-        
-        m_cube.shader().setUniformVec3("material.ambient",  glm::vec3{ 0.25f, 0.25f, 0.25f });
+
         m_cube.shader().setUniformInt("material.diffuse",  0);
         m_cube.shader().setUniformInt("material.specular", 1);
         m_cube.shader().setUniformFloat("material.shininess", 0.6f * 128);
