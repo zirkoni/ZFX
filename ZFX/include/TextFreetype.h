@@ -7,8 +7,6 @@
 
 namespace ZFX
 {
-    extern const std::string TEXTCOLOUR_UNIFORM;
-
     class TextFreetype
     {
         struct Character
@@ -19,17 +17,11 @@ namespace ZFX
             GLuint advance;   // Horizontal offset to advance to next glyph
         };
 
-        class TextShader : public Shader
-        {
-        public:
-            TextShader(const std::string& filename) : Shader{ filename } {}
-        };
-
     public:
-        TextFreetype(const std::string& font, const std::string& shader);
+        TextFreetype(const std::string& font);
         ~TextFreetype();
 
-        void drawText(const std::string& text, float x, float y, float scale, glm::vec3 colour);
+        void drawText(const std::string& text, float x, float y, float scale, const glm::vec4& colour);
 
     private:
         void init(const std::string& font);
@@ -39,7 +31,7 @@ namespace ZFX
         GLuint m_vao;
         GLuint m_vbo;
 
-        TextShader m_shader;
+        Shader m_shader;
         std::map<char, Character> m_characters;
     };
 }

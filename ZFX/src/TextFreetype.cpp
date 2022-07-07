@@ -4,12 +4,34 @@
 #include <stdexcept>
 #include <iostream>
 
-const std::string ZFX::TEXTCOLOUR_UNIFORM = "textColour";
 
-ZFX::TextFreetype::TextFreetype(const std::string& font, const std::string& shader) :
-    m_vao{ 0 }, m_vbo{ 0 }, m_shader{ shader }
+const std::string VERTEX_SHADER =
+    "#version 330 core\n"
+    "layout (location = 0) in vec4 vertex; // xy = vec2 position, zw= vec2 texture coordinates\n"
+    "out vec2 texCoord;"
+    "uniform mat4 model;"
+    "void main() {"
+    "    gl_Position = model * vec4(vertex.xy, 0.0, 1.0);"
+    "    texCoord = vertex.zw;"
+    "}";
+
+const std::string FRAGMENT_SHADER =
+    "#version 330 core\n"
+    "in vec2 texCoord;"
+    "out vec4 fragColourOut;"
+    "uniform sampler2D diffuse;"
+    "uniform vec4 textColour;"
+    "void main() {"
+    "    vec4 sampled = vec4(1.0, 1.0, 1.0, texture(diffuse, texCoord).r);"
+    "    fragColourOut = textColour * sampled;"
+    "}";
+
+ZFX::TextFreetype::TextFreetype(const std::string& font) :
+    m_vao{ 0 }, m_vbo{ 0 }, m_shader{ VERTEX_SHADER, FRAGMENT_SHADER, false }
 {
-    glm::mat4 transform = glm::ortho(0.0f, static_cast<float>(Window::width()), 0.0f, static_cast<float>(Window::height()));
+    glm::mat4 transform = glm::ortho(0.0f, static_cast<float>(Window::width()), 0.0f,
+            static_cast<float>(Window::height()));
+
     m_shader.bind();
     m_shader.update(transform);
 
@@ -99,10 +121,11 @@ void ZFX::TextFreetype::loadCharacters(const FT_Face& face, uint32_t numCharacte
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void ZFX::TextFreetype::drawText(const std::string& text, float x, float y, float scale, glm::vec3 colour)
+void ZFX::TextFreetype::drawText(const std::string& text, float x, float y, float scale,
+        const glm::vec4& colour)
 {
     m_shader.bind();
-    glUniform3f(m_shader.uniformLocation(TEXTCOLOUR_UNIFORM), colour.x, colour.y, colour.z);
+    m_shader.setUniformVec4("textColour", colour);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(m_vao);
 
