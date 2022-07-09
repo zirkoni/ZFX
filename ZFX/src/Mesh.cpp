@@ -52,7 +52,7 @@ ZFX::Mesh::Mesh(const Verteces &vertices, const Indeces &indeces, const std::vec
     glBindVertexArray(m_vertexArrayObject);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffers[INSTANCE_BUFFER]);
-    glBufferData(GL_ARRAY_BUFFER, modelMatrices.size() * sizeof(modelMatrices.at(0)), modelMatrices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, modelMatrices.size() * sizeof(modelMatrices.at(0)), modelMatrices.data(), GL_DYNAMIC_DRAW);
 
     uint64_t offset = 0;
 
