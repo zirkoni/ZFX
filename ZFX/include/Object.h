@@ -25,6 +25,7 @@ namespace ZFX
         Transform& transform() { return m_transforms.front(); }
         Transform& transform(int idx) { return m_transforms.at(idx); }
 
+        Mesh& mesh()     { return *m_mesh.get(); }
         Shader& shader() { return *m_shader.get(); }
 
     private:

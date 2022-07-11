@@ -11,7 +11,7 @@ public:
 
     virtual ~Demo() {}
 
-    //virtual void update(float deltaTime) = 0; // TODO
+    virtual void handleInput(const SDL_Event& e) {}
     virtual void draw() = 0;
 
     virtual void onExit() {}

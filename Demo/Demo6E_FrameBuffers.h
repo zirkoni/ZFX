@@ -5,7 +5,7 @@
 class Demo6E : public Demo
 {
 public:
-    Demo6E(ZFX::Camera& camera, ZFX::Window& window) : Demo{ camera, "Demo6E" }
+    Demo6E(ZFX::Camera& camera, ZFX::Window& window) : Demo{ camera, "Demo6E" }, m_activeEffect{0}
     {
         addCube();
         m_cube.transform().scale() = glm::vec3{ 0.5f };
@@ -47,6 +47,20 @@ public:
     void onExit() override
     {
         glEnable(GL_DEPTH_TEST);
+    }
+
+    void handleInput(const SDL_Event& e) override
+    {
+        if(e.key.keysym.scancode == SDL_SCANCODE_D)
+        {
+            ++m_activeEffect;
+            if(m_activeEffect > 4)
+            {
+                m_activeEffect = 0;
+            }
+
+            m_screen.shader().setUniformInt("selected", m_activeEffect);
+        }
     }
 
 private:
@@ -285,4 +299,5 @@ private:
     std::unique_ptr<ZFX::SpotLight> m_spotLight;
     ZFX::FrameBuffer m_buffer;
     ZFX::Object m_screen;
+    int m_activeEffect;
 };

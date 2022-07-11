@@ -90,6 +90,9 @@ void checkKeyboardInput(const SDL_Event& e, ZFX::Camera& camera, DemoList& demos
     else if (e.key.keysym.scancode == SDL_SCANCODE_RIGHT)
     {
         camera.move(ZFX::Camera::Direction::RIGHT, deltaTime);
+    } else
+    {
+        activeDemo->get()->handleInput(e);
     }
 }
 
