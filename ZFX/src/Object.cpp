@@ -5,11 +5,19 @@ ZFX::Object::Object()
 {
 }
 
-void ZFX::Object::load(const ZFX::Verteces &vertices,
-        const ZFX::Indeces &indeces, const std::string shaderName)
+void ZFX::Object::load(const ZFX::Verteces &vertices, const ZFX::Indeces &indeces,
+        std::shared_ptr<ZFX::Shader> shader)
 {
     m_mesh = std::make_unique<Mesh>(vertices, indeces);
-    m_shader = std::make_unique<Shader>(shaderName);
+    m_shader = shader;
+    m_transforms.push_back( Transform{} );
+}
+
+void ZFX::Object::load(const ZFX::Verteces &vertices, const ZFX::Indeces &indeces,
+        const std::string shaderName)
+{
+    m_mesh = std::make_unique<Mesh>(vertices, indeces);
+    m_shader = std::make_shared<Shader>(shaderName);
     m_transforms.push_back( Transform{} );
 }
 

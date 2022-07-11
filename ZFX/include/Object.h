@@ -14,6 +14,7 @@ namespace ZFX
     public:
         Object();
 
+        void load(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces, std::shared_ptr<ZFX::Shader> shader);
         void load(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces, const std::string shaderName);
         void loadTexture(const std::string& textureFile);
         Transform& duplicate();
@@ -21,14 +22,14 @@ namespace ZFX
 
         void draw(const ZFX::Camera& camera);
 
-        Transform& transform() { return m_transforms[0]; }
-        Transform& transform(int idx) { return m_transforms[idx]; }
+        Transform& transform() { return m_transforms.front(); }
+        Transform& transform(int idx) { return m_transforms.at(idx); }
 
         Shader& shader() { return *m_shader.get(); }
 
     private:
         std::unique_ptr<Mesh> m_mesh;
-        std::unique_ptr<Shader> m_shader;
+        std::shared_ptr<Shader> m_shader;
         std::vector<std::unique_ptr<Texture> > m_textures;
         std::vector<Transform> m_transforms;
     };

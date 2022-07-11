@@ -7,6 +7,7 @@
 #include "Demo6B_Materials.h"
 #include "Demo6C_LightMaps.h"
 #include "Demo6D_LightCasters.h"
+#include "Demo6E_FrameBuffers.h"
 #include "Demo7_ObjectLoader.h"
 #include "Demo8_Instancing.h"
 #include <iostream>
@@ -15,7 +16,7 @@
 
 using DemoList = std::vector<std::unique_ptr<Demo> >;
 
-void addDemos(DemoList& demos, ZFX::Camera& camera)
+void addDemos(DemoList& demos, ZFX::Camera& camera, ZFX::Window& window)
 {
     demos.emplace_back(std::make_unique<Demo1>(camera));
     demos.emplace_back(std::make_unique<Demo2>(camera));
@@ -26,6 +27,7 @@ void addDemos(DemoList& demos, ZFX::Camera& camera)
     demos.emplace_back(std::make_unique<Demo6B>(camera));
     demos.emplace_back(std::make_unique<Demo6C>(camera));
     demos.emplace_back(std::make_unique<Demo6D>(camera));
+    demos.emplace_back(std::make_unique<Demo6E>(camera, window));
     demos.emplace_back(std::make_unique<Demo7>(camera));
     demos.emplace_back(std::make_unique<Demo8>(camera));
 }
@@ -43,25 +45,19 @@ void toggleWireframe()
 
 void changeActiveDemo(ZFX::Camera& camera, DemoList& demos, DemoList::iterator& activeDemo)
 {
+    activeDemo->get()->onExit();
+
     ++activeDemo;
     if (activeDemo == demos.end())
     {
         activeDemo = demos.begin();
     }
 
-    if (activeDemo->get()->name() == "Demo8")
-    {
-        camera.position().z = 80.0f;
-    } else
-    {
-        camera.position().z = 3.0f;
-    }
-
-    camera.resetZoom();
+    activeDemo->get()->onEntry();
 }
 
 void checkKeyboardInput(const SDL_Event& e, ZFX::Camera& camera, DemoList& demos,
-        DemoList::iterator& activeDemo, glm::vec4& bgColour, float deltaTime)
+        DemoList::iterator& activeDemo, float deltaTime)
 {
     if (e.key.keysym.scancode == SDL_SCANCODE_W) // Toggle wireframe mode on/off by pressing W
     {
@@ -77,8 +73,7 @@ void checkKeyboardInput(const SDL_Event& e, ZFX::Camera& camera, DemoList& demos
     }
     else if (e.key.keysym.scancode == SDL_SCANCODE_C) // Change background colour black <=> white
     {
-        if (bgColour == ZFX::BLACK) bgColour = ZFX::WHITE;
-        else bgColour = ZFX::BLACK;
+        activeDemo->get()->changeBgColour();
     }
     else if (e.key.keysym.scancode == SDL_SCANCODE_UP)
     {
@@ -126,8 +121,7 @@ void checkMouseInput(const SDL_Event& e, ZFX::Camera& camera)
     }
 }
 
-bool checkInput(ZFX::Camera& camera, DemoList& demos, DemoList::iterator& activeDemo,
-        glm::vec4& bgColour, float deltaTime)
+bool checkInput(ZFX::Camera& camera, DemoList& demos, DemoList::iterator& activeDemo, float deltaTime)
 {
     SDL_Event e;
 
@@ -138,7 +132,7 @@ bool checkInput(ZFX::Camera& camera, DemoList& demos, DemoList::iterator& active
             return true;
         } else if (e.type == SDL_KEYDOWN)
         {
-            checkKeyboardInput(e, camera, demos, activeDemo, bgColour, deltaTime);
+            checkKeyboardInput(e, camera, demos, activeDemo, deltaTime);
         } else
         {
             checkMouseInput(e, camera);
@@ -153,11 +147,10 @@ void mainLoop(ZFX::Window& window)
     ZFX::Camera camera{ glm::vec3{0.0f, 0.0f, 3.0f}, window.aspectRatio() };
 
     DemoList demos;
-    addDemos(demos, camera);
+    addDemos(demos, camera, window);
     auto activeDemo = demos.begin();
 
     bool exitRequested = false;
-    auto bgColour = ZFX::BLACK;
 
     Uint64 now = SDL_GetPerformanceCounter();
     Uint64 last = 0;
@@ -169,9 +162,9 @@ void mainLoop(ZFX::Window& window)
         now = SDL_GetPerformanceCounter();
         deltaTime = (now - last) * 1000 / (float)SDL_GetPerformanceFrequency();
 
-        exitRequested = checkInput(camera, demos, activeDemo, bgColour, deltaTime);
+        exitRequested = checkInput(camera, demos, activeDemo, deltaTime);
 
-        window.clear(bgColour);
+        window.clear(activeDemo->get()->bgColour());
         activeDemo->get()->draw();
         window.update();
 
