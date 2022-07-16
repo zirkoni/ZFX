@@ -7,7 +7,7 @@
 #if 1
 class Demo8 : public Demo
 {
-    static constexpr unsigned NUM_OBJECTS = 6200; // Can be increased much higher without drop in frame rate!
+    static constexpr unsigned NUM_OBJECTS = 42000; // Can be increased much higher without dropping below 60 fps!
     static constexpr float RADIUS = 30.0f;
     static constexpr float OFFSET = 3.5f;
 
@@ -159,7 +159,7 @@ private:
 #else // Each cube has its own draw call => slow.
 class Demo8 : public Demo
 {
-    static constexpr unsigned NUM_OBJECTS = 6200; // TODO: test again -- Higher than ~this not reaching 60fps anymore (GTX 1660 Super)
+    static constexpr unsigned NUM_OBJECTS = 42000; // Higher than ~this not reaching 60fps anymore (GTX 1660 Super)
 
     struct CubeInstance
     {
@@ -221,6 +221,12 @@ public:
 
         m_cube.draw(m_camera); // Here draw is called for each Transform
         m_counter += 0.01f;
+    }
+
+    void onEntry() override
+    {
+        m_camera.position().z = 80.0f;
+        m_camera.resetZoom();
     }
 
 private:
