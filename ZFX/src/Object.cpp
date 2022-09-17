@@ -54,3 +54,14 @@ void ZFX::Object::draw(const ZFX::Camera &camera)
         m_mesh->draw();
     }
 }
+
+void ZFX::Object::draw(ZFX::Shader &shader)
+{
+    shader.bind();
+
+    for(const auto& t : m_transforms)
+    {
+        shader.update(t.getModel());
+        m_mesh->draw();
+    }
+}

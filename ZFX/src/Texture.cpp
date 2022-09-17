@@ -61,6 +61,7 @@ ZFX::Texture::Texture(const std::string& filename) : m_texture{ 0 }
     }
     else
     {
+#if 1
         glGenTextures(1, &m_texture);
         glBindTexture(GL_TEXTURE_2D, m_texture);
 
@@ -73,10 +74,28 @@ ZFX::Texture::Texture(const std::string& filename) : m_texture{ 0 }
         // Define what happens when rendered object size is not equal to texture size (interpolating)
         // GL_LINEAR: linear interpolation
         // GL_NEAREST: ...
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // smaller
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // smaller
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // bigger
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+        glGenerateMipmap(GL_TEXTURE_2D);
+#else // TODO: is there any benefit for checking the format?
+        GLenum format;
+        if      (numComponents == 1) format = GL_RED;
+        else if (numComponents == 3) format = GL_RGB; // Demo1 texture has no alpha but alpha is used => glitch
+        else if (numComponents == 4) format = GL_RGBA;
+
+        glGenTextures(1, &m_texture);
+        glBindTexture(GL_TEXTURE_2D, m_texture);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, imageData);
+        glGenerateMipmap(GL_TEXTURE_2D);
+#endif
 
         stbi_image_free(imageData);
     }

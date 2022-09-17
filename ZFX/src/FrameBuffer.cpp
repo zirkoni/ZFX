@@ -3,7 +3,7 @@
 #include <string>
 
 
-ZFX::FrameBuffer::FrameBuffer(): m_fbo{0}, m_textureBuffer{0}, m_rbo{0}
+ZFX::FrameBuffer::FrameBuffer(): m_fbo{0}, m_textureBuffer{0}, m_rbo{0}, m_depthBuffer{0}
 {
     glGenFramebuffers(1, &m_fbo);
 }
@@ -50,10 +50,36 @@ void ZFX::FrameBuffer::attachRenderBuffer(GLsizei width, GLsizei height)
     bindDefault();
 }
 
+void ZFX::FrameBuffer::attachDepthBuffer(GLsizei width, GLsizei height)
+{
+    // create depth texture
+    glGenTextures(1, &m_depthBuffer);
+    glBindTexture(GL_TEXTURE_2D, m_depthBuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+    // attach depth texture as FBO's depth buffer
+    bind();
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_depthBuffer, 0);
+    glDrawBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
+
+    bindDefault();
+}
+
 void ZFX::FrameBuffer::bindTextureBuffer()
 {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_textureBuffer);
+}
+
+void ZFX::FrameBuffer::bindDepthBuffer()
+{
+    glBindTexture(GL_TEXTURE_2D, m_depthBuffer);
 }
 
 void ZFX::FrameBuffer::clear()

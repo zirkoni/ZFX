@@ -2,6 +2,8 @@
 #include <GL/glew.h>
 //#define USE_SDL2_IMAGE
 
+#define ZFX_RUNTIME_ERROR(msg) std::runtime_error(std::string(__FILE__) + ":" + std::to_string(__LINE__) + ": " + msg)
+
 namespace ZFX
 {
     static constexpr GLint UNIFORM_NOT_FOUND = -1;

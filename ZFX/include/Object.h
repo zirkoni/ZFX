@@ -21,12 +21,14 @@ namespace ZFX
         void duplicate(Transform& transform);
 
         void draw(const ZFX::Camera& camera);
+        void draw(ZFX::Shader& shader);
 
         Transform& transform() { return m_transforms.front(); }
         Transform& transform(int idx) { return m_transforms.at(idx); }
 
-        Mesh& mesh()     { return *m_mesh.get(); }
-        Shader& shader() { return *m_shader.get(); }
+        Mesh& mesh()                        { return *m_mesh.get(); }
+        Shader& shader()                    { return *m_shader.get(); }
+        Texture& texture(unsigned int idx)  { return *m_textures.at(idx); }
 
     private:
         std::unique_ptr<Mesh> m_mesh;
