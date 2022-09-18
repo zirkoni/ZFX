@@ -98,8 +98,8 @@ public:
 
     void onEntry() override
     {
+        Demo::onEntry();
         m_camera.position().z = 80.0f;
-        m_camera.resetZoom();
     }
 
 private:

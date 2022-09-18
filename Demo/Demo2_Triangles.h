@@ -3,13 +3,13 @@
 #include <vector>
 
 
-class Demo1 : public Demo
+class Demo2 : public Demo
 {
     static constexpr uint32_t IDX_X_MOVE = 0;
     static constexpr uint32_t IDX_Y_MOVE = 1;
 
 public:
-    Demo1(ZFX::Camera& camera) : Demo{ camera, "Demo1" }
+    Demo2(ZFX::Camera& camera) : Demo{ camera, "Demo2" }
     {
         addTriangle();
         addTexturedTriangle();

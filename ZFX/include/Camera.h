@@ -87,6 +87,21 @@ namespace ZFX
             m_zoom = 45.0f;
         }
 
+        float& yaw()
+        {
+            return m_yaw;
+        }
+
+        float& pitch()
+        {
+            return m_pitch;
+        }
+
+        void update()
+        {
+            updateCameraVectors();
+        }
+
     private:
         void updateCameraVectors()
         {

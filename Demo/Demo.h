@@ -17,8 +17,11 @@ public:
     virtual void onExit() {}
     virtual void onEntry()
     {
-        m_camera.position().z = 3.0f;
+        m_camera.position() = glm::vec3{0.0f, 0.0f, 3.0f};
         m_camera.resetZoom();
+        m_camera.yaw() = -90.0f;
+        m_camera.pitch() = 0.0f;
+        m_camera.update();
     }
 
     const std::string& name() { return m_name; }

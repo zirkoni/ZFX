@@ -56,6 +56,15 @@ public:
         renderScene();
     }
 
+    void onEntry() override
+    {
+        m_camera.resetZoom();
+        m_camera.position() = glm::vec3{-2.0f, 2.5f, 6.5f};
+        m_camera.yaw() = -65.0f;
+        m_camera.pitch() = -15.0f;
+        m_camera.update();
+    }
+
 private:
     void loadShaders()
     {

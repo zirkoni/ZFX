@@ -2,10 +2,10 @@
 #include "Demo.h"
 
 
-class Demo2 : public Demo
+class Demo3 : public Demo
 {
 public:
-    Demo2(ZFX::Camera& camera) : Demo{ camera, "Demo2" }
+    Demo3(ZFX::Camera& camera) : Demo{ camera, "Demo3" }
     {
         addSquare();
     }
