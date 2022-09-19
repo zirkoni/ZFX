@@ -5,48 +5,40 @@
 #include <fstream>
 
 
-ZFX::Shader::Shader(const std::string& baseFileName): Shader{ baseFileName + ".vs", baseFileName + ".fs" }
-{
-}
-
-ZFX::Shader::Shader(const std::string& vertexFileName, const std::string& fragFileName)
+ZFX::Shader::Shader(const ShaderSource &source)
 {
     GLuint vertexShader;
     GLuint fragmentShader;
+    GLuint geometryShader;
 
     m_program = glCreateProgram();
 
-    vertexShader = create(true, vertexFileName, GL_VERTEX_SHADER);
-    fragmentShader = create(true, fragFileName, GL_FRAGMENT_SHADER);
+    vertexShader = create(source.areFiles, source.vertex, GL_VERTEX_SHADER);
+    fragmentShader = create(source.areFiles, source.fragment, GL_FRAGMENT_SHADER);
+
+    bool hasGeomShader = source.geometry.length() > 0;
+    if(hasGeomShader)
+    {
+        geometryShader = create(source.areFiles, source.geometry, GL_GEOMETRY_SHADER);
+    }
 
     glAttachShader(m_program, vertexShader);
     glAttachShader(m_program, fragmentShader);
+
+    if(hasGeomShader)
+    {
+        glAttachShader(m_program, geometryShader);
+    }
 
     compile();
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    saveUniformLocations();
-}
-
-ZFX::Shader::Shader(const std::string& vertexSource, const std::string& fragSource, bool dummy)
-{
-    GLuint vertexShader;
-    GLuint fragmentShader;
-
-    m_program = glCreateProgram();
-
-    vertexShader = create(false, vertexSource, GL_VERTEX_SHADER);
-    fragmentShader = create(false, fragSource, GL_FRAGMENT_SHADER);
-
-    glAttachShader(m_program, vertexShader);
-    glAttachShader(m_program, fragmentShader);
-
-    compile();
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    if(hasGeomShader)
+    {
+        glDeleteShader(geometryShader);
+    }
 
     saveUniformLocations();
 }

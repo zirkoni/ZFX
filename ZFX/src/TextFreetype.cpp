@@ -27,7 +27,7 @@ const std::string FRAGMENT_SHADER =
     "}";
 
 ZFX::TextFreetype::TextFreetype(const std::string& font) :
-    m_vao{ 0 }, m_vbo{ 0 }, m_shader{ VERTEX_SHADER, FRAGMENT_SHADER, false }
+    m_vao{ 0 }, m_vbo{ 0 }, m_shader{ {VERTEX_SHADER, FRAGMENT_SHADER, "", false} }
 {
     glm::mat4 transform = glm::ortho(0.0f, static_cast<float>(Window::width()), 0.0f,
             static_cast<float>(Window::height()));

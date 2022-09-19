@@ -14,8 +14,9 @@ namespace ZFX
     public:
         Object();
 
+        void load(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces, const std::string& shadersFileName);
+        void load(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces, const ShaderSource& shaderSrc);
         void load(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces, std::shared_ptr<ZFX::Shader> shader);
-        void load(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces, const std::string shaderName);
         void loadTexture(const std::string& textureFile);
         Transform& duplicate();
         void duplicate(Transform& transform);

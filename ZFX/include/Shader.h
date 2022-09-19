@@ -10,21 +10,20 @@ namespace ZFX
     class Camera;
     class Transform;
 
+    struct ShaderSource
+    {
+        const std::string& vertex;
+        const std::string& fragment;
+        const std::string& geometry = "";
+        bool areFiles = true;
+    };
+
     class Shader
     {
         using UniformMap = std::unordered_map<std::string, const GLint>;
 
     public:
-
-        // 2 files without extension: baseFileName.vs & baseFileName.fs
-        Shader(const std::string& baseFileName);
-
-        // 2 files with extension, filenames can be whatever
-        Shader(const std::string& vertexFileName, const std::string& fragFileName);
-
-        // Pass the source directly (no files). Dummy argument unused
-        Shader(const std::string& vertexSource, const std::string& fragSource, bool dummy);
-
+        Shader(const ShaderSource& source);
         Shader(const Shader& other) = delete;
         Shader& operator=(const Shader& other) = delete;
         virtual ~Shader();
