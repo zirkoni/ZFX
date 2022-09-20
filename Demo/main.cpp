@@ -19,19 +19,19 @@ using DemoList = std::vector<std::unique_ptr<Demo> >;
 
 void addDemos(DemoList& demos, ZFX::Camera& camera, ZFX::Window& window)
 {
-    demos.emplace_back(std::make_unique<Demo1>(camera));
-    demos.emplace_back(std::make_unique<Demo2>(camera));
-    demos.emplace_back(std::make_unique<Demo3>(camera));
-    demos.emplace_back(std::make_unique<Demo4>(camera));
-    demos.emplace_back(std::make_unique<Demo5>(camera));
-    demos.emplace_back(std::make_unique<Demo6>(camera));
-    demos.emplace_back(std::make_unique<Demo6B>(camera));
-    demos.emplace_back(std::make_unique<Demo6C>(camera));
-    demos.emplace_back(std::make_unique<Demo6D>(camera));
-    demos.emplace_back(std::make_unique<Demo6E>(camera, window));
-    demos.emplace_back(std::make_unique<Demo6F>(camera, window));
-    demos.emplace_back(std::make_unique<Demo7>(camera));
-    demos.emplace_back(std::make_unique<Demo8>(camera));
+    demos.push_back(std::make_unique<Demo1>(camera));
+    demos.push_back(std::make_unique<Demo2>(camera));
+    demos.push_back(std::make_unique<Demo3>(camera));
+    demos.push_back(std::make_unique<Demo4>(camera));
+    demos.push_back(std::make_unique<Demo5>(camera));
+    demos.push_back(std::make_unique<Demo6>(camera));
+    demos.push_back(std::make_unique<Demo6B>(camera));
+    demos.push_back(std::make_unique<Demo6C>(camera));
+    demos.push_back(std::make_unique<Demo6D>(camera));
+    demos.push_back(std::make_unique<Demo6E>(camera, window));
+    demos.push_back(std::make_unique<Demo6F>(camera, window));
+    demos.push_back(std::make_unique<Demo7>(camera));
+    demos.push_back(std::make_unique<Demo8>(camera));
 }
 
 void toggleWireframe()
