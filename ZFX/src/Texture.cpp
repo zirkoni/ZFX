@@ -1,7 +1,6 @@
 #include "Texture.h"
 #include "zfxdefs.h"
 #include <SDL2/SDL_image.h>
-#include <stdexcept>
 #include <cassert>
 
 #ifndef USE_SDL2_IMAGE
@@ -19,7 +18,7 @@ ZFX::Texture::Texture(const std::string& filename) : m_texture{ 0 }
     {
         std::string msg = "IMG_Load failed: ";
         msg += std::string{ IMG_GetError() };
-        throw std::runtime_error{ msg };
+        throw ZFX::Exception{ msg };
     }
 
     glGenTextures(1, &m_texture);
@@ -57,7 +56,7 @@ ZFX::Texture::Texture(const std::string& filename) : m_texture{ 0 }
     if (imageData == nullptr)
     {
         std::string msg = "Texture loading failed: " + filename;
-        throw std::runtime_error{ msg };
+        throw ZFX::Exception{ msg };
     }
     else
     {

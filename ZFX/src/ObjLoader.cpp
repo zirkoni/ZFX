@@ -2,9 +2,8 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/hash.hpp"
 #include "glm/glm.hpp"
+#include "zfxdefs.h"
 #include "../tinyobjloader/tiny_obj_loader.h"
-#include <iostream>
-#include <stdexcept>
 #include <algorithm>
 #include <unordered_map>
 
@@ -17,10 +16,10 @@ ZFX::ObjectLoader::ObjectLoader(const std::string& filename, bool smoothNormals)
     {
         if (!reader.Error().empty())
         {
-            throw std::runtime_error{ std::string{ "TinyObjReader: " } + reader.Error() };
+            throw ZFX::Exception{ std::string{ "TinyObjReader: " } + reader.Error() };
         }
 
-        throw std::runtime_error{ "TinyObjReader: ParseFromFile failed" };
+        throw ZFX::Exception{ "TinyObjReader: ParseFromFile failed" };
     }
 
     if (!reader.Warning().empty())

@@ -1,7 +1,6 @@
 #include "TextFreetype.h"
 #include "Window.h"
 #include <glm/gtc/matrix_transform.hpp>
-#include <stdexcept>
 #include <iostream>
 
 
@@ -65,13 +64,13 @@ void ZFX::TextFreetype::init(const std::string& font)
     FT_Library ftLib;
     if (FT_Init_FreeType(&ftLib))
     {
-        throw std::runtime_error{ "FT_Init_FreeType failed" };
+        throw ZFX::Exception{ "FT_Init_FreeType failed" };
     }
 
     FT_Face face;
     if (FT_New_Face(ftLib, font.c_str(), 0, &face))
     {
-        throw std::runtime_error{ "FT_New_Face failed, font: " + font };
+        throw ZFX::Exception{ "FT_New_Face failed, font: " + font };
     }
 
     FT_Set_Pixel_Sizes(face, 0, 48);

@@ -1,5 +1,5 @@
 #include "FrameBuffer.h"
-#include <stdexcept>
+#include "zfxdefs.h"
 #include <string>
 
 
@@ -44,7 +44,7 @@ void ZFX::FrameBuffer::attachRenderBuffer(GLsizei width, GLsizei height)
 
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
-        throw std::runtime_error{ std::string{"ZFX::FrameBuffer::attachRenderBuffer - glCheckFramebufferStatus failed"} };
+        throw ZFX::Exception{__FILE__, __LINE__, "ZFX::FrameBuffer::attachRenderBuffer - glCheckFramebufferStatus failed"};
     }
 
     bindDefault();

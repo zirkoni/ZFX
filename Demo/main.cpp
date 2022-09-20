@@ -188,10 +188,15 @@ int main(int argc, char* argv[])
         window.clear();
         window.update(); // Show black screen while loading...
         mainLoop(window);
-    }
-    catch (const std::runtime_error& error) // TODO: maybe typedef type to e.g. ZFX::Exception?
+    } catch (const ZFX::Exception& e)
     {
-        std::cerr << "Runtime error:\n" << error.what() << "\n";
+        std::cerr << "ZFX::Exception:\n" << e.what() << "\n";
+    } catch(const std::exception& e)
+    {
+        std::cerr << "std::exception:\n" << e.what() << "\n";
+    } catch(...)
+    {
+        std::cerr << "Unknown exception occurred\n";
     }
 
     return 0;

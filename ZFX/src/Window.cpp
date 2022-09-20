@@ -4,7 +4,7 @@
 #include <GL/glew.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>
-#include <stdexcept>
+
 
 uint32_t ZFX::Window::s_width = 0;
 uint32_t ZFX::Window::s_height = 0;
@@ -20,7 +20,7 @@ ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::stri
     {
         std::string msg = "SDL_Init failed: ";
         msg += std::string{ SDL_GetError() };
-        throw std::runtime_error{ msg };
+        throw ZFX::Exception{ msg };
     }
 
 #ifdef USE_SDL2_IMAGE
@@ -28,7 +28,7 @@ ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::stri
     {
         std::string msg = "IMG_Init failed: ";
         msg += std::string{ IMG_GetError() };
-        throw std::runtime_error{ msg };
+        throw ZFX::Exception{ msg };
     }
 #endif
 
@@ -39,19 +39,19 @@ ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::stri
 
     if (nullptr == m_window)
     {
-        throw std::runtime_error{ "SDL_CreateWindow failed" };
+        throw ZFX::Exception{ "SDL_CreateWindow failed" };
     }
 
     m_glContext = SDL_GL_CreateContext(m_window);
 
     if (nullptr == m_glContext)
     {
-        throw std::runtime_error{ "SDL_CreateWindow failed" };
+        throw ZFX::Exception{ "SDL_CreateWindow failed" };
     }
 
     if (GLEW_OK != glewInit())
     {
-        throw std::runtime_error{ "glewInit() failed" };
+        throw ZFX::Exception{ "glewInit() failed" };
     }
 
     setGlewAttributes();

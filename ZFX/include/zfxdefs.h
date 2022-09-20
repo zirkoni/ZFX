@@ -1,8 +1,9 @@
 #pragma once
 #include <GL/glew.h>
+#include <stdexcept>
+#include <string>
 //#define USE_SDL2_IMAGE
 
-#define ZFX_RUNTIME_ERROR(msg) std::runtime_error(std::string(__FILE__) + ":" + std::to_string(__LINE__) + ": " + msg)
 
 namespace ZFX
 {
@@ -23,4 +24,12 @@ namespace ZFX
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         drawFilled = true;
     }
+
+    class Exception: public std::runtime_error
+    {
+    public:
+        Exception(const std::string& msg): std::runtime_error{msg} {}
+        Exception(const char* file, int line, const std::string& msg):
+            std::runtime_error{std::string(__FILE__) + ":" + std::to_string(__LINE__) + ": " + msg} {}
+    };
 }
