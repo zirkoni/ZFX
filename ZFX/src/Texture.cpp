@@ -18,7 +18,7 @@ ZFX::Texture::Texture(const std::string& filename) : m_texture{ 0 }
     {
         std::string msg = "IMG_Load failed: ";
         msg += std::string{ IMG_GetError() };
-        throw ZFX::Exception{ msg };
+        throw ZFX::Exception{ __FILE__, __LINE__, msg };
     }
 
     glGenTextures(1, &m_texture);
@@ -56,7 +56,7 @@ ZFX::Texture::Texture(const std::string& filename) : m_texture{ 0 }
     if (imageData == nullptr)
     {
         std::string msg = "Texture loading failed: " + filename;
-        throw ZFX::Exception{ msg };
+        throw ZFX::Exception{ __FILE__, __LINE__, msg };
     }
     else
     {

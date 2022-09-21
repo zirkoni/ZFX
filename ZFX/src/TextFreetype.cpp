@@ -64,13 +64,13 @@ void ZFX::TextFreetype::init(const std::string& font)
     FT_Library ftLib;
     if (FT_Init_FreeType(&ftLib))
     {
-        throw ZFX::Exception{ "FT_Init_FreeType failed" };
+        throw ZFX::Exception{ __FILE__, __LINE__, "FT_Init_FreeType failed" };
     }
 
     FT_Face face;
     if (FT_New_Face(ftLib, font.c_str(), 0, &face))
     {
-        throw ZFX::Exception{ "FT_New_Face failed, font: " + font };
+        throw ZFX::Exception{ __FILE__, __LINE__, "FT_New_Face failed, font: " + font };
     }
 
     FT_Set_Pixel_Sizes(face, 0, 48);

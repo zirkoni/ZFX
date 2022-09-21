@@ -16,10 +16,10 @@ ZFX::ObjectLoader::ObjectLoader(const std::string& filename, bool smoothNormals)
     {
         if (!reader.Error().empty())
         {
-            throw ZFX::Exception{ std::string{ "TinyObjReader: " } + reader.Error() };
+            throw ZFX::Exception{ __FILE__, __LINE__, "TinyObjReader: " + reader.Error() };
         }
 
-        throw ZFX::Exception{ "TinyObjReader: ParseFromFile failed" };
+        throw ZFX::Exception{ __FILE__, __LINE__, "TinyObjReader: ParseFromFile failed" };
     }
 
     if (!reader.Warning().empty())

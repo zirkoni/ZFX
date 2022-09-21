@@ -81,7 +81,7 @@ void ZFX::Shader::saveSingleUniform(const GLint BUF_SIZE, GLuint idx)
 
     if(uLength == 0)
     {
-        throw ZFX::Exception{ "glGetActiveUniform returned uniform name with length 0" };
+        throw ZFX::Exception{ __FILE__, __LINE__, "glGetActiveUniform returned uniform name with length 0" };
     }
 
     const GLint uniformLocation = glGetUniformLocation(m_program, buffer);
@@ -89,7 +89,7 @@ void ZFX::Shader::saveSingleUniform(const GLint BUF_SIZE, GLuint idx)
 
     if(uniformLocation == UNIFORM_NOT_FOUND)
     {
-        throw ZFX::Exception{ "glGetUniformLocation failed to get uniform: " + uniformName };
+        throw ZFX::Exception{ __FILE__, __LINE__, "glGetUniformLocation failed to get uniform: " + uniformName };
     }
 
     m_uniforms.insert( { uniformName, uniformLocation } );
@@ -123,7 +123,7 @@ GLint ZFX::Shader::uniformLocation(const std::string& uniform) const
     auto iter = m_uniforms.find(uniform);
     if(iter == m_uniforms.end())
     {
-        throw ZFX::Exception{ "No such uniform: " + uniform };
+        throw ZFX::Exception{ __FILE__, __LINE__, "No such uniform: " + uniform };
     }
 
     return iter->second;
@@ -197,7 +197,7 @@ void ZFX::Shader::checkError(GLuint shader, GLuint flag, bool isProgram, const s
             glGetShaderInfoLog(shader, sizeof(error), NULL, error);
         }
 
-        throw ZFX::Exception{ errorMsg + ":\n" + errorMsg2 + "\n" + error };
+        throw ZFX::Exception{ __FILE__, __LINE__, errorMsg + ":\n" + errorMsg2 + "\n" + error };
     }
 }
 
@@ -218,7 +218,7 @@ void ZFX::Shader::loadFromFile(const std::string& fileName, GLuint shader)
     }
     else
     {
-        throw ZFX::Exception{ "Unable to load shader: " + fileName };
+        throw ZFX::Exception{ __FILE__, __LINE__, "Unable to load shader: " + fileName };
     }
 
     loadFromString(output, shader);
@@ -241,7 +241,7 @@ GLuint ZFX::Shader::create(bool isFile, const std::string& source, GLenum shader
 
     if (0 == shader)
     {
-        throw ZFX::Exception{ "glCreateShader failed, shader type " + shaderType };
+        throw ZFX::Exception{ __FILE__, __LINE__, "glCreateShader failed, shader type " + shaderType };
     }
     else
     {
