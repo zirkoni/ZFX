@@ -1,5 +1,6 @@
 #pragma once
 #include <GL/glew.h>
+#include <iostream>
 #include <stdexcept>
 #include <string>
 //#define USE_SDL2_IMAGE

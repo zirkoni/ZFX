@@ -1,7 +1,6 @@
 #include "TextFreetype.h"
 #include "Window.h"
 #include <glm/gtc/matrix_transform.hpp>
-#include <iostream>
 
 
 const std::string VERTEX_SHADER =
