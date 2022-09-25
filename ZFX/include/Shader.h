@@ -23,10 +23,12 @@ namespace ZFX
         using UniformMap = std::unordered_map<std::string, const GLint>;
 
     public:
-        Shader(const ShaderSource& source);
+        Shader(const ShaderSource& source, bool validate = true);
         Shader(const Shader& other) = delete;
         Shader& operator=(const Shader& other) = delete;
         virtual ~Shader();
+
+        void validate();
 
         /* Use this shader */
         void bind();
@@ -48,7 +50,7 @@ namespace ZFX
         void setUniformMat4(const std::string& uniform, const glm::mat4& value);
 
     protected:
-        void compile();
+        void compile(bool validate);
         void saveUniformLocations();
         void saveSingleUniform(const GLint BUF_SIZE, GLuint idx);
 

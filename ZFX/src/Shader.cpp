@@ -4,7 +4,7 @@
 #include <fstream>
 
 
-ZFX::Shader::Shader(const ShaderSource &source)
+ZFX::Shader::Shader(const ShaderSource &source, bool validate)
 {
     GLuint vertexShader;
     GLuint fragmentShader;
@@ -29,7 +29,7 @@ ZFX::Shader::Shader(const ShaderSource &source)
         glAttachShader(m_program, geometryShader);
     }
 
-    compile();
+    compile(validate);
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
@@ -47,11 +47,19 @@ ZFX::Shader::~Shader()
     glDeleteProgram(m_program);
 }
 
-void ZFX::Shader::compile()
+void ZFX::Shader::compile(bool validate)
 {
     glLinkProgram(m_program);
     checkError(m_program, GL_LINK_STATUS, true, "glLinkProgram failed");
 
+    if(validate)
+    {
+        this->validate();
+    }
+}
+
+void ZFX::Shader::validate()
+{
     glValidateProgram(m_program);
     checkError(m_program, GL_VALIDATE_STATUS, true, "glValidateProgram failed");
 }

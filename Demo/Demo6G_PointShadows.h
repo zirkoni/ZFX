@@ -78,7 +78,7 @@ private:
     void loadShaders()
     {
         ZFX::ShaderSource shaderSrc = {SHADERS_PATH + "colour3D_PointShadows.vs", SHADERS_PATH + "colour3D_PointShadows.fs"};
-        m_shader = std::make_shared<ZFX::Shader>(shaderSrc);
+        m_shader = std::make_shared<ZFX::Shader>(shaderSrc, false); // do not validate shader in constructor
 
         // Vertex + fragment + geometry shader
         ZFX::ShaderSource depthSrc = {SHADERS_PATH + "depthCube.vs", SHADERS_PATH + "depthCube.fs", SHADERS_PATH + "depthCube.gs"};
@@ -86,6 +86,14 @@ private:
 
         m_shader->setUniformInt("u_diffuseTexture", 0);
         m_shader->setUniformInt("u_depthMap", 1);
+
+        /* Validate after setting the above uniforms.
+        *  This fixes error on Inter integrated graphics:
+        *  glValidateProgram failed:
+        *  active samplers with a different type refer to the same texture image unit
+        *  TODO: should always validate only in debug build + only when requested by user (before start drawing)?
+        */
+        m_shader->validate();
     }
 
     void loadCubes()
