@@ -9,6 +9,7 @@
 #include "Demo6D_LightCasters.h"
 #include "Demo6E_FrameBuffers.h"
 #include "Demo6F_ShadowMapping.h"
+#include "Demo6G_PointShadows.h"
 #include "Demo7_ObjectLoader.h"
 #include "Demo8_Instancing.h"
 #include <iostream>
@@ -30,6 +31,7 @@ void addDemos(DemoList& demos, ZFX::Camera& camera, ZFX::Window& window)
     demos.push_back(std::make_unique<Demo6D>(camera));
     demos.push_back(std::make_unique<Demo6E>(camera, window));
     demos.push_back(std::make_unique<Demo6F>(camera, window));
+    demos.push_back(std::make_unique<Demo6G>(camera, window));
     demos.push_back(std::make_unique<Demo7>(camera));
     demos.push_back(std::make_unique<Demo8>(camera));
 }

@@ -16,9 +16,11 @@ namespace ZFX
         void attachTextureBuffer(GLsizei width, GLsizei height);
         void attachRenderBuffer(GLsizei width, GLsizei height);
         void attachDepthBuffer(GLsizei width, GLsizei height);
+        void attachDepthCubeMap(GLsizei width, GLsizei height);
 
         void bindTextureBuffer();
         void bindDepthBuffer();
+        void bindDepthCubeMap();
 
         void clear(); // clear to black
         void clear(float r, float g, float b, float a); // clear to user defined colour
