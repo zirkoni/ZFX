@@ -84,8 +84,9 @@ void ZFX::Shader::saveSingleUniform(const GLint BUF_SIZE, GLuint idx)
         throw ZFX::Exception{ __FILE__, __LINE__, "glGetActiveUniform returned uniform name with length 0" };
     }
 
-    const GLint uniformLocation = glGetUniformLocation(m_program, buffer);
+    GLint uniformLocation = glGetUniformLocation(m_program, buffer);
     std::string uniformName{ buffer };
+    const bool isArrayUniform = uniformName.find('[') != std::string::npos && uniformName.find(']') != std::string::npos;
 
     if(uniformLocation == UNIFORM_NOT_FOUND)
     {
@@ -93,6 +94,20 @@ void ZFX::Shader::saveSingleUniform(const GLint BUF_SIZE, GLuint idx)
     }
 
     m_uniforms.insert( { uniformName, uniformLocation } );
+
+    // Only index 0 is found automatically
+    if(isArrayUniform)
+    {
+        size_t idx = 1;
+
+        do
+        {
+            uniformName = uniformName.substr(0, uniformName.find('[')) + "[" + std::to_string(idx) + "]";
+            uniformLocation = glGetUniformLocation(m_program, uniformName.c_str());
+            m_uniforms.insert( { uniformName, uniformLocation } );
+            ++idx;
+        } while(uniformLocation != UNIFORM_NOT_FOUND);
+    }
 }
 
 void ZFX::Shader::bind()
