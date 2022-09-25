@@ -49,13 +49,13 @@ struct SpotLight
 };
 
 
-uniform vec3 viewPosition;
-uniform Material material;
+uniform vec3 u_viewPosition;
+uniform Material u_material;
 
 #define NUM_POINT_LIGHTS 4
-uniform DirectionalLight dirLight;
-uniform PointLight pointLights[NUM_POINT_LIGHTS];
-uniform SpotLight spotLight;
+uniform DirectionalLight u_dirLight;
+uniform PointLight u_pointLights[NUM_POINT_LIGHTS];
+uniform SpotLight u_spotLight;
 
 vec3 calcDirLight(DirectionalLight light, vec3 normal, vec3 viewDir, vec3 difSample, vec3 specSample)
 {
@@ -66,7 +66,7 @@ vec3 calcDirLight(DirectionalLight light, vec3 normal, vec3 viewDir, vec3 difSam
 
     // Specular
     vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_material.shininess);
 
     // Combine
     vec3 ambient = light.ambient * difSample;
@@ -84,7 +84,7 @@ vec3 calcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, v
 
     // Specular
     vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_material.shininess);
 
     // Attenuation
     float distance = length(light.position - fragPos);
@@ -109,7 +109,7 @@ vec3 calcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec
 
     // Specular
     vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_material.shininess);
 
     // Attenuation
     float distance = length(light.position - fragPos);
@@ -134,20 +134,20 @@ vec3 calcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec
 void main()
 {
     vec3 norm = normalize(v_out_normal);
-    vec3 viewDir = normalize(viewPosition - v_out_position);
+    vec3 viewDir = normalize(u_viewPosition - v_out_position);
 
     // Texture sampling
-    vec3 difSample = vec3(texture(material.diffuse, v_out_texCoord));
-    vec3 specSample = vec3(texture(material.specular, v_out_texCoord));
+    vec3 difSample = vec3(texture(u_material.diffuse, v_out_texCoord));
+    vec3 specSample = vec3(texture(u_material.specular, v_out_texCoord));
 
     // Calculate different lighting components
-    vec3 result = calcDirLight(dirLight, norm, viewDir, difSample, specSample);
+    vec3 result = calcDirLight(u_dirLight, norm, viewDir, difSample, specSample);
 
     for(int i = 0; i < NUM_POINT_LIGHTS; ++i)
     {
-        result += calcPointLight(pointLights[i], norm, v_out_position, viewDir, difSample, specSample);
+        result += calcPointLight(u_pointLights[i], norm, v_out_position, viewDir, difSample, specSample);
     }
 
-    result += calcSpotLight(spotLight, norm, v_out_position, viewDir, difSample, specSample);
+    result += calcSpotLight(u_spotLight, norm, v_out_position, viewDir, difSample, specSample);
     f_out_colour = vec4(result, 1.0);
 }

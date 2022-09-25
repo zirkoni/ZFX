@@ -23,7 +23,7 @@ class Demo8 : public Demo
         void draw(const ZFX::Camera& camera)
         {
             shader.bind();
-            shader.update(camera, "viewProjection");
+            shader.update(camera, "u_viewProjection");
             mesh.draw(NUM_OBJECTS);
         }
 

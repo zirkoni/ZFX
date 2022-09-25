@@ -5,23 +5,23 @@
 
 const std::string VERTEX_SHADER =
     "#version 330 core\n"
-    "layout (location = 0) in vec4 vertex; // xy = vec2 position, zw= vec2 texture coordinates\n"
-    "out vec2 texCoord;"
-    "uniform mat4 model;"
+    "layout (location = 0) in vec4 v_in_vertex; // xy = vec2 position, zw= vec2 texture coordinates\n"
+    "out vec2 v_out_texCoord;"
+    "uniform mat4 u_model;"
     "void main() {"
-    "    gl_Position = model * vec4(vertex.xy, 0.0, 1.0);"
-    "    texCoord = vertex.zw;"
+    "    gl_Position = u_model * vec4(v_in_vertex.xy, 0.0, 1.0);"
+    "    v_out_texCoord = v_in_vertex.zw;"
     "}";
 
 const std::string FRAGMENT_SHADER =
     "#version 330 core\n"
-    "in vec2 texCoord;"
-    "out vec4 fragColourOut;"
-    "uniform sampler2D diffuse;"
-    "uniform vec4 textColour;"
+    "in vec2 v_out_texCoord;"
+    "out vec4 f_out_colour;"
+    "uniform sampler2D u_diffuse;"
+    "uniform vec4 u_textColour;"
     "void main() {"
-    "    vec4 sampled = vec4(1.0, 1.0, 1.0, texture(diffuse, texCoord).r);"
-    "    fragColourOut = textColour * sampled;"
+    "    vec4 sampled = vec4(1.0, 1.0, 1.0, texture(u_diffuse, v_out_texCoord).r);"
+    "    f_out_colour = u_textColour * sampled;"
     "}";
 
 ZFX::TextFreetype::TextFreetype(const std::string& font) :
@@ -123,7 +123,7 @@ void ZFX::TextFreetype::drawText(const std::string& text, float x, float y, floa
         const glm::vec4& colour)
 {
     m_shader.bind();
-    m_shader.setUniformVec4("textColour", colour);
+    m_shader.setUniformVec4("u_textColour", colour);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(m_vao);
 

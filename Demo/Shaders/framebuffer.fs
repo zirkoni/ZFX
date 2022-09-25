@@ -9,23 +9,23 @@
 in vec2 v_out_texCoord;
 out vec4 f_out_colour;
 
-uniform sampler2D screenTexture;
-uniform int selected = POST_SHARPEN;
+uniform sampler2D u_screenTexture;
+uniform int u_selected = POST_SHARPEN;
 
 vec3 noPostProcessing()
 {
-    return texture(screenTexture, v_out_texCoord).rgb;
+    return texture(u_screenTexture, v_out_texCoord).rgb;
 }
 
 vec3 inversion()
 {
-    vec3 colour = texture(screenTexture, v_out_texCoord).rgb;
+    vec3 colour = texture(u_screenTexture, v_out_texCoord).rgb;
     return vec3(1.0) - colour;
 }
 
 vec3 grayScale()
 {
-    vec3 colour = texture(screenTexture, v_out_texCoord).rgb;
+    vec3 colour = texture(u_screenTexture, v_out_texCoord).rgb;
     float average = 0.2126 * colour.r + 0.7152 * colour.g + 0.0722 * colour.b;
     return vec3(average, average, average);
 }
@@ -58,16 +58,16 @@ vec3 sharpen()
 
 void main()
 {
-    if(selected == POST_NONE)
+    if(u_selected == POST_NONE)
     {
         f_out_colour = vec4(noPostProcessing(), 1.0);
-    } else if(selected == POST_INVERT)
+    } else if(u_selected == POST_INVERT)
     {
         f_out_colour = vec4(inversion(), 1.0);
-    } else if(selected == POST_GRAY)
+    } else if(u_selected == POST_GRAY)
     {
         f_out_colour = vec4(grayScale(), 1.0);
-    } else if(selected == POST_BLUR)
+    } else if(u_selected == POST_BLUR)
     {
         f_out_colour = vec4(blur(), 1.0);
     } else
@@ -96,7 +96,7 @@ vec3 kernelEffect(float kernel[9])
     vec3 sampleTex[9];
     for(int i = 0; i < 9; ++i)
     {
-        sampleTex[i] = vec3(texture(screenTexture, v_out_texCoord.st + offsets[i]));
+        sampleTex[i] = vec3(texture(u_screenTexture, v_out_texCoord.st + offsets[i]));
     }
 
     vec3 col = vec3(0.0);

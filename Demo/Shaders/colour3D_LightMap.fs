@@ -22,26 +22,26 @@ struct Light
     vec3 specular;
 };
 
-uniform vec3 viewPosition;
-uniform Material material;
-uniform Light light;
+uniform vec3 u_viewPosition;
+uniform Material u_material;
+uniform Light u_light;
 
 void main()
 {
     // Ambient
-    vec3 ambient = light.ambient * material.ambient * texture(material.diffuse, v_out_texCoord).rgb;
+    vec3 ambient = u_light.ambient * u_material.ambient * texture(u_material.diffuse, v_out_texCoord).rgb;
 
     // Diffuse
     vec3 norm = normalize(v_out_normal);
-    vec3 lightDirection = normalize(light.position - v_out_position);
+    vec3 lightDirection = normalize(u_light.position - v_out_position);
     float diff = max(dot(norm, lightDirection), 0.0);
-    vec3 diffuse = light.diffuse * diff * texture(material.diffuse, v_out_texCoord).rgb;
+    vec3 diffuse = u_light.diffuse * diff * texture(u_material.diffuse, v_out_texCoord).rgb;
 
     // Specular
-    vec3 viewDir = normalize(viewPosition - v_out_position);
+    vec3 viewDir = normalize(u_viewPosition - v_out_position);
     vec3 reflectDir = reflect(-lightDirection, norm);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    vec3 specular = light.specular * spec * texture(material.specular, v_out_texCoord).rgb;
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_material.shininess);
+    vec3 specular = u_light.specular * spec * texture(u_material.specular, v_out_texCoord).rgb;
 
     vec3 result = (ambient + diffuse + specular);
     f_out_colour = vec4(result, 1.0);

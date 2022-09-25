@@ -118,12 +118,12 @@ void ZFX::Shader::bind()
 void ZFX::Shader::update(const Transform& transform, const Camera& camera)
 {
     update(transform.getModel());
-    update(camera, "viewProjection");
+    update(camera, "u_viewProjection");
 }
 
 void ZFX::Shader::update(const glm::mat4& transform)
 {
-    GLint modelLocation = uniformLocation("model");
+    GLint modelLocation = uniformLocation("u_model");
     glUniformMatrix4fv(modelLocation, 1, GL_FALSE, &transform[0][0]);
 }
 

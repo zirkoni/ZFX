@@ -4,7 +4,7 @@ layout (triangle_strip, max_vertices=18) out;
 
 out vec4 g_out_fragPos;
 
-uniform mat4 shadowMatrices[6];
+uniform mat4 u_shadowMatrices[6];
 
 void main()
 {
@@ -15,7 +15,7 @@ void main()
         for(int i = 0; i < 3; ++i) // for each triangle's vertices
         {
             g_out_fragPos = gl_in[i].gl_Position;
-            gl_Position = shadowMatrices[face] * g_out_fragPos;
+            gl_Position = u_shadowMatrices[face] * g_out_fragPos;
             EmitVertex();
         }
 
