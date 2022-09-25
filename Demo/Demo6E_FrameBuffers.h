@@ -87,6 +87,7 @@ private:
         m_screen.shader().setUniformInt("u_screenTexture", 0);
 
         m_buffer.attachTextureBuffer(window.width(), window.height());
+        m_buffer.attachRenderBuffer(window.width(), window.height()); // For depth testing
     }
 
     void drawFrameBufferToScreen()
