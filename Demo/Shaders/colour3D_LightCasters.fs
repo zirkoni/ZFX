@@ -1,10 +1,10 @@
 #version 330
 
-in vec3 position;
-in vec3 normal;
-in vec2 texCoord;
+in vec3 v_out_position;
+in vec3 v_out_normal;
+in vec2 v_out_texCoord;
 
-out vec4 fragColorOut;
+out vec4 f_out_colour;
 
 struct Material
 {
@@ -133,21 +133,21 @@ vec3 calcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir, vec
 
 void main()
 {
-    vec3 norm = normalize(normal);
-    vec3 viewDir = normalize(viewPosition - position);
+    vec3 norm = normalize(v_out_normal);
+    vec3 viewDir = normalize(viewPosition - v_out_position);
 
     // Texture sampling
-    vec3 difSample = vec3(texture(material.diffuse, texCoord));
-    vec3 specSample = vec3(texture(material.specular, texCoord));
+    vec3 difSample = vec3(texture(material.diffuse, v_out_texCoord));
+    vec3 specSample = vec3(texture(material.specular, v_out_texCoord));
 
     // Calculate different lighting components
     vec3 result = calcDirLight(dirLight, norm, viewDir, difSample, specSample);
 
     for(int i = 0; i < NUM_POINT_LIGHTS; ++i)
     {
-        result += calcPointLight(pointLights[i], norm, position, viewDir, difSample, specSample);
+        result += calcPointLight(pointLights[i], norm, v_out_position, viewDir, difSample, specSample);
     }
 
-    result += calcSpotLight(spotLight, norm, position, viewDir, difSample, specSample);
-    fragColorOut = vec4(result, 1.0);
+    result += calcSpotLight(spotLight, norm, v_out_position, viewDir, difSample, specSample);
+    f_out_colour = vec4(result, 1.0);
 }

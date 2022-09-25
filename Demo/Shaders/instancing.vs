@@ -1,18 +1,18 @@
 #version 330
 
-layout (location = 0) in vec3 positionIn;
-layout (location = 1) in vec3 normalIn;
-layout (location = 2) in mat4 modelMatrixIn;
+layout (location = 0) in vec3 v_in_position;
+layout (location = 1) in vec3 v_in_normal;
+layout (location = 2) in mat4 v_in_modelMatrix;
 
-out vec3 position;
-out vec3 normal;
+out vec3 v_out_position;
+out vec3 v_out_normal;
 
 uniform mat4 viewProjection;
 
 void main()
 {
-    position = vec3(modelMatrixIn * vec4(positionIn, 1.0));
-    normal = mat3(transpose(inverse(modelMatrixIn))) * normalIn; // TODO: inverse is slow => calculate normal matrix on CPU
-    gl_Position = viewProjection * vec4(position, 1.0);
+    v_out_position = vec3(v_in_modelMatrix * vec4(v_in_position, 1.0));
+    v_out_normal = mat3(transpose(inverse(v_in_modelMatrix))) * v_in_normal; // TODO: inverse is slow => calculate v_out_normal matrix on CPU
+    gl_Position = viewProjection * vec4(v_out_position, 1.0);
 }
 

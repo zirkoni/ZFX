@@ -1,11 +1,12 @@
 #version 330 core
-out vec4 fragColorOut;
+out vec4 f_out_colour;
 
-in VS_OUT {
-    vec3 fragPos;
+in V_OUT
+{
+    vec3 position;
     vec3 normal;
-    vec2 texCoords;
-} fs_in;
+    vec2 texCoord;
+} f_in;
 
 uniform sampler2D diffuseTexture;
 uniform samplerCube depthMap;
@@ -26,10 +27,10 @@ vec3 gridSamplingDisk[20] = vec3[]
    vec3(0, 1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0, 1, -1)
 );
 
-float shadowCalculation(vec3 fragPos)
+float shadowCalculation(vec3 position)
 {
     // Get vector between fragment position and light position
-    vec3 fragToLight = fragPos - lightPos;
+    vec3 fragToLight = position - lightPos;
 
     // Get current linear depth as the length between the fragment and light position
     float currentDepth = length(fragToLight);
@@ -38,7 +39,7 @@ float shadowCalculation(vec3 fragPos)
     float shadow = 0.0;
     float bias = 0.15;
     int samples = 20;
-    float viewDistance = length(viewPos - fragPos);
+    float viewDistance = length(viewPos - position);
     float diskRadius = (1.0 + (viewDistance / farPlane)) / 25.0;
     for(int i = 0; i < samples; ++i)
     {
@@ -56,20 +57,20 @@ float shadowCalculation(vec3 fragPos)
 
 void main()
 {
-    vec3 color = texture(diffuseTexture, fs_in.texCoords).rgb;
-    vec3 normal = normalize(fs_in.normal);
+    vec3 color = texture(diffuseTexture, f_in.texCoord).rgb;
+    vec3 normal = normalize(f_in.normal);
     vec3 lightColor = vec3(0.3);
 
     // ambient
     vec3 ambient = 0.6 * lightColor;
 
     // diffuse
-    vec3 lightDir = normalize(lightPos - fs_in.fragPos);
+    vec3 lightDir = normalize(lightPos - f_in.position);
     float diff = max(dot(lightDir, normal), 0.0);
     vec3 diffuse = diff * lightColor;
 
     // specular
-    vec3 viewDir = normalize(viewPos - fs_in.fragPos);
+    vec3 viewDir = normalize(viewPos - f_in.position);
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = 0.0;
     vec3 halfwayDir = normalize(lightDir + viewDir);
@@ -77,9 +78,9 @@ void main()
     vec3 specular = spec * lightColor;
 
     // calculate shadow
-    float shadow = shadowCalculation(fs_in.fragPos);
+    float shadow = shadowCalculation(f_in.position);
     vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;
 
-    fragColorOut = vec4(lighting, 1.0);
+    f_out_colour = vec4(lighting, 1.0);
 }
 

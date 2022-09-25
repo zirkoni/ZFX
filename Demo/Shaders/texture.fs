@@ -1,10 +1,9 @@
 #version 330
-
-out vec4 fragColorOut;
+in vec2 v_out_texCoord;
+out vec4 f_out_colour;
 uniform sampler2D diffuse;
-varying vec2 texCoord;
 
 void main()
 {
-    fragColorOut = texture(diffuse, texCoord);
+    f_out_colour = texture(diffuse, v_out_texCoord);
 }

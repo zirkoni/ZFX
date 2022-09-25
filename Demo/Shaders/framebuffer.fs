@@ -6,26 +6,26 @@
 #define POST_BLUR    3
 #define POST_SHARPEN 4
 
-in vec2 texCoord;
-out vec4 fragColorOut;
+in vec2 v_out_texCoord;
+out vec4 f_out_colour;
 
 uniform sampler2D screenTexture;
 uniform int selected = POST_SHARPEN;
 
 vec3 noPostProcessing()
 {
-    return texture(screenTexture, texCoord).rgb;
+    return texture(screenTexture, v_out_texCoord).rgb;
 }
 
 vec3 inversion()
 {
-    vec3 colour = texture(screenTexture, texCoord).rgb;
+    vec3 colour = texture(screenTexture, v_out_texCoord).rgb;
     return vec3(1.0) - colour;
 }
 
 vec3 grayScale()
 {
-    vec3 colour = texture(screenTexture, texCoord).rgb;
+    vec3 colour = texture(screenTexture, v_out_texCoord).rgb;
     float average = 0.2126 * colour.r + 0.7152 * colour.g + 0.0722 * colour.b;
     return vec3(average, average, average);
 }
@@ -60,19 +60,19 @@ void main()
 {
     if(selected == POST_NONE)
     {
-        fragColorOut = vec4(noPostProcessing(), 1.0);
+        f_out_colour = vec4(noPostProcessing(), 1.0);
     } else if(selected == POST_INVERT)
     {
-        fragColorOut = vec4(inversion(), 1.0);
+        f_out_colour = vec4(inversion(), 1.0);
     } else if(selected == POST_GRAY)
     {
-        fragColorOut = vec4(grayScale(), 1.0);
+        f_out_colour = vec4(grayScale(), 1.0);
     } else if(selected == POST_BLUR)
     {
-        fragColorOut = vec4(blur(), 1.0);
+        f_out_colour = vec4(blur(), 1.0);
     } else
     {
-        fragColorOut = vec4(sharpen(), 1.0);
+        f_out_colour = vec4(sharpen(), 1.0);
     }
 }
 
@@ -96,7 +96,7 @@ vec3 kernelEffect(float kernel[9])
     vec3 sampleTex[9];
     for(int i = 0; i < 9; ++i)
     {
-        sampleTex[i] = vec3(texture(screenTexture, texCoord.st + offsets[i]));
+        sampleTex[i] = vec3(texture(screenTexture, v_out_texCoord.st + offsets[i]));
     }
 
     vec3 col = vec3(0.0);

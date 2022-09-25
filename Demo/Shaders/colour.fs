@@ -1,10 +1,10 @@
 #version 330
 
-in vec4 colour; // Input from vertex shader, same type and name (basicshader.vs: out vec4 colour).
+in vec4 v_out_colour; // Input from vertex shader, same type and name
 
-out vec4 fragColorOut;
+out vec4 f_out_colour;
 
 void main()
 {
-    fragColorOut = colour;
+    f_out_colour = v_out_colour;
 }
