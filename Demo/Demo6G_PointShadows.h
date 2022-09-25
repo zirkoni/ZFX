@@ -88,7 +88,7 @@ private:
         m_shader->setUniformInt("u_depthMap", 1);
 
         /* Validate after setting the above uniforms.
-        *  This fixes error on Inter integrated graphics:
+        *  This fixes error on Intel integrated graphics:
         *  glValidateProgram failed:
         *  active samplers with a different type refer to the same texture image unit
         *  TODO: should always validate only in debug build + only when requested by user (before start drawing)?
