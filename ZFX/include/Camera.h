@@ -87,15 +87,10 @@ namespace ZFX
             m_zoom = 45.0f;
         }
 
-        float& yaw()
-        {
-            return m_yaw;
-        }
-
-        float& pitch()
-        {
-            return m_pitch;
-        }
+        float& yaw() { return m_yaw; }
+        const float& yaw() const { return m_yaw; }
+        float& pitch() { return m_pitch; }
+        const float& pitch() const { return m_pitch; }
 
         void update()
         {
