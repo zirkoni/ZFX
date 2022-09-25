@@ -65,7 +65,7 @@ void main()
     vec3 lightColor = vec3(0.3);
 
     // ambient
-    vec3 ambient = 0.3 * lightColor;
+    vec3 ambient = 0.6 * lightColor;
 
     // diffuse
     vec3 lightDir = normalize(u_lightPos - f_in.position);
