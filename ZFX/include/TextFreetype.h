@@ -21,7 +21,7 @@ namespace ZFX
         TextFreetype(const std::string& font);
         ~TextFreetype();
 
-        void drawText(const std::string& text, float x, float y, float scale, const glm::vec4& colour);
+        void drawText(std::string_view text, float x, float y, float scale, const glm::vec4& colour);
 
     private:
         void init(const std::string& font);

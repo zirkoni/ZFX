@@ -119,7 +119,7 @@ void ZFX::TextFreetype::loadCharacters(const FT_Face& face, uint32_t numCharacte
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void ZFX::TextFreetype::drawText(const std::string& text, float x, float y, float scale,
+void ZFX::TextFreetype::drawText(std::string_view text, float x, float y, float scale,
         const glm::vec4& colour)
 {
     m_shader.bind();
