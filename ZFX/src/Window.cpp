@@ -128,3 +128,18 @@ void ZFX::Window::update()
 {
     SDL_GL_SwapWindow(m_window);
 }
+
+void ZFX::Window::toggleFullscreen()
+{
+    const Uint32 flags = SDL_GetWindowFlags(m_window);
+    const bool isFullScreen = flags & SDL_WINDOW_FULLSCREEN;
+    const bool isBorderlessFullScreen = flags & SDL_WINDOW_FULLSCREEN_DESKTOP;
+
+    if(isFullScreen or isBorderlessFullScreen)
+    {
+        SDL_SetWindowFullscreen(m_window, 0);
+    } else
+    {
+        SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN);
+    }
+}

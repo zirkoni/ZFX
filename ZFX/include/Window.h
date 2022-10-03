@@ -24,6 +24,8 @@ namespace ZFX
         static uint32_t width() { return s_width; }
         static uint32_t height() { return s_height; }
 
+        void toggleFullscreen();
+
     private:
         void setGlAttributes();
         void setGlewAttributes();
