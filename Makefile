@@ -1,6 +1,6 @@
 CXX      = g++
 CPPFLAGS = -IZFX -IZFX/include -I/usr/include/freetype2 -Itinyobjloader
-CXXFLAGS = -g -O2 -MMD
+CXXFLAGS = -g -O2 -MMD -std=c++17
 LDFLAGS  = 
 LIBS     = -lGL -lGLEW -lSDL2 -lfreetype
 
