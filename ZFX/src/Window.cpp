@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "Camera.h"
 #include "zfxdefs.h"
 #include "glDebug.h"
 #include <GL/glew.h>
@@ -137,9 +138,15 @@ void ZFX::Window::toggleFullscreen()
 
     if(isFullScreen or isBorderlessFullScreen)
     {
+        Camera::resize(aspectRatio());
         SDL_SetWindowFullscreen(m_window, 0);
     } else
     {
+        SDL_DisplayMode dispMode;
+        int displayIdx = SDL_GetWindowDisplayIndex(m_window);
+        SDL_GetCurrentDisplayMode(displayIdx, &dispMode);
+
+        Camera::resize((float)dispMode.w / dispMode.h);
         SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN);
     }
 }
