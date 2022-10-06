@@ -32,6 +32,6 @@ namespace ZFX
     public:
         Exception(const std::string& msg): std::runtime_error{msg} {}
         Exception(const char* file, int line, const std::string& msg):
-            std::runtime_error{std::string(__FILE__) + ":" + std::to_string(__LINE__) + ": " + msg} {}
+            std::runtime_error{std::string(file) + ":" + std::to_string(line) + ": " + msg} {}
     };
 }
