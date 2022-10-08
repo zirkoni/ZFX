@@ -31,6 +31,8 @@ void ZFX::Camera::move(const Direction dir, const float deltaTime, const float s
 
     if (dir == Direction::FORWARD)  m_position += m_front * velocity;
     if (dir == Direction::BACKWARD) m_position -= m_front * velocity;
+    if (dir == Direction::UP)       m_position += m_up    * velocity;
+    if (dir == Direction::DOWN)     m_position -= m_up    * velocity;
     if (dir == Direction::LEFT)     m_position -= m_right * velocity;
     if (dir == Direction::RIGHT)    m_position += m_right * velocity;
 }

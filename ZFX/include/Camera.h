@@ -14,6 +14,8 @@ namespace ZFX
         {
             FORWARD,
             BACKWARD,
+            UP,
+            DOWN,
             LEFT,
             RIGHT
         };
