@@ -36,12 +36,12 @@ namespace ZFX
 
         void zoomIn(float amount = ZOOM_AMOUNT)
         {
-            zoom(amount);
+            zoom(-amount);
         }
 
         void zoomOut(float amount = ZOOM_AMOUNT)
         {
-            zoom(-amount);
+            zoom(amount);
         }
 
         void resetZoom()
