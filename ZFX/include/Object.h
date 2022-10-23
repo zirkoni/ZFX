@@ -26,6 +26,7 @@ namespace ZFX
 
         Transform& transform() { return m_transforms.front(); }
         Transform& transform(int idx) { return m_transforms.at(idx); }
+        std::vector<Transform>& transformList() { return m_transforms; }
 
         Mesh& mesh()                        { return *m_mesh.get(); }
         Shader& shader()                    { return *m_shader.get(); }
