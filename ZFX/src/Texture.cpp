@@ -81,7 +81,7 @@ ZFX::Texture::Texture(const std::string& filename) : m_texture{ 0 }
 #else // TODO: is there any benefit for checking the format?
         GLenum format;
         if      (numComponents == 1) format = GL_RED;
-        else if (numComponents == 3) format = GL_RGB; // Demo1 texture has no alpha but alpha is used => glitch
+        else if (numComponents == 3) format = GL_RGB; // Demo2 texture has no alpha but alpha is used => glitch
         else if (numComponents == 4) format = GL_RGBA;
 
         glGenTextures(1, &m_texture);
