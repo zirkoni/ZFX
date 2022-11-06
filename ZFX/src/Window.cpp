@@ -124,6 +124,9 @@ void ZFX::Window::setGlOptions(const Options& options)
     if(options.enableStencilTest)
     {
         glEnable(GL_STENCIL_TEST);
+        // Set some default options:
+        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
     }
 
     if(options.enableBlending)
