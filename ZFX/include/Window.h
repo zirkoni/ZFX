@@ -20,11 +20,13 @@ namespace ZFX
             bool enableStencilTest = false;
             bool enableFaceCulling = true;
             bool enableBlending = true;
+            bool enableMSAA = false;
             bool enableGlDebug = false;
 
             int rgbaSize = 8;
             int depthSize = 16;
             int stencilSize = 16;
+            int numMSAASamples = 4;
         };
 
         Window(const Options& options);

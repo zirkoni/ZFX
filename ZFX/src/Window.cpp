@@ -101,6 +101,12 @@ void ZFX::Window::setGlAttributes(const Options& options)
         SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, options.stencilSize);
     }
 
+    if(options.enableMSAA)
+    {
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, options.numMSAASamples);
+    }
+
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 }
 
@@ -134,6 +140,11 @@ void ZFX::Window::setGlOptions(const Options& options)
         // Enable transparency (alpha channel)
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+
+    if(options.enableMSAA)
+    {
+        glEnable(GL_MULTISAMPLE);
     }
 
     s_bitsToClear = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT * options.enableDepthTest | GL_STENCIL_BUFFER_BIT * options.enableStencilTest;
