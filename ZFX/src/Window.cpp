@@ -10,12 +10,12 @@
 uint32_t ZFX::Window::s_width = 0;
 uint32_t ZFX::Window::s_height = 0;
 
-ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::string& title, bool vsync, bool glDebug) :
+ZFX::Window::Window(const Options& options) :
     m_window{ nullptr },
     m_glContext{ nullptr }
 {
-    s_width = width;
-    s_height = height;
+    s_width = options.width;
+    s_height = options.height;
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
@@ -33,9 +33,9 @@ ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::stri
     }
 #endif
 
-    setGlAttributes();
+    setGlAttributes(options);
 
-    m_window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+    m_window = SDL_CreateWindow(options.title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         s_width, s_height, SDL_WINDOW_OPENGL);
 
     if (nullptr == m_window)
@@ -55,10 +55,10 @@ ZFX::Window::Window(const uint32_t width, const uint32_t height, const std::stri
         throw ZFX::Exception{ __FILE__, __LINE__, "glewInit() failed" };
     }
 
-    setGlewAttributes();
-    setVsync(vsync);
+    setGlOptions(options);
+    setVsync(options.enableVsync);
 
-    if(glDebug)
+    if(options.enableGlDebug)
     {
         enableGlDebug();
     }
@@ -72,36 +72,65 @@ ZFX::Window::~Window()
     SDL_Quit();
 }
 
-void ZFX::Window::setGlAttributes()
+void ZFX::Window::setGlAttributes(const Options& options)
 {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
-    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32); // 4 * 8 = 32 (RGBA)
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, options.rgbaSize);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, options.rgbaSize);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, options.rgbaSize);
 
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16); // If GL_DEPTH_TEST is enabled
+    if(options.enableBlending)
+    {
+        SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, options.rgbaSize);
+        SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 4 * options.rgbaSize);
+    } else
+    {
+        SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 3 * options.rgbaSize);
+    }
+
+    if(options.enableDepthTest)
+    {
+        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, options.depthSize);
+    }
+
+    if(options.enableStencilTest)
+    {
+        SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, options.stencilSize);
+    }
 
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 }
 
-void ZFX::Window::setGlewAttributes()
+void ZFX::Window::setGlOptions(const Options& options)
 {
-    // for simple object these are enough
-    // Cull faces that are facing away from the camera
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+    if(options.enableDepthTest && options.enableFaceCulling)
+    {
+        // for simple object these are enough
+        // Cull faces that are facing away from the camera
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+    }
 
-    // Complex object require depth test:
-    // don't draw pixels that are behind pixels that are closer to the camera.
-    glEnable(GL_DEPTH_TEST);
+    if(options.enableDepthTest)
+    {
+        // Complex object require depth test:
+        // don't draw pixels that are behind pixels that are closer to the camera.
+        glEnable(GL_DEPTH_TEST);
+    }
 
-    // Enable transparency (alpha channel)
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    if(options.enableStencilTest)
+    {
+        glEnable(GL_STENCIL_TEST);
+    }
+
+    if(options.enableBlending)
+    {
+        // Enable transparency (alpha channel)
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
 }
 
 void ZFX::Window::setVsync(bool enabled)

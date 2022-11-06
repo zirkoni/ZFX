@@ -181,12 +181,16 @@ void mainLoop(ZFX::Window& window)
 
 int main(int argc, char* argv[])
 {
-    const bool vsync = true;
-    const bool glDebug = true;
-
     try
     {
-        ZFX::Window window{ 800, 600, "Demo", vsync, glDebug };
+        ZFX::Window::Options wOpts;
+        wOpts.width = 800;
+        wOpts.height = 600;
+        wOpts.title = "Demo";
+        wOpts.enableVsync = true;
+        wOpts.enableGlDebug = true;
+
+        ZFX::Window window{ wOpts };
         window.clear();
         window.update(); // Show black screen while loading...
         mainLoop(window);

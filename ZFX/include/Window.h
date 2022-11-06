@@ -8,7 +8,26 @@ namespace ZFX
     class Window
     {
     public:
-        Window(const uint32_t width, const uint32_t height, const std::string& title, bool vsync = true, bool glDebug = false);
+
+        struct Options
+        {
+            uint32_t width = 800;
+            uint32_t height = 600;
+            std::string title = "";
+
+            bool enableVsync = true;
+            bool enableDepthTest = true;
+            bool enableStencilTest = false;
+            bool enableFaceCulling = true;
+            bool enableBlending = true;
+            bool enableGlDebug = false;
+
+            int rgbaSize = 8;
+            int depthSize = 16;
+            int stencilSize = 16;
+        };
+
+        Window(const Options& options);
         Window(const Window& other) = delete;
         Window& operator=(const Window& other) = delete;
         ~Window();
@@ -27,8 +46,8 @@ namespace ZFX
         void toggleFullscreen();
 
     private:
-        void setGlAttributes();
-        void setGlewAttributes();
+        void setGlAttributes(const Options& options);
+        void setGlOptions(const Options& options);
 
     private:
         SDL_Window* m_window;
