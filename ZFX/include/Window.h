@@ -32,9 +32,9 @@ namespace ZFX
         Window& operator=(const Window& other) = delete;
         ~Window();
 
-        void clear(); // clear to black
-        void clear(float r, float g, float b, float a); // clear to user defined colour
-        void clear(glm::vec4 bgColour); // clear to user defined colour
+        static void clear(); // clear to black
+        static void clear(float r, float g, float b, float a); // clear to user defined colour
+        static void clear(glm::vec4 bgColour); // clear to user defined colour
 
         void update();
         void setVsync(bool enabled);
@@ -55,6 +55,7 @@ namespace ZFX
 
         static uint32_t s_width;
         static uint32_t s_height;
+        static uint32_t s_bitsToClear;
     };
 }
 

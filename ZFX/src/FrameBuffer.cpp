@@ -1,4 +1,5 @@
 #include "FrameBuffer.h"
+#include "Window.h"
 #include "zfxdefs.h"
 #include <string>
 
@@ -114,16 +115,15 @@ void ZFX::FrameBuffer::bindDepthCubeMap()
 
 void ZFX::FrameBuffer::clear()
 {
-    clear(0.0f, 0.0f, 0.0f, 1.0f);
+    Window::clear();
 }
 
 void ZFX::FrameBuffer::clear(float r, float g, float b, float a)
 {
-    glClearColor(r, g, b, a);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    Window::clear(r, g, b, a);
 }
 
 void ZFX::FrameBuffer::clear(glm::vec4 bgColour)
 {
-    clear(bgColour.r, bgColour.g, bgColour.b, bgColour.a);
+    Window::clear(bgColour.r, bgColour.g, bgColour.b, bgColour.a);
 }

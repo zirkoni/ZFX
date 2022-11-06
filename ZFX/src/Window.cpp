@@ -9,6 +9,7 @@
 
 uint32_t ZFX::Window::s_width = 0;
 uint32_t ZFX::Window::s_height = 0;
+uint32_t ZFX::Window::s_bitsToClear = GL_COLOR_BUFFER_BIT;
 
 ZFX::Window::Window(const Options& options) :
     m_window{ nullptr },
@@ -131,6 +132,8 @@ void ZFX::Window::setGlOptions(const Options& options)
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
+
+    s_bitsToClear = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT * options.enableDepthTest | GL_STENCIL_BUFFER_BIT * options.enableStencilTest;
 }
 
 void ZFX::Window::setVsync(bool enabled)
@@ -146,7 +149,7 @@ void ZFX::Window::clear()
 void ZFX::Window::clear(float r, float g, float b, float a)
 {
     glClearColor(r, g, b, a);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(s_bitsToClear);
 }
 
 void ZFX::Window::clear(glm::vec4 bgColour)
