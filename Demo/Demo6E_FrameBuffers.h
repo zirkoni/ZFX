@@ -5,7 +5,7 @@
 class Demo6E : public Demo
 {
 public:
-    Demo6E(ZFX::Camera& camera, ZFX::Window& window) : Demo{ camera, "Demo6E" }, m_activeEffect{0}
+    Demo6E(ZFX::Camera& camera, ZFX::Window& window) : Demo{ camera, "Demo6E" }, m_activeEffect{4}
     {
         addCube();
         m_cube.transform().scale() = glm::vec3{ 0.5f };
