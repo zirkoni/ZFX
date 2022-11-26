@@ -11,7 +11,9 @@ public:
         addFrameBuffer(window);
     }
 
-    void draw() override
+    virtual ~Demo6E() {}
+
+    virtual void draw() override
     {
         m_cube.transform().rotation().z = m_counter;
         m_cube.transform().rotation().x = m_counter;
@@ -59,7 +61,7 @@ public:
         }
     }
 
-private:
+protected:
 
     void addFrameBuffer(ZFX::Window& window)
     {
@@ -97,7 +99,7 @@ private:
         m_screen.mesh().draw();
     }
 
-private:
+protected:
     ZFX::FrameBuffer m_buffer;
     ZFX::Object m_screen;
     int m_activeEffect;
