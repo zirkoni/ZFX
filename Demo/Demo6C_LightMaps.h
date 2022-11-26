@@ -1,6 +1,9 @@
 #pragma once
-#include "Demo.h"
+#include "Demo6A_BasicLighting.h"
 #include <vector>
+
+
+ZFX::Verteces cubeVertecesWithNormalsAndTexture();
 
 class Demo6C : public Demo
 {
@@ -33,78 +36,7 @@ public:
 private:
     void addCube()
     {
-        /* Duplicate some vertices to get clearly defined edges:
-        * - each corner has a normal vector in every cardinal (x,y,z) direction
-        * - 8 corners and 3 axis => 24 vertices
-        */
-        ZFX::Verteces vertices =
-        {
-            ZFX::VertexData
-            {
-            //   position x,y,z         normal x,y,z        texture coordinates x,y
-
-                // +Y SIDE
-                -1.0f,  1.0f, -1.0f,    0.0f, 1.0f, 0.0f,   0.0f, 1.0f,
-                 1.0f,  1.0f, -1.0f,    0.0f, 1.0f, 0.0f,   1.0f, 1.0f,
-                -1.0f,  1.0f,  1.0f,    0.0f, 1.0f, 0.0f,   0.0f, 0.0f,
-                 1.0f,  1.0f,  1.0f,    0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
-
-                // -Y SIDE
-                -1.0f,  -1.0f, -1.0f,   0.0f, -1.0f, 0.0f,  0.0f, 1.0f,
-                 1.0f,  -1.0f, -1.0f,   0.0f, -1.0f, 0.0f,  1.0f, 1.0f,
-                -1.0f,  -1.0f,  1.0f,   0.0f, -1.0f, 0.0f,  0.0f, 0.0f,
-                 1.0f,  -1.0f,  1.0f,   0.0f, -1.0f, 0.0f,  1.0f, 0.0f,
-
-                // +X SIDE
-                1.0f,  1.0f,  1.0f,     1.0f, 0.0f, 0.0f,   0.0f, 1.0f,
-                1.0f,  1.0f, -1.0f,     1.0f, 0.0f, 0.0f,   1.0f, 1.0f,
-                1.0f, -1.0f,  1.0f,     1.0f, 0.0f, 0.0f,   0.0f, 0.0f,
-                1.0f, -1.0f, -1.0f,     1.0f, 0.0f, 0.0f,   1.0f, 0.0f,
-
-                // -X SIDE
-                -1.0f,  1.0f,  1.0f,    -1.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-                -1.0f,  1.0f, -1.0f,    -1.0f, 0.0f, 0.0f,  1.0f, 1.0f,
-                -1.0f, -1.0f,  1.0f,    -1.0f, 0.0f, 0.0f,  0.0f, 0.0f,
-                -1.0f, -1.0f, -1.0f,    -1.0f, 0.0f, 0.0f,  1.0f, 0.0f,
-
-                // +Z SIDE
-                -1.0f,  1.0f, 1.0f,     0.0f, 0.0f, 1.0f,   0.0f, 1.0f,
-                 1.0f,  1.0f, 1.0f,     0.0f, 0.0f, 1.0f,   1.0f, 1.0f,
-                -1.0f, -1.0f, 1.0f,     0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
-                 1.0f, -1.0f, 1.0f,     0.0f, 0.0f, 1.0f,   1.0f, 0.0f,
-
-                // -Z SIDE
-                -1.0f,  1.0f, -1.0f,    0.0f, 0.0f, -1.0f,  0.0f, 1.0f,
-                 1.0f,  1.0f, -1.0f,    0.0f, 0.0f, -1.0f,  1.0f, 1.0f,
-                -1.0f, -1.0f, -1.0f,    0.0f, 0.0f, -1.0f,  0.0f, 0.0f,
-                 1.0f, -1.0f, -1.0f,    0.0f, 0.0f, -1.0f,  1.0f, 0.0f
-            },
-
-            ZFX::AttributeSizes{3, 3, 2}
-        };
-
-        ZFX::Indeces indeces =
-        {
-            // +X
-            8, 10, 9, 9, 10, 11,
-
-            // -X
-            14, 12, 13, 14, 13, 15,
-
-            // +Y
-            1, 0, 2, 3, 1, 2,
-
-            // -Y
-            4, 5, 6, 5, 7, 6,
-
-            // +Z
-            17, 16, 18, 19, 17, 18,
-
-            // -Z
-            20, 21, 22, 21, 23, 22
-        };
-
-        m_cube.load(vertices, indeces, SHADERS_PATH + "colour3D_LightMap");
+        m_cube.load(cubeVertecesWithNormalsAndTexture(), cubeIndeces(), SHADERS_PATH + "colour3D_LightMap");
         m_cube.loadTexture(TEXTURES_PATH + "container.png");
         m_cube.loadTexture(TEXTURES_PATH + "container_specular.png");
         
@@ -117,48 +49,7 @@ private:
 
     void addLight()
     {
-        /* The 8 corners of a cube */
-        ZFX::Verteces vertices =
-        {
-            ZFX::VertexData
-            {
-                //   x   y   z
-                    -1, -1, -1, // 0 left low
-                     1, -1, -1, // 1 right low
-                     1,  1, -1, // 2 right high
-                    -1,  1, -1, // 3 left high
-
-                    -1, -1,  1, // 4 left low
-                     1, -1,  1, // 5 right low
-                     1,  1,  1, // 6 right high
-                    -1,  1,  1, // 7 left high
-            },
-
-            ZFX::AttributeSizes{3}
-        };
-
-        ZFX::Indeces indeces =
-        {
-            /* Back */
-            0, 3, 1, 3, 2, 1,
-
-            /* Right */
-            1, 2, 5, 2, 6, 5,
-
-            /* Front */
-            5, 6, 4, 6, 7, 4,
-
-            /* Left */
-            4, 7, 0, 7, 3, 0,
-
-            /* Top */
-            3, 7, 2, 7, 6, 2,
-
-            /* Bottom */
-            4, 0, 5, 0, 1, 5
-        };
-
-        m_light.load(vertices, indeces, SHADERS_PATH + "colour3D");
+        m_light.load(simpleCubeVerteces(), simpleCubeIndeces(), SHADERS_PATH + "colour3D");
         m_light.shader().bind();
         m_light.shader().setUniformVec4("u_colour", glm::vec4{ 1.0f });
         m_light.transform().scale() = glm::vec3{ 0.01f };
@@ -184,3 +75,60 @@ private:
     ZFX::Object m_cube;
     ZFX::Object m_light;
 };
+
+ZFX::Verteces cubeVertecesWithNormalsAndTexture()
+{
+    /* Duplicate some vertices to get clearly defined edges:
+    * - each corner has a normal vector in every cardinal (x,y,z) direction
+    * - 8 corners and 3 axis => 24 vertices
+    */
+    ZFX::Verteces vertices =
+    {
+        ZFX::VertexData
+        {
+        //   position x,y,z         normal x,y,z        texture coordinates x,y
+
+            // +Y SIDE
+            -1.0f,  1.0f, -1.0f,    0.0f, 1.0f, 0.0f,   0.0f, 1.0f,
+             1.0f,  1.0f, -1.0f,    0.0f, 1.0f, 0.0f,   1.0f, 1.0f,
+            -1.0f,  1.0f,  1.0f,    0.0f, 1.0f, 0.0f,   0.0f, 0.0f,
+             1.0f,  1.0f,  1.0f,    0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
+
+            // -Y SIDE
+            -1.0f,  -1.0f, -1.0f,   0.0f, -1.0f, 0.0f,  0.0f, 1.0f,
+             1.0f,  -1.0f, -1.0f,   0.0f, -1.0f, 0.0f,  1.0f, 1.0f,
+            -1.0f,  -1.0f,  1.0f,   0.0f, -1.0f, 0.0f,  0.0f, 0.0f,
+             1.0f,  -1.0f,  1.0f,   0.0f, -1.0f, 0.0f,  1.0f, 0.0f,
+
+            // +X SIDE
+            1.0f,  1.0f,  1.0f,     1.0f, 0.0f, 0.0f,   0.0f, 1.0f,
+            1.0f,  1.0f, -1.0f,     1.0f, 0.0f, 0.0f,   1.0f, 1.0f,
+            1.0f, -1.0f,  1.0f,     1.0f, 0.0f, 0.0f,   0.0f, 0.0f,
+            1.0f, -1.0f, -1.0f,     1.0f, 0.0f, 0.0f,   1.0f, 0.0f,
+
+            // -X SIDE
+            -1.0f,  1.0f,  1.0f,    -1.0f, 0.0f, 0.0f,  0.0f, 1.0f,
+            -1.0f,  1.0f, -1.0f,    -1.0f, 0.0f, 0.0f,  1.0f, 1.0f,
+            -1.0f, -1.0f,  1.0f,    -1.0f, 0.0f, 0.0f,  0.0f, 0.0f,
+            -1.0f, -1.0f, -1.0f,    -1.0f, 0.0f, 0.0f,  1.0f, 0.0f,
+
+            // +Z SIDE
+            -1.0f,  1.0f, 1.0f,     0.0f, 0.0f, 1.0f,   0.0f, 1.0f,
+             1.0f,  1.0f, 1.0f,     0.0f, 0.0f, 1.0f,   1.0f, 1.0f,
+            -1.0f, -1.0f, 1.0f,     0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
+             1.0f, -1.0f, 1.0f,     0.0f, 0.0f, 1.0f,   1.0f, 0.0f,
+
+            // -Z SIDE
+            -1.0f,  1.0f, -1.0f,    0.0f, 0.0f, -1.0f,  0.0f, 1.0f,
+             1.0f,  1.0f, -1.0f,    0.0f, 0.0f, -1.0f,  1.0f, 1.0f,
+            -1.0f, -1.0f, -1.0f,    0.0f, 0.0f, -1.0f,  0.0f, 0.0f,
+             1.0f, -1.0f, -1.0f,    0.0f, 0.0f, -1.0f,  1.0f, 0.0f
+        },
+
+        ZFX::AttributeSizes{3, 3, 2}
+    };
+
+    return vertices;
+}
+
+

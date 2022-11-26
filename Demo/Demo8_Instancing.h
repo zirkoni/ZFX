@@ -1,5 +1,5 @@
 #pragma once
-#include "Demo.h"
+#include "Demo6A_BasicLighting.h"
 #include <cmath>
 #include <vector>
 
@@ -105,50 +105,7 @@ public:
 private:
     std::unique_ptr<Shape> addCube()
     {
-        ZFX::Verteces vertices =
-        {
-            ZFX::VertexData
-            {
-                -1.0f,  1.0f, -1.0f,    0.0f, 1.0f, 0.0f,
-                 1.0f,  1.0f, -1.0f,    0.0f, 1.0f, 0.0f,
-                -1.0f,  1.0f,  1.0f,    0.0f, 1.0f, 0.0f,
-                 1.0f,  1.0f,  1.0f,    0.0f, 1.0f, 0.0f,
-                -1.0f,  -1.0f, -1.0f,   0.0f, -1.0f, 0.0f,
-                 1.0f,  -1.0f, -1.0f,   0.0f, -1.0f, 0.0f,
-                -1.0f,  -1.0f,  1.0f,   0.0f, -1.0f, 0.0f,
-                 1.0f,  -1.0f,  1.0f,   0.0f, -1.0f, 0.0f,
-                1.0f,  1.0f,  1.0f,     1.0f, 0.0f, 0.0f,
-                1.0f,  1.0f, -1.0f,     1.0f, 0.0f, 0.0f,
-                1.0f, -1.0f,  1.0f,     1.0f, 0.0f, 0.0f,
-                1.0f, -1.0f, -1.0f,     1.0f, 0.0f, 0.0f,
-                -1.0f,  1.0f,  1.0f,    -1.0f, 0.0f, 0.0f,
-                -1.0f,  1.0f, -1.0f,    -1.0f, 0.0f, 0.0f,
-                -1.0f, -1.0f,  1.0f,    -1.0f, 0.0f, 0.0f,
-                -1.0f, -1.0f, -1.0f,    -1.0f, 0.0f, 0.0f,
-                -1.0f,  1.0f, 1.0f,     0.0f, 0.0f, 1.0f,
-                 1.0f,  1.0f, 1.0f,     0.0f, 0.0f, 1.0f,
-                -1.0f, -1.0f, 1.0f,     0.0f, 0.0f, 1.0f,
-                 1.0f, -1.0f, 1.0f,     0.0f, 0.0f, 1.0f,
-                -1.0f,  1.0f, -1.0f,    0.0f, 0.0f, -1.0f,
-                 1.0f,  1.0f, -1.0f,    0.0f, 0.0f, -1.0f,
-                -1.0f, -1.0f, -1.0f,    0.0f, 0.0f, -1.0f,
-                 1.0f, -1.0f, -1.0f,    0.0f, 0.0f, -1.0f
-            },
-
-            ZFX::AttributeSizes{3, 3}
-        };
-
-        ZFX::Indeces indeces =
-        {
-            8, 10, 9, 9, 10, 11,
-            14, 12, 13, 14, 13, 15,
-            1, 0, 2, 3, 1, 2,
-            4, 5, 6, 5, 7, 6,
-            17, 16, 18, 19, 17, 18,
-            20, 21, 22, 21, 23, 22
-        };
-
-        return std::make_unique<Shape>(vertices, indeces, m_instanceMatrix);
+        return std::make_unique<Shape>(cubeVertecesWithNormals(), cubeIndeces(), m_instanceMatrix);
     }
 
 private:
@@ -232,50 +189,7 @@ public:
 private:
     void addCube()
     {
-        ZFX::Verteces vertices =
-        {
-            ZFX::VertexData
-            {
-                -1.0f,  1.0f, -1.0f,    0.0f, 1.0f, 0.0f,
-                 1.0f,  1.0f, -1.0f,    0.0f, 1.0f, 0.0f,
-                -1.0f,  1.0f,  1.0f,    0.0f, 1.0f, 0.0f,
-                 1.0f,  1.0f,  1.0f,    0.0f, 1.0f, 0.0f,
-                -1.0f,  -1.0f, -1.0f,   0.0f, -1.0f, 0.0f,
-                 1.0f,  -1.0f, -1.0f,   0.0f, -1.0f, 0.0f,
-                -1.0f,  -1.0f,  1.0f,   0.0f, -1.0f, 0.0f,
-                 1.0f,  -1.0f,  1.0f,   0.0f, -1.0f, 0.0f,
-                1.0f,  1.0f,  1.0f,     1.0f, 0.0f, 0.0f,
-                1.0f,  1.0f, -1.0f,     1.0f, 0.0f, 0.0f,
-                1.0f, -1.0f,  1.0f,     1.0f, 0.0f, 0.0f,
-                1.0f, -1.0f, -1.0f,     1.0f, 0.0f, 0.0f,
-                -1.0f,  1.0f,  1.0f,    -1.0f, 0.0f, 0.0f,
-                -1.0f,  1.0f, -1.0f,    -1.0f, 0.0f, 0.0f,
-                -1.0f, -1.0f,  1.0f,    -1.0f, 0.0f, 0.0f,
-                -1.0f, -1.0f, -1.0f,    -1.0f, 0.0f, 0.0f,
-                -1.0f,  1.0f, 1.0f,     0.0f, 0.0f, 1.0f,
-                 1.0f,  1.0f, 1.0f,     0.0f, 0.0f, 1.0f,
-                -1.0f, -1.0f, 1.0f,     0.0f, 0.0f, 1.0f,
-                 1.0f, -1.0f, 1.0f,     0.0f, 0.0f, 1.0f,
-                -1.0f,  1.0f, -1.0f,    0.0f, 0.0f, -1.0f,
-                 1.0f,  1.0f, -1.0f,    0.0f, 0.0f, -1.0f,
-                -1.0f, -1.0f, -1.0f,    0.0f, 0.0f, -1.0f,
-                 1.0f, -1.0f, -1.0f,    0.0f, 0.0f, -1.0f
-            },
-
-            ZFX::AttributeSizes{3, 3}
-        };
-
-        ZFX::Indeces indeces =
-        {
-            8, 10, 9, 9, 10, 11,
-            14, 12, 13, 14, 13, 15,
-            1, 0, 2, 3, 1, 2,
-            4, 5, 6, 5, 7, 6,
-            17, 16, 18, 19, 17, 18,
-            20, 21, 22, 21, 23, 22
-        };
-
-        m_cube.load(vertices, indeces, SHADERS_PATH + "colour3D_Lighting");
+        m_cube.load(cubeVertecesWithNormals(), cubeIndeces(), SHADERS_PATH + "colour3D_Lighting");
     }
 
 private:

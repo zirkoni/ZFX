@@ -1,5 +1,5 @@
 #pragma once
-#include "Demo.h"
+#include "Demo6C_LightMaps.h"
 #include <vector>
 
 
@@ -108,74 +108,7 @@ private:
 
     void loadCubes()
     {
-        ZFX::Verteces vertices =
-        {
-            ZFX::VertexData
-            {
-            //   position x,y,z         normal x,y,z        texture coordinates x,y
-
-                // +Y SIDE
-                -1.0f,  1.0f, -1.0f,    0.0f, 1.0f, 0.0f,   0.0f, 1.0f,
-                 1.0f,  1.0f, -1.0f,    0.0f, 1.0f, 0.0f,   1.0f, 1.0f,
-                -1.0f,  1.0f,  1.0f,    0.0f, 1.0f, 0.0f,   0.0f, 0.0f,
-                 1.0f,  1.0f,  1.0f,    0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
-
-                // -Y SIDE
-                -1.0f,  -1.0f, -1.0f,   0.0f, -1.0f, 0.0f,  0.0f, 1.0f,
-                 1.0f,  -1.0f, -1.0f,   0.0f, -1.0f, 0.0f,  1.0f, 1.0f,
-                -1.0f,  -1.0f,  1.0f,   0.0f, -1.0f, 0.0f,  0.0f, 0.0f,
-                 1.0f,  -1.0f,  1.0f,   0.0f, -1.0f, 0.0f,  1.0f, 0.0f,
-
-                // +X SIDE
-                1.0f,  1.0f,  1.0f,     1.0f, 0.0f, 0.0f,   0.0f, 1.0f,
-                1.0f,  1.0f, -1.0f,     1.0f, 0.0f, 0.0f,   1.0f, 1.0f,
-                1.0f, -1.0f,  1.0f,     1.0f, 0.0f, 0.0f,   0.0f, 0.0f,
-                1.0f, -1.0f, -1.0f,     1.0f, 0.0f, 0.0f,   1.0f, 0.0f,
-
-                // -X SIDE
-                -1.0f,  1.0f,  1.0f,    -1.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-                -1.0f,  1.0f, -1.0f,    -1.0f, 0.0f, 0.0f,  1.0f, 1.0f,
-                -1.0f, -1.0f,  1.0f,    -1.0f, 0.0f, 0.0f,  0.0f, 0.0f,
-                -1.0f, -1.0f, -1.0f,    -1.0f, 0.0f, 0.0f,  1.0f, 0.0f,
-
-                // +Z SIDE
-                -1.0f,  1.0f, 1.0f,     0.0f, 0.0f, 1.0f,   0.0f, 1.0f,
-                 1.0f,  1.0f, 1.0f,     0.0f, 0.0f, 1.0f,   1.0f, 1.0f,
-                -1.0f, -1.0f, 1.0f,     0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
-                 1.0f, -1.0f, 1.0f,     0.0f, 0.0f, 1.0f,   1.0f, 0.0f,
-
-                // -Z SIDE
-                -1.0f,  1.0f, -1.0f,    0.0f, 0.0f, -1.0f,  0.0f, 1.0f,
-                 1.0f,  1.0f, -1.0f,    0.0f, 0.0f, -1.0f,  1.0f, 1.0f,
-                -1.0f, -1.0f, -1.0f,    0.0f, 0.0f, -1.0f,  0.0f, 0.0f,
-                 1.0f, -1.0f, -1.0f,    0.0f, 0.0f, -1.0f,  1.0f, 0.0f
-            },
-
-            ZFX::AttributeSizes{3, 3, 2}
-        };
-
-        ZFX::Indeces indeces =
-        {
-            // +X
-            8, 10, 9, 9, 10, 11,
-
-            // -X
-            14, 12, 13, 14, 13, 15,
-
-            // +Y
-            1, 0, 2, 3, 1, 2,
-
-            // -Y
-            4, 5, 6, 5, 7, 6,
-
-            // +Z
-            17, 16, 18, 19, 17, 18,
-
-            // -Z
-            20, 21, 22, 21, 23, 22
-        };
-
-        m_cubes.load(vertices, indeces, m_shader);
+        m_cubes.load(cubeVertecesWithNormalsAndTexture(), cubeIndeces(), m_shader);
         m_cubes.loadTexture(TEXTURES_PATH + "container.png");
 
         // 1st cube
