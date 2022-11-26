@@ -34,6 +34,7 @@ public:
         lightView = glm::lookAt(m_lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
         lightSpaceMatrix = lightProjection * lightView;
         // render scene from light's point of view
+        m_simpleDepthShader->bind();
         m_simpleDepthShader->setUniformMat4("u_lightSpaceMatrix", lightSpaceMatrix);
         glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
         m_depthBuffer.bind();
@@ -47,6 +48,7 @@ public:
 
         // 2. Render scene as normal using the generated depth/shadow map
         glm::mat4 viewProjection = m_camera.getViewProjection();
+        m_shader->bind();
         m_shader->setUniformMat4("u_viewProjection", viewProjection);
         m_shader->setUniformVec3("u_viewPos", m_camera.position());
         m_shader->setUniformVec3("u_lightPos", m_lightPos);
@@ -74,6 +76,7 @@ private:
         ZFX::ShaderSource depthSrc = {SHADERS_PATH + "depthshader.vs", SHADERS_PATH + "depthshader.fs"};
         m_simpleDepthShader = std::make_unique<ZFX::Shader>(depthSrc);
 
+        m_shader->bind();
         m_shader->setUniformInt("u_diffuseTexture", 0);
         m_shader->setUniformInt("u_shadowMap", 1);
     }

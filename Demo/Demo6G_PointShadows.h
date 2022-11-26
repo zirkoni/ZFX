@@ -43,6 +43,7 @@ public:
         glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
         m_depthBuffer.bind();
         glClear(GL_DEPTH_BUFFER_BIT);
+        m_simpleDepthShader->bind();
         for (unsigned int i = 0; i < 6; ++i)
         {
             m_simpleDepthShader->setUniformMat4("u_shadowMatrices[" + std::to_string(i) + "]", shadowTransforms[i]);
@@ -56,6 +57,7 @@ public:
         glViewport(0, 0, m_window.width(), m_window.height());
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glm::mat4 viewProjection = m_camera.getViewProjection();
+        m_shader->bind();
         m_shader->setUniformMat4("u_viewProjection", viewProjection);
         m_shader->setUniformVec3("u_viewPos", m_camera.position());
         m_shader->setUniformVec3("u_lightPos", m_lightPos);
@@ -84,6 +86,7 @@ private:
         ZFX::ShaderSource depthSrc = {SHADERS_PATH + "depthCube.vs", SHADERS_PATH + "depthCube.fs", SHADERS_PATH + "depthCube.gs"};
         m_simpleDepthShader = std::make_unique<ZFX::Shader>(depthSrc);
 
+        m_shader->bind();
         m_shader->setUniformInt("u_diffuseTexture", 0);
         m_shader->setUniformInt("u_depthMap", 1);
 

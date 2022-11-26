@@ -21,6 +21,7 @@ public:
 
         m_light.transform().position().x = sin(50 * m_counter);
 
+        m_cube.shader().bind();
         m_cube.shader().setUniformVec3("u_viewPosition", m_camera.position());
         m_cube.shader().setUniformVec3("u_lightPosition", m_light.transform().position());
 
@@ -150,7 +151,8 @@ private:
 
         m_light.load(vertices, indeces, SHADERS_PATH + "colour3D");
 
-        m_light.shader().setUniformVec4("u_colour", glm::vec4{ 1.0f });
+        m_light.shader().bind();
+        m_light.shader().setUniformVec4("u_colour", ZFX::WHITE);
         m_light.transform().scale() = glm::vec3{ 0.01f };
         m_light.transform().position().x = 0.0f;
         m_light.transform().position().y = 0.0f;

@@ -23,9 +23,11 @@ public:
         m_counter += 0.001f;
 
         // Spotlight always comes 'out-of-camera'
+        m_spotLight->bind();
         m_spotLight->setPosition(m_camera.position());
         m_spotLight->setDirection(m_camera.front());
 
+        m_cube.shader().bind();
         m_cube.shader().setUniformVec3("u_viewPosition", m_camera.position());
         m_cube.draw(m_camera);
 
@@ -113,6 +115,7 @@ private:
         m_cube.loadTexture(TEXTURES_PATH + "container.png");
         m_cube.loadTexture(TEXTURES_PATH + "container_specular.png");
 
+        m_cube.shader().bind();
         m_cube.shader().setUniformInt("u_material.diffuse",  0);
         m_cube.shader().setUniformInt("u_material.specular", 1);
         m_cube.shader().setUniformFloat("u_material.shininess", 0.6f * 128);
@@ -122,6 +125,7 @@ private:
     {
         // Local variable, only create and set once
         ZFX::DirectionalLight dirLight{ "u_dirLight", m_cube.shader() };
+        dirLight.bind();
         dirLight.setDirection( glm::vec3{-0.2f, -1.0f, -0.3f} );
         dirLight.setAmbient( glm::vec3{0.05f} );
         dirLight.setDiffuse( glm::vec3{0.4f} );
@@ -151,6 +155,7 @@ private:
         for(int i = 0; i < 4; ++i)
         {
             ZFX::PointLight pLight{ "u_pointLights[" + std::to_string(i) + "]", m_cube.shader() };
+            pLight.bind(); // Bind called for the same shader every loop...
             pLight.setPosition(pointLightPositions[i]);
             pLight.setAmbient( pointLightColours[i] * glm::vec3{0.05f} );
             pLight.setDiffuse( pointLightColours[i] * glm::vec3{0.8f} );
@@ -208,6 +213,7 @@ private:
 
         ZFX::Object cube;
         cube.load(vertices, indeces, SHADERS_PATH + "colour3D");
+        cube.shader().bind();
         cube.shader().setUniformVec4("u_colour", glm::vec4{ colour, 1.0f });
         cube.transform().scale() = glm::vec3{ 0.05f };
         cube.transform().position() = position;
@@ -218,6 +224,7 @@ private:
     void addSpotLight()
     {
         m_spotLight = std::make_unique<ZFX::SpotLight>("u_spotLight", m_cube.shader());
+        m_spotLight->bind();
         m_spotLight->setPosition(m_camera.position());
         m_spotLight->setDirection(m_camera.front());
         m_spotLight->setAmbient( glm::vec3{0.0f} );

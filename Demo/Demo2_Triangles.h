@@ -110,6 +110,7 @@ private:
         triangle.load(vertices, indeces, SHADERS_PATH + "colour2");
         triangle.transform().position() = glm::vec3{ position, 0.0f };
         triangle.transform().scale() = glm::vec3{ scale };
+        triangle.shader().bind();
         triangle.shader().setUniformVec4("u_colour", ZFX::YELLOW);
         m_triangles.push_back(std::move(triangle));
     }
