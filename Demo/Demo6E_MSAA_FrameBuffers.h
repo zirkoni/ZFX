@@ -7,7 +7,7 @@ class Demo6E_MSAA : public Demo6E
 public:
     Demo6E_MSAA(ZFX::Camera& camera) : Demo6E{camera}, m_MSAABuffer{4}
     {
-        m_name = "Demo6E_MSAA";
+        m_name = "Demo6E_MSAA - MSAA Framebuffer";
         addMSAABuffer();
     }
 

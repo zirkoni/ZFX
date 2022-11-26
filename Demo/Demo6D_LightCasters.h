@@ -5,7 +5,7 @@
 class Demo6D : public Demo
 {
 public:
-    Demo6D(ZFX::Camera& camera) : Demo{ camera, "Demo6D" }
+    Demo6D(ZFX::Camera& camera) : Demo{ camera, "Demo6D - Multiple Lights" }
     {
         addCube();
         m_cube.transform().scale() = glm::vec3{ 0.5f };

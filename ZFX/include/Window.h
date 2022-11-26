@@ -40,6 +40,7 @@ namespace ZFX
 
         void update();
         void setVsync(bool enabled);
+        void setTitle(const std::string& title);
 
         static float aspectRatio() { return ((float)s_width / s_height); }
         static uint32_t width() { return s_width; }

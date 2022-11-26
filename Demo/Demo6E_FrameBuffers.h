@@ -7,7 +7,7 @@ class Demo6E : public Demo6D
 public:
     Demo6E(ZFX::Camera& camera) : Demo6D{camera}, m_activeEffect{4}
     {
-        m_name = "Demo6E";
+        m_name = "Demo6E - Framebuffer";
         addFrameBuffer();
     }
 

@@ -11,7 +11,7 @@ class Demo6G : public Demo
     const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
 
 public:
-    Demo6G(ZFX::Camera& camera) : Demo{ camera, "Demo6G" }
+    Demo6G(ZFX::Camera& camera) : Demo{ camera, "Demo6G - Multidirectional Shadow Mapping" }
     {
         loadShaders();
         loadCubes();

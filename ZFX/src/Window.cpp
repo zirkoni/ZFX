@@ -196,3 +196,8 @@ void ZFX::Window::toggleFullscreen()
         SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN);
     }
 }
+
+void ZFX::Window::setTitle(const std::string &title)
+{
+    SDL_SetWindowTitle(m_window, title.c_str());
+}

@@ -8,7 +8,7 @@ static const std::string FONT = FONTS_PATH + "arial.ttf";
 class Demo1 : public Demo
 {
 public:
-    Demo1(ZFX::Camera& camera) : Demo{ camera, "Demo1" },
+    Demo1(ZFX::Camera& camera) : Demo{ camera, "Demo1 - Rendering Text" },
         m_textRenderer{ FONT }
     {
         m_strings.push_back("<Space> : Next demo");

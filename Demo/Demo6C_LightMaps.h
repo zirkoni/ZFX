@@ -8,7 +8,7 @@ ZFX::Verteces cubeVertecesWithNormalsAndTexture();
 class Demo6C : public Demo
 {
 public:
-    Demo6C(ZFX::Camera& camera) : Demo{ camera, "Demo6C" }
+    Demo6C(ZFX::Camera& camera) : Demo{ camera, "Demo6C - Lighting Map" }
     {
         addCube();
         m_cube.transform().scale() = glm::vec3{ 0.5f };

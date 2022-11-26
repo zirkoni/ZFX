@@ -41,7 +41,7 @@ class Demo8 : public Demo
     };
 
 public:
-    Demo8(ZFX::Camera& camera) : Demo{ camera, "Demo8" }
+    Demo8(ZFX::Camera& camera) : Demo{ camera, "Demo8 - Instancing (Fast)" }
     {
         srand(SDL_GetTicks());
 
@@ -154,7 +154,7 @@ class Demo8 : public Demo
     };
 
 public:
-    Demo8(ZFX::Camera& camera) : Demo{ camera, "Demo8" }
+    Demo8(ZFX::Camera& camera) : Demo{ camera, "Demo8 - Instancing (Slow)" }
     {
         addCube();
 

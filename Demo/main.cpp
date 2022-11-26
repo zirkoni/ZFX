@@ -63,7 +63,7 @@ void changeActiveDemo(ZFX::Camera& camera, DemoList& demos, DemoList::iterator& 
 }
 
 void checkKeyboardInput(const SDL_Event& e, ZFX::Camera& camera, DemoList& demos,
-        DemoList::iterator& activeDemo, float deltaTime)
+        DemoList::iterator& activeDemo, float deltaTime, ZFX::Window& window)
 {
     if (e.key.keysym.scancode == SDL_SCANCODE_W) // Toggle wireframe mode on/off by pressing W
     {
@@ -72,6 +72,7 @@ void checkKeyboardInput(const SDL_Event& e, ZFX::Camera& camera, DemoList& demos
     else if (e.key.keysym.scancode == SDL_SCANCODE_SPACE) // Switch to different demo by pressing space
     {
         changeActiveDemo(camera, demos, activeDemo);
+        window.setTitle(activeDemo->get()->name());
     }
     else if (e.key.keysym.scancode == SDL_SCANCODE_Z)
     {
@@ -130,7 +131,7 @@ void checkMouseInput(const SDL_Event& e, ZFX::Camera& camera)
     }
 }
 
-bool checkInput(ZFX::Camera& camera, DemoList& demos, DemoList::iterator& activeDemo, float deltaTime)
+bool checkInput(ZFX::Camera& camera, DemoList& demos, DemoList::iterator& activeDemo, float deltaTime, ZFX::Window& window)
 {
     SDL_Event e;
 
@@ -141,7 +142,7 @@ bool checkInput(ZFX::Camera& camera, DemoList& demos, DemoList::iterator& active
             return true;
         } else if (e.type == SDL_KEYDOWN)
         {
-            checkKeyboardInput(e, camera, demos, activeDemo, deltaTime);
+            checkKeyboardInput(e, camera, demos, activeDemo, deltaTime, window);
         } else
         {
             checkMouseInput(e, camera);
@@ -158,6 +159,7 @@ void mainLoop(ZFX::Window& window)
     DemoList demos;
     addDemos(demos, camera);
     auto activeDemo = demos.begin();
+    window.setTitle(activeDemo->get()->name());
 
     bool exitRequested = false;
 
@@ -171,7 +173,7 @@ void mainLoop(ZFX::Window& window)
         now = SDL_GetPerformanceCounter();
         deltaTime = (now - last) * 1000 / (float)SDL_GetPerformanceFrequency();
 
-        exitRequested = checkInput(camera, demos, activeDemo, deltaTime);
+        exitRequested = checkInput(camera, demos, activeDemo, deltaTime, window);
 
         window.clear(activeDemo->get()->bgColour());
         activeDemo->get()->draw();
