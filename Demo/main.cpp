@@ -19,7 +19,7 @@
 
 using DemoList = std::vector<std::unique_ptr<Demo> >;
 
-void addDemos(DemoList& demos, ZFX::Camera& camera, ZFX::Window& window)
+void addDemos(DemoList& demos, ZFX::Camera& camera)
 {
     demos.push_back(std::make_unique<Demo1>(camera));
     demos.push_back(std::make_unique<Demo2>(camera));
@@ -30,10 +30,10 @@ void addDemos(DemoList& demos, ZFX::Camera& camera, ZFX::Window& window)
     demos.push_back(std::make_unique<Demo6B>(camera));
     demos.push_back(std::make_unique<Demo6C>(camera));
     demos.push_back(std::make_unique<Demo6D>(camera));
-    demos.push_back(std::make_unique<Demo6E>(camera, window));
-    demos.push_back(std::make_unique<Demo6E_MSAA>(camera, window));
-    demos.push_back(std::make_unique<Demo6F>(camera, window));
-    demos.push_back(std::make_unique<Demo6G>(camera, window));
+    demos.push_back(std::make_unique<Demo6E>(camera));
+    demos.push_back(std::make_unique<Demo6E_MSAA>(camera));
+    demos.push_back(std::make_unique<Demo6F>(camera));
+    demos.push_back(std::make_unique<Demo6G>(camera));
     demos.push_back(std::make_unique<Demo7>(camera));
     demos.push_back(std::make_unique<Demo8>(camera));
 }
@@ -156,7 +156,7 @@ void mainLoop(ZFX::Window& window)
     ZFX::Camera camera{ glm::vec3{0.0f, 0.0f, 3.0f}, window.aspectRatio() };
 
     DemoList demos;
-    addDemos(demos, camera, window);
+    addDemos(demos, camera);
     auto activeDemo = demos.begin();
 
     bool exitRequested = false;

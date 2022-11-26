@@ -11,7 +11,7 @@ class Demo6F : public Demo
     const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
 
 public:
-    Demo6F(ZFX::Camera& camera, ZFX::Window& window) : Demo{ camera, "Demo6F" }, m_window{window}
+    Demo6F(ZFX::Camera& camera) : Demo{ camera, "Demo6F" }
     {
         loadShaders();
         loadFloor();
@@ -43,7 +43,7 @@ public:
         m_depthBuffer.bindDefault();
 
         // reset viewport
-        glViewport(0, 0, m_window.width(), m_window.height());
+        glViewport(0, 0, ZFX::Window::width(), ZFX::Window::height());
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // 2. Render scene as normal using the generated depth/shadow map
@@ -147,7 +147,6 @@ private:
     }
 
 private:
-    ZFX::Window& m_window;
     std::shared_ptr<ZFX::Shader> m_shader;
     std::unique_ptr<ZFX::Shader> m_simpleDepthShader;
     ZFX::Object m_floor;

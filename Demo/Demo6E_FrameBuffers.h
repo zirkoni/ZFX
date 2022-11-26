@@ -5,10 +5,10 @@
 class Demo6E : public Demo6D
 {
 public:
-    Demo6E(ZFX::Camera& camera, ZFX::Window& window) : Demo6D{camera}, m_activeEffect{4}
+    Demo6E(ZFX::Camera& camera) : Demo6D{camera}, m_activeEffect{4}
     {
         m_name = "Demo6E";
-        addFrameBuffer(window);
+        addFrameBuffer();
     }
 
     virtual ~Demo6E() {}
@@ -63,7 +63,7 @@ public:
 
 protected:
 
-    void addFrameBuffer(ZFX::Window& window)
+    void addFrameBuffer()
     {
         ZFX::Verteces vertices =
         {
@@ -85,8 +85,8 @@ protected:
         m_screen.shader().bind();
         m_screen.shader().setUniformInt("u_screenTexture", 0);
 
-        m_buffer.attachTextureBuffer(window.width(), window.height());
-        m_buffer.attachRenderBuffer(window.width(), window.height()); // For depth testing
+        m_buffer.attachTextureBuffer(ZFX::Window::width(), ZFX::Window::height());
+        m_buffer.attachRenderBuffer(ZFX::Window::width(), ZFX::Window::height()); // For depth testing
     }
 
     void drawFrameBufferToScreen()
