@@ -15,6 +15,7 @@ namespace ZFX
         Mesh(const Verteces& vertices, const Indeces& indeces);
         Mesh(const Verteces& vertices, const Indeces& indeces, const std::vector<glm::mat4>& modelMatrices);
         Mesh(const Mesh& other) = delete;
+        Mesh(Mesh&&) = default;
         Mesh& operator=(const Mesh& other) = delete;
         ~Mesh();
 
