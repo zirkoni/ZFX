@@ -3,7 +3,7 @@
 #include "Demo3_Square.h"
 #include "Demo4_Circles.h"
 #include "Demo5_Cube.h"
-#include "Demo6_BasicLighting.h"
+#include "Demo6A_BasicLighting.h"
 #include "Demo6B_Materials.h"
 #include "Demo6C_LightMaps.h"
 #include "Demo6D_LightCasters.h"
@@ -25,7 +25,7 @@ void addDemos(DemoList& demos, ZFX::Camera& camera, ZFX::Window& window)
     demos.push_back(std::make_unique<Demo3>(camera));
     demos.push_back(std::make_unique<Demo4>(camera));
     demos.push_back(std::make_unique<Demo5>(camera));
-    demos.push_back(std::make_unique<Demo6>(camera));
+    demos.push_back(std::make_unique<Demo6A>(camera));
     demos.push_back(std::make_unique<Demo6B>(camera));
     demos.push_back(std::make_unique<Demo6C>(camera));
     demos.push_back(std::make_unique<Demo6D>(camera));

@@ -2,10 +2,10 @@
 #include "Demo.h"
 #include <vector>
 
-class Demo6 : public Demo
+class Demo6A : public Demo
 {
 public:
-    Demo6(ZFX::Camera& camera) : Demo{ camera, "Demo6" }
+    Demo6A(ZFX::Camera& camera) : Demo{ camera, "Demo6" }
     {
         addCube();
         m_cube.transform().scale() = glm::vec3{ 0.5f };
