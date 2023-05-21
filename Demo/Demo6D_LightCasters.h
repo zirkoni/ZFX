@@ -30,7 +30,7 @@ public:
         m_spotLight->setDirection(m_camera.front());
 
         m_cube.shader().bind();
-        m_cube.shader().setUniformVec3("u_viewPosition", m_camera.position());
+        m_cube.shader().setUniform("u_viewPosition", m_camera.position());
         m_cube.draw(m_camera);
 
         for(auto& light : m_pointLights)
@@ -47,9 +47,9 @@ protected:
         m_cube.loadTexture(TEXTURES_PATH + "container_specular.png");
 
         m_cube.shader().bind();
-        m_cube.shader().setUniformInt("u_material.diffuse",  0);
-        m_cube.shader().setUniformInt("u_material.specular", 1);
-        m_cube.shader().setUniformFloat("u_material.shininess", 0.6f * 128);
+        m_cube.shader().setUniform("u_material.diffuse",  0);
+        m_cube.shader().setUniform("u_material.specular", 1);
+        m_cube.shader().setUniform("u_material.shininess", 0.6f * 128);
     }
 
     void addDirectionalLight()
@@ -105,7 +105,7 @@ protected:
         ZFX::Object cube;
         cube.load(simpleCubeVerteces(), simpleCubeIndeces(), SHADERS_PATH + "colour3D");
         cube.shader().bind();
-        cube.shader().setUniformVec4("u_colour", glm::vec4{ colour, 1.0f });
+        cube.shader().setUniform("u_colour", glm::vec4{ colour, 1.0f });
         cube.transform().scale() = glm::vec3{ 0.05f };
         cube.transform().position() = position;
 

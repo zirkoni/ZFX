@@ -32,7 +32,7 @@ private:
 //#define CHANGE_COLOUR
 #if defined(CHANGE_COLOUR)
         m_cube.shader().bind();
-        m_cube.shader().setUniformVec4("u_colour", glm::vec4{ 0.0f, 0.5f, 0.0f, 1.0f });
+        m_cube.shader().setUniform("u_colour", glm::vec4{ 0.0f, 0.5f, 0.0f, 1.0f });
 #endif
     }
 

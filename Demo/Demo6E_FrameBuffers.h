@@ -30,7 +30,7 @@ public:
         m_spotLight->setDirection(m_camera.front());
 
         m_cube.shader().bind();
-        m_cube.shader().setUniformVec3("u_viewPosition", m_camera.position());
+        m_cube.shader().setUniform("u_viewPosition", m_camera.position());
         m_cube.draw(m_camera);
 
         for(auto& light : m_pointLights)
@@ -57,7 +57,7 @@ public:
             }
 
             m_screen.shader().bind();
-            m_screen.shader().setUniformInt("u_selected", m_activeEffect);
+            m_screen.shader().setUniform("u_selected", m_activeEffect);
         }
     }
 
@@ -83,7 +83,7 @@ protected:
 
         m_screen.load(vertices, indeces, SHADERS_PATH + "framebuffer");
         m_screen.shader().bind();
-        m_screen.shader().setUniformInt("u_screenTexture", 0);
+        m_screen.shader().setUniform("u_screenTexture", 0);
 
         m_buffer.attachTextureBuffer(ZFX::Window::width(), ZFX::Window::height());
         m_buffer.attachRenderBuffer(ZFX::Window::width(), ZFX::Window::height()); // For depth testing

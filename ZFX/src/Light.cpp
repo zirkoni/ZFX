@@ -13,17 +13,17 @@ void ZFX::Light::bind()
 
 void ZFX::Light::setAmbient(const glm::vec3& amb)
 {
-    m_shader.setUniformVec3(m_name + ".ambient", amb);
+    m_shader.setUniform(m_name + ".ambient", amb);
 }
 
 void ZFX::Light::setDiffuse(const glm::vec3& dif)
 {
-    m_shader.setUniformVec3(m_name + ".diffuse", dif);
+    m_shader.setUniform(m_name + ".diffuse", dif);
 }
 
 void ZFX::Light::setSpecular(const glm::vec3& spec)
 {
-    m_shader.setUniformVec3(m_name + ".specular", spec);
+    m_shader.setUniform(m_name + ".specular", spec);
 }
 
 ///////////////////////
@@ -33,7 +33,7 @@ ZFX::DirectionalLight::DirectionalLight(const std::string& name, Shader &shader)
 
 void ZFX::DirectionalLight::setDirection(const glm::vec3 &dir)
 {
-    m_shader.setUniformVec3(m_name + ".direction", dir);
+    m_shader.setUniform(m_name + ".direction", dir);
 }
 
 ///////////////////////
@@ -43,22 +43,22 @@ ZFX::PointLight::PointLight(const std::string& name, Shader &shader): Light{ nam
 
 void ZFX::PointLight::setPosition(const glm::vec3 &pos)
 {
-    m_shader.setUniformVec3(m_name + ".position", pos);
+    m_shader.setUniform(m_name + ".position", pos);
 }
 
 void ZFX::PointLight::setConstant(float c)
 {
-    m_shader.setUniformFloat(m_name + ".constant", c);
+    m_shader.setUniform(m_name + ".constant", c);
 }
 
 void ZFX::PointLight::setLinear(float l)
 {
-    m_shader.setUniformFloat(m_name + ".linear", l);
+    m_shader.setUniform(m_name + ".linear", l);
 }
 
 void ZFX::PointLight::setQuadratic(float q)
 {
-    m_shader.setUniformFloat(m_name + ".quadratic", q);
+    m_shader.setUniform(m_name + ".quadratic", q);
 }
 
 ///////////////////////
@@ -68,15 +68,15 @@ ZFX::SpotLight::SpotLight(const std::string& name, Shader &shader): PointLight{ 
 
 void ZFX::SpotLight::setDirection(const glm::vec3 &dir)
 {
-    m_shader.setUniformVec3(m_name + ".direction", dir);
+    m_shader.setUniform(m_name + ".direction", dir);
 }
 
 void ZFX::SpotLight::setCutOff(float c)
 {
-    m_shader.setUniformFloat(m_name + ".cutOff", c);
+    m_shader.setUniform(m_name + ".cutOff", c);
 }
 
 void ZFX::SpotLight::setOuterCutOff(float o)
 {
-    m_shader.setUniformFloat(m_name + ".outerCutOff", o);
+    m_shader.setUniform(m_name + ".outerCutOff", o);
 }

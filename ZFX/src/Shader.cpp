@@ -152,37 +152,37 @@ GLint ZFX::Shader::uniformLocation(const std::string& uniform) const
     return iter->second;
 }
 
-void ZFX::Shader::setUniformInt(const std::string& uniform, int value)
+void ZFX::Shader::setUniform(const std::string& uniform, int value)
 {
     GLint loc = uniformLocation(uniform);
     glUniform1i(loc, value);
 }
 
-void ZFX::Shader::setUniformFloat(const std::string& uniform, float value)
+void ZFX::Shader::setUniform(const std::string& uniform, float value)
 {
     GLint loc = uniformLocation(uniform);
     glUniform1f(loc, value);
 }
 
-void ZFX::Shader::setUniformVec2(const std::string& uniform, const glm::vec2& value)
+void ZFX::Shader::setUniform(const std::string& uniform, const glm::vec2& value)
 {
     GLint loc = uniformLocation(uniform);
     glUniform2f(loc, value.x, value.y);
 }
 
-void ZFX::Shader::setUniformVec3(const std::string& uniform, const glm::vec3& value)
+void ZFX::Shader::setUniform(const std::string& uniform, const glm::vec3& value)
 {
     GLint loc = uniformLocation(uniform);
     glUniform3f(loc, value.x, value.y, value.z);
 }
 
-void ZFX::Shader::setUniformVec4(const std::string& uniform, const glm::vec4& value)
+void ZFX::Shader::setUniform(const std::string& uniform, const glm::vec4& value)
 {
     GLint loc = uniformLocation(uniform);
     glUniform4f(loc, value.x, value.y, value.z, value.w);
 }
 
-void ZFX::Shader::setUniformMat4(const std::string& uniform, const glm::mat4& value)
+void ZFX::Shader::setUniform(const std::string& uniform, const glm::mat4& value)
 {
     GLint loc = uniformLocation(uniform);
     glUniformMatrix4fv(loc, 1, GL_FALSE, &value[0][0]);

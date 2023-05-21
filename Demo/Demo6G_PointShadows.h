@@ -46,10 +46,10 @@ public:
         m_simpleDepthShader->bind();
         for (unsigned int i = 0; i < 6; ++i)
         {
-            m_simpleDepthShader->setUniformMat4("u_shadowMatrices[" + std::to_string(i) + "]", shadowTransforms[i]);
+            m_simpleDepthShader->setUniform("u_shadowMatrices[" + std::to_string(i) + "]", shadowTransforms[i]);
         }
-        m_simpleDepthShader->setUniformFloat("u_farPlane", farPlane);
-        m_simpleDepthShader->setUniformVec3("u_lightPos", m_lightPos);
+        m_simpleDepthShader->setUniform("u_farPlane", farPlane);
+        m_simpleDepthShader->setUniform("u_lightPos", m_lightPos);
         renderDepth();
         m_depthBuffer.bindDefault();
 
@@ -58,10 +58,10 @@ public:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glm::mat4 viewProjection = m_camera.getViewProjection();
         m_shader->bind();
-        m_shader->setUniformMat4("u_viewProjection", viewProjection);
-        m_shader->setUniformVec3("u_viewPos", m_camera.position());
-        m_shader->setUniformVec3("u_lightPos", m_lightPos);
-        m_shader->setUniformFloat("u_farPlane", farPlane);
+        m_shader->setUniform("u_viewProjection", viewProjection);
+        m_shader->setUniform("u_viewPos", m_camera.position());
+        m_shader->setUniform("u_lightPos", m_lightPos);
+        m_shader->setUniform("u_farPlane", farPlane);
         glActiveTexture(GL_TEXTURE1);
         m_depthBuffer.bindDepthCubeMap();
         renderScene();
@@ -87,8 +87,8 @@ private:
         m_simpleDepthShader = std::make_unique<ZFX::Shader>(depthSrc);
 
         m_shader->bind();
-        m_shader->setUniformInt("u_diffuseTexture", 0);
-        m_shader->setUniformInt("u_depthMap", 1);
+        m_shader->setUniform("u_diffuseTexture", 0);
+        m_shader->setUniform("u_depthMap", 1);
 
         /* Validate after setting the above uniforms.
         *  This fixes error on Intel integrated graphics:
@@ -153,9 +153,9 @@ private:
         // note that we disable culling here since we render 'inside' the cube instead of the usual 'outside' which throws off the normal culling methods.
         glDisable(GL_CULL_FACE);
         // A small little hack to invert normals when drawing cube from the inside so lighting still works.
-        m_shader->setUniformInt("u_reverseNormals", 1);
+        m_shader->setUniform("u_reverseNormals", 1);
         m_room.draw(m_camera);
-        m_shader->setUniformInt("u_reverseNormals", 0); // and of course disable it
+        m_shader->setUniform("u_reverseNormals", 0); // and of course disable it
         glEnable(GL_CULL_FACE);
 
         m_cubes.draw(m_camera);

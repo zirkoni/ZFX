@@ -26,8 +26,8 @@ public:
         m_light.transform().position().x = sin(50 * m_counter);
 
         m_cube.shader().bind();
-        m_cube.shader().setUniformVec3("u_viewPosition", m_camera.position());
-        m_cube.shader().setUniformVec3("u_light.position", m_light.transform().position());
+        m_cube.shader().setUniform("u_viewPosition", m_camera.position());
+        m_cube.shader().setUniform("u_light.position", m_light.transform().position());
 
         m_light.draw(m_camera);
         m_cube.draw(m_camera);
@@ -41,17 +41,17 @@ private:
         m_cube.loadTexture(TEXTURES_PATH + "container_specular.png");
         
         m_cube.shader().bind();
-        m_cube.shader().setUniformVec3("u_material.ambient",  glm::vec3{ 0.25f, 0.25f, 0.25f });
-        m_cube.shader().setUniformInt("u_material.diffuse",  0);
-        m_cube.shader().setUniformInt("u_material.specular", 1);
-        m_cube.shader().setUniformFloat("u_material.shininess", 0.6f * 128);
+        m_cube.shader().setUniform("u_material.ambient",  glm::vec3{ 0.25f, 0.25f, 0.25f });
+        m_cube.shader().setUniform("u_material.diffuse",  0);
+        m_cube.shader().setUniform("u_material.specular", 1);
+        m_cube.shader().setUniform("u_material.shininess", 0.6f * 128);
     }
 
     void addLight()
     {
         m_light.load(simpleCubeVerteces(), simpleCubeIndeces(), SHADERS_PATH + "colour3D");
         m_light.shader().bind();
-        m_light.shader().setUniformVec4("u_colour", glm::vec4{ 1.0f });
+        m_light.shader().setUniform("u_colour", glm::vec4{ 1.0f });
         m_light.transform().scale() = glm::vec3{ 0.01f };
         m_light.transform().position().x = 0.0f;
         m_light.transform().position().y = 0.0f;
@@ -62,13 +62,13 @@ private:
     {
         // Different components have different intensities
         m_cube.shader().bind();
-        m_cube.shader().setUniformVec3("u_light.ambient",  colour * glm::vec3{ 0.2f });
-        m_cube.shader().setUniformVec3("u_light.diffuse",  colour * glm::vec3{ 0.5f });
-        m_cube.shader().setUniformVec3("u_light.specular", colour * glm::vec3{ 1.0f });
+        m_cube.shader().setUniform("u_light.ambient",  colour * glm::vec3{ 0.2f });
+        m_cube.shader().setUniform("u_light.diffuse",  colour * glm::vec3{ 0.5f });
+        m_cube.shader().setUniform("u_light.specular", colour * glm::vec3{ 1.0f });
 
         // Also set the light object colour
         m_light.shader().bind();
-        m_light.shader().setUniformVec4("u_colour", glm::vec4{ colour, 1.0f } );
+        m_light.shader().setUniform("u_colour", glm::vec4{ colour, 1.0f } );
     }
 
 private:

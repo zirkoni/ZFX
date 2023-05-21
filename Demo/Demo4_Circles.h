@@ -77,7 +77,7 @@ private:
 
         // Set colour
         m_shaderCircle.shader().bind();
-        m_shaderCircle.shader().setUniformVec4("u_colour", ZFX::GREEN);
+        m_shaderCircle.shader().setUniform("u_colour", ZFX::GREEN);
     }
 
 private:

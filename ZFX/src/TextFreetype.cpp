@@ -123,7 +123,7 @@ void ZFX::TextFreetype::drawText(std::string_view text, float x, float y, float 
         const glm::vec4& colour)
 {
     m_shader.bind();
-    m_shader.setUniformVec4("u_textColour", colour);
+    m_shader.setUniform("u_textColour", colour);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(m_vao);
 

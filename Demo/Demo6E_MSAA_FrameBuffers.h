@@ -28,7 +28,7 @@ public:
         m_spotLight->setDirection(m_camera.front());
 
         m_cube.shader().bind();
-        m_cube.shader().setUniformVec3("u_viewPosition", m_camera.position());
+        m_cube.shader().setUniform("u_viewPosition", m_camera.position());
         m_cube.draw(m_camera);
 
         for(auto& light : m_pointLights)
