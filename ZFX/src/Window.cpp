@@ -201,3 +201,47 @@ void ZFX::Window::setTitle(const std::string &title)
 {
     SDL_SetWindowTitle(m_window, title.c_str());
 }
+
+const std::vector<SDL_DisplayMode> ZFX::Window::getSupportedDisplayModes()
+{
+    std::vector<SDL_DisplayMode> modeList;
+    int displayIdx = SDL_GetWindowDisplayIndex(m_window);
+    int numModes = SDL_GetNumDisplayModes(displayIdx);
+
+    for(int i = 0; i < numModes; ++i)
+    {
+        SDL_DisplayMode dispMode;
+        if(!SDL_GetDisplayMode(displayIdx, i, &dispMode))
+        {
+            modeList.push_back(dispMode);
+        }
+    }
+
+    return modeList;
+}
+
+void ZFX::Window::resize(const SDL_DisplayMode& mode)
+{
+    const Uint32 flags = SDL_GetWindowFlags(m_window);
+    const bool isFullScreen = flags & SDL_WINDOW_FULLSCREEN;
+    const bool isBorderlessFullScreen = flags & SDL_WINDOW_FULLSCREEN_DESKTOP;
+
+    if(isFullScreen or isBorderlessFullScreen)
+    {
+        if(!SDL_SetWindowDisplayMode(m_window, &mode))
+        {
+            s_width = mode.w;
+            s_height = mode.h;
+            Camera::resize(aspectRatio());
+        } else
+        {
+            throw ZFX::Exception{ __FILE__, __LINE__, "SDL_SetWindowDisplayMode failed" };
+        }
+    } else
+    {
+        SDL_SetWindowSize(m_window, mode.w, mode.h);
+        s_width = mode.w;
+        s_height = mode.h;
+        Camera::resize(aspectRatio());
+    }
+}

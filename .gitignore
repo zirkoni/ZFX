@@ -363,3 +363,5 @@ zfx_demo
 
 run_with_mangohud.sh
 
+# Vim swap
+*.swp

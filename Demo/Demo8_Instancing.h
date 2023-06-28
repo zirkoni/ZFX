@@ -3,11 +3,16 @@
 #include <cmath>
 #include <vector>
 
+//#define LOW_PERF_GPU
 
 #if 1
 class Demo8 : public Demo
 {
-    static constexpr unsigned NUM_OBJECTS = 42000; // Can be increased much higher without dropping below 60 fps!
+#ifdef LOW_PERF_GPU
+    static constexpr unsigned NUM_OBJECTS = 5000;
+#else
+    static constexpr unsigned NUM_OBJECTS = 42000; // Can be increased much higher without dropping below 60 fps (GTX 1660 Super)!
+#endif
     static constexpr float RADIUS = 30.0f;
     static constexpr float OFFSET = 3.5f;
 
@@ -116,7 +121,11 @@ private:
 #else // Each cube has its own draw call => slow.
 class Demo8 : public Demo
 {
+#ifdef LOW_PERF_GPU
+    static constexpr unsigned NUM_OBJECTS = 5000;
+#else
     static constexpr unsigned NUM_OBJECTS = 42000; // Higher than ~this not reaching 60fps anymore (GTX 1660 Super)
+#endif
 
     struct CubeInstance
     {

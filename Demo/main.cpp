@@ -34,7 +34,7 @@ void addDemos(DemoList& demos, ZFX::Camera& camera)
     demos.push_back(std::make_unique<Demo6E_MSAA>(camera));
     demos.push_back(std::make_unique<Demo6F>(camera));
     demos.push_back(std::make_unique<Demo6G>(camera));
-    demos.push_back(std::make_unique<Demo7>(camera));
+//    demos.push_back(std::make_unique<Demo7>(camera)); // Very slow to load on Intel integrated GPU/mobile CPU! TODO: fix
     demos.push_back(std::make_unique<Demo8>(camera));
 }
 

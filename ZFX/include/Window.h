@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 
@@ -47,6 +48,8 @@ namespace ZFX
         static uint32_t height() { return s_height; }
 
         void toggleFullscreen();
+        const std::vector<SDL_DisplayMode> getSupportedDisplayModes();
+        void resize(const SDL_DisplayMode& mode);
 
     private:
         void setGlAttributes(const Options& options);
