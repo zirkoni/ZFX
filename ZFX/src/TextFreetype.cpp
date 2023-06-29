@@ -27,11 +27,7 @@ const std::string FRAGMENT_SHADER =
 ZFX::TextFreetype::TextFreetype(const std::string& font) :
     m_vao{ 0 }, m_vbo{ 0 }, m_shader{ {VERTEX_SHADER, FRAGMENT_SHADER, "", false} }
 {
-    glm::mat4 transform = glm::ortho(0.0f, static_cast<float>(Window::width()), 0.0f,
-            static_cast<float>(Window::height()));
-
-    m_shader.bind();
-    m_shader.update(transform);
+    handleWindowResize(Window::width(), Window::height());
 
     init(font);
 
@@ -99,8 +95,8 @@ void ZFX::TextFreetype::loadCharacters(const FT_Face& face, uint32_t numCharacte
 
         // To prevent certain artifacts when a character is not rendered exactly on pixel boundaries,
         // we should clamp the texture at the edges, and enable linear interpolation
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -117,6 +113,15 @@ void ZFX::TextFreetype::loadCharacters(const FT_Face& face, uint32_t numCharacte
     }
 
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void ZFX::TextFreetype::handleWindowResize(uint32_t newWidth, uint32_t newHeight)
+{
+    glm::mat4 transform = glm::ortho(0.0f, static_cast<float>(newWidth), 0.0f,
+            static_cast<float>(newHeight));
+
+    m_shader.bind();
+    m_shader.update(transform);
 }
 
 void ZFX::TextFreetype::drawText(std::string_view text, float x, float y, float scale,
