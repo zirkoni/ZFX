@@ -48,6 +48,7 @@ namespace ZFX
         static uint32_t height() { return s_height; }
 
         void toggleFullscreen();
+        SDL_DisplayMode getCurrentDisplayMode();
         const std::vector<SDL_DisplayMode> getSupportedDisplayModes();
         void resize(const SDL_DisplayMode& mode);
 

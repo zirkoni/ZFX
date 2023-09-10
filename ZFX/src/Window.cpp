@@ -202,6 +202,17 @@ void ZFX::Window::setTitle(const std::string &title)
     SDL_SetWindowTitle(m_window, title.c_str());
 }
 
+SDL_DisplayMode ZFX::Window::getCurrentDisplayMode()
+{
+    SDL_DisplayMode mode;
+    if(SDL_GetWindowDisplayMode(m_window, &mode) != 0)
+    {
+        throw ZFX::Exception{__FILE__, __LINE__, "SDL_GetWindowDisplayMode failed"};
+    }
+
+    return mode;
+}
+
 const std::vector<SDL_DisplayMode> ZFX::Window::getSupportedDisplayModes()
 {
     std::vector<SDL_DisplayMode> modeList;
