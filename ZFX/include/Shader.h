@@ -41,12 +41,18 @@ namespace ZFX
         GLuint programId() const { return m_program; }
         GLint uniformLocation(const std::string& uniform) const;
 
+        /* These set uniform based on the name that was saved in the Shader CTOR.
+         * So the name must match exactly, i.e. "u_myUniform[1]" = value */
         void setUniform(const std::string& uniform, int value);
         void setUniform(const std::string& uniform, float value);
         void setUniform(const std::string& uniform, const glm::vec2& value);
         void setUniform(const std::string& uniform, const glm::vec3& value);
         void setUniform(const std::string& uniform, const glm::vec4& value);
         void setUniform(const std::string& uniform, const glm::mat4& value);
+
+        /* These can be used to set entire array data, i.e. "u_myUniform" => u_myUniform[i] = values[i] */
+        void setUniformArray(const std::string& uniform, const std::vector<int>& values, int numValues);
+        void setUniformArray(const std::string& uniform, const std::vector<glm::mat4>& values, int numValues);
 
     protected:
         void compile(bool validate);

@@ -5,29 +5,54 @@
 
 const std::string VERTEX_SHADER =
     "#version 330 core\n"
-    "layout (location = 0) in vec4 v_in_vertex; // xy = vec2 position, zw= vec2 texture coordinates\n"
-    "out vec2 v_out_texCoord;"
-    "uniform mat4 u_model;"
-    "void main() {"
-    "    gl_Position = u_model * vec4(v_in_vertex.xy, 0.0, 1.0);"
-    "    v_out_texCoord = v_in_vertex.zw;"
+    "layout (location = 0) in vec2 v_in_vertex; // vec2 position\n"
+    "out V_OUT\n"
+    "{\n"
+    "    vec2 texCoord;\n"
+    "    flat int index;\n"
+    "} v_out;\n"
+    "uniform mat4 u_transforms[" + std::to_string(ZFX::TextFreetype::U_ARRAY_LIMIT) + "];\n"
+    "uniform mat4 u_viewProjection;\n"
+    "void main() {\n"
+    "    gl_Position = u_viewProjection * u_transforms[gl_InstanceID] * vec4(v_in_vertex.xy, 0.0, 1.0);\n"
+    "    v_out.index = gl_InstanceID;\n"
+    "    v_out.texCoord.x = v_in_vertex.x;\n"
+    "    v_out.texCoord.y = 1.0f - v_in_vertex.y;\n"
     "}";
 
 const std::string FRAGMENT_SHADER =
     "#version 330 core\n"
-    "in vec2 v_out_texCoord;"
-    "out vec4 f_out_colour;"
-    "uniform sampler2D u_diffuse;"
-    "uniform vec4 u_textColour;"
-    "void main() {"
-    "    vec4 sampled = vec4(1.0, 1.0, 1.0, texture(u_diffuse, v_out_texCoord).r);"
-    "    f_out_colour = u_textColour * sampled;"
+    "in V_OUT\n"
+    "{\n"
+    "    vec2 texCoord;\n"
+    "    flat int index;\n"
+    "} f_in;\n"
+    "out vec4 f_out_colour;\n"
+    "uniform sampler2DArray u_diffuse;\n"
+    "uniform int u_charMap[" + std::to_string(ZFX::TextFreetype::U_ARRAY_LIMIT) + "];\n"
+    "uniform vec4 u_textColour;\n"
+    "void main() {\n"
+    "    vec4 sampled = vec4(1.0, 1.0, 1.0, texture(u_diffuse, vec3(f_in.texCoord.xy, u_charMap[f_in.index])).r);\n"
+    "    f_out_colour = u_textColour * sampled;\n"
     "}";
+
+GLfloat ZFX::TextFreetype::s_vertexData[] =
+{
+    0.0f, 1.0f,
+    0.0f, 0.0f,
+    1.0f, 1.0f,
+    1.0f, 0.0f
+};
 
 ZFX::TextFreetype::TextFreetype(const std::string& font) :
     m_vao{ 0 }, m_vbo{ 0 }, m_shader{ {VERTEX_SHADER, FRAGMENT_SHADER, "", false} }
 {
     handleWindowResize(Window::width(), Window::height());
+
+    glGenTextures(1, &m_textureArray);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, m_textureArray);
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_R8, TEXTURE_SIZE, TEXTURE_SIZE, 128, 0, GL_RED, GL_UNSIGNED_BYTE, 0);
 
     init(font);
 
@@ -37,15 +62,19 @@ ZFX::TextFreetype::TextFreetype(const std::string& font) :
     glGenBuffers(1, &m_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 
-    // We need 6 verteces/character (2 triangles)
-    // For each vertex we have 2D position and texture coordinates = 4 floats
-    glBufferData(GL_ARRAY_BUFFER, 6 * 4 * sizeof(float), NULL, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(s_vertexData), s_vertexData, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+
+    for(int i = 0; i < U_ARRAY_LIMIT; ++i)
+    {
+        m_transforms.push_back(glm::mat4{1.0f});
+        m_charMap.push_back(0);
+    }
 }
 
 ZFX::TextFreetype::~TextFreetype()
@@ -68,8 +97,9 @@ void ZFX::TextFreetype::init(const std::string& font)
         throw ZFX::Exception{ __FILE__, __LINE__, "FT_New_Face failed, font: " + font };
     }
 
-    FT_Set_Pixel_Sizes(face, 0, 48);
+    FT_Set_Pixel_Sizes(face, TEXTURE_SIZE, TEXTURE_SIZE);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
     loadCharacters(face, 128);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
@@ -87,23 +117,21 @@ void ZFX::TextFreetype::loadCharacters(const FT_Face& face, uint32_t numCharacte
             continue;
         }
 
-        GLuint texture;
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, face->glyph->bitmap.width, face->glyph->bitmap.rows, 0,
-            GL_RED, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
+        glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, int(c),
+                        face->glyph->bitmap.width, face->glyph->bitmap.rows, 1, GL_RED,
+                        GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
 
         // To prevent certain artifacts when a character is not rendered exactly on pixel boundaries,
         // we should clamp the texture at the edges, and enable linear interpolation
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         // Store character for later use
         Character character =
         {
-            texture,
+            int(c),
             glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
             glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
             static_cast<GLuint>(face->glyph->advance.x)
@@ -112,7 +140,7 @@ void ZFX::TextFreetype::loadCharacters(const FT_Face& face, uint32_t numCharacte
         m_characters.insert(std::pair<char, Character>(c, character));
     }
 
-    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
 }
 
 void ZFX::TextFreetype::handleWindowResize(uint32_t newWidth, uint32_t newHeight)
@@ -121,66 +149,71 @@ void ZFX::TextFreetype::handleWindowResize(uint32_t newWidth, uint32_t newHeight
             static_cast<float>(newHeight));
 
     m_shader.bind();
-    m_shader.update(transform);
+    m_shader.setUniform("u_viewProjection", transform);
 }
 
 void ZFX::TextFreetype::drawText(std::string_view text, float x, float y, float scale,
         const glm::vec4& colour)
 {
+    float copyX = x;
+    scale = scale * 48.0f / TEXTURE_SIZE; // TODO: remove
     m_shader.bind();
     m_shader.setUniform("u_textColour", colour);
     glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, m_textureArray);
     glBindVertexArray(m_vao);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glDisable(GL_DEPTH_TEST);
 
-    for (const auto c : text)
+    int index = 0;
+    for (const auto& c : text)
     {
         const Character& ch = m_characters[c];
 
-        float xpos = x + ch.bearing.x * scale;
-        float ypos = y - (ch.size.y - ch.bearing.y) * scale;
-
-        float w = ch.size.x * scale;
-        float h = ch.size.y * scale;
-
-        // update VBO for each character, CCW
-#if 1
-        float vertices[6][4] =
+        if(c == '\n')
         {
-            { xpos,     ypos + h,   0.0f, 0.0f },
-            { xpos,     ypos,       0.0f, 1.0f },
-            { xpos + w, ypos,       1.0f, 1.0f },
-
-            { xpos,     ypos + h,   0.0f, 0.0f },
-            { xpos + w, ypos,       1.0f, 1.0f },
-            { xpos + w, ypos + h,   1.0f, 0.0f }
-        };
-#else
-        // CW
-        float vertices[6][4] =
+            y -= ch.size.y *1.3f * scale;
+            x = copyX;
+        } else if(c == ' ')
         {
-            { xpos,     ypos,       0.0f, 1.0f },
-            { xpos,     ypos + h,   0.0f, 0.0f },
-            { xpos + w, ypos,       1.0f, 1.0f },
+            x += (ch.advance >> 6) * scale;
+        } else
+        {
+            float xpos = x + ch.bearing.x * scale;
+            float ypos = y - (TEXTURE_SIZE - ch.bearing.y) * scale;
+            float w = TEXTURE_SIZE * scale;
+            float h = TEXTURE_SIZE * scale;
 
-            { xpos,     ypos + h,   0.0f, 0.0f },
-            { xpos + w, ypos + h,   1.0f, 0.0f },
-            { xpos + w, ypos,       1.0f, 1.0f }
-        };
-#endif
+            m_transforms.at(index) = glm::translate(glm::mat4{1.0f}, glm::vec3{xpos, ypos, 0.0f})
+                            * glm::scale(glm::mat4{1.0f}, glm::vec3{w, h, 0.0f});
+            m_charMap.at(index) = ch.textureID;
 
-        // render glyph texture over quad
-        glBindTexture(GL_TEXTURE_2D, ch.textureID);
-        // update content of VBO memory
-        glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // be sure to use glBufferSubData and not glBufferData
+            x += (ch.advance >> 6) * scale;
+            ++index;
 
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        // render quad
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-        x += (ch.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
+            if(index == U_ARRAY_LIMIT - 1)
+            {
+                renderCall(index);
+                index = 0;
+            }
+        }
     }
 
+    renderCall(index);
+
+    glEnable(GL_DEPTH_TEST); // TODO: Only enable if neabled in Window options
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
 }
+
+void ZFX::TextFreetype::renderCall(int length)
+{
+    if(length > 0)
+    {
+        m_shader.setUniformArray("u_transforms", m_transforms, length);
+        m_shader.setUniformArray("u_charMap", m_charMap, length);
+        glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, length);
+    }
+}
+

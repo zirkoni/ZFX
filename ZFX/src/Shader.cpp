@@ -107,14 +107,20 @@ void ZFX::Shader::saveSingleUniform(const GLint BUF_SIZE, GLuint idx)
     if(isArrayUniform)
     {
         size_t idx = 1;
-
-        do
+        while(true)
         {
             uniformName = uniformName.substr(0, uniformName.find('[')) + "[" + std::to_string(idx) + "]";
             uniformLocation = glGetUniformLocation(m_program, uniformName.c_str());
-            m_uniforms.insert( { uniformName, uniformLocation } );
-            ++idx;
-        } while(uniformLocation != UNIFORM_NOT_FOUND);
+
+            if(uniformLocation != UNIFORM_NOT_FOUND)
+            {
+                m_uniforms.insert( { uniformName, uniformLocation } );
+                ++idx;
+            } else
+            {
+                break;
+            }
+        }
     }
 }
 
@@ -186,6 +192,30 @@ void ZFX::Shader::setUniform(const std::string& uniform, const glm::mat4& value)
 {
     GLint loc = uniformLocation(uniform);
     glUniformMatrix4fv(loc, 1, GL_FALSE, &value[0][0]);
+}
+
+void ZFX::Shader::setUniformArray(const std::string& uniform, const std::vector<int>& values, int numValues)
+{
+    GLint loc = glGetUniformLocation(m_program, uniform.c_str());
+
+    if(loc == UNIFORM_NOT_FOUND)
+    {
+        throw ZFX::Exception{ __FILE__, __LINE__, "glGetUniformLocation failed to get uniform: " + uniform };
+    }
+
+    glUniform1iv(loc, numValues, &values[0]);
+}
+
+void ZFX::Shader::setUniformArray(const std::string& uniform, const std::vector<glm::mat4>& values, int numValues)
+{
+    GLint loc = glGetUniformLocation(m_program, uniform.c_str());
+
+    if(loc == UNIFORM_NOT_FOUND)
+    {
+        throw ZFX::Exception{ __FILE__, __LINE__, "glGetUniformLocation failed to get uniform: " + uniform };
+    }
+
+    glUniformMatrix4fv(loc, numValues, GL_FALSE, &values[0][0][0]);
 }
 
 void ZFX::Shader::checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg,
