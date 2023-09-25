@@ -29,13 +29,13 @@ public:
             "Hello World!",                          // text
             ZFX::Window::width() / 2.0f - 150.0f,    // x-coordinate (pixel coordinates)
             ZFX::Window::height() - 50.0f,           // y-coordinate (pixel coordinates)
-            1.0f,                                    // scale
+            0.7f,                                    // scale
             glm::vec4(0.5f, 0.8f, 0.2f, 0.5f));      // text colour
 
         float yCoord = ZFX::Window::height() - 100.0f;
         for(const auto& str : m_strings)
         {
-            m_textRenderer.drawText(str, 20.0f, yCoord, 0.5f, ZFX::YELLOW);
+            m_textRenderer.drawText(str, 20.0f, yCoord, 0.4f, ZFX::YELLOW);
             yCoord -= 30.0f;
         }
 #else // simple performance test

@@ -156,7 +156,6 @@ void ZFX::TextFreetype::drawText(std::string_view text, float x, float y, float 
         const glm::vec4& colour)
 {
     float copyX = x;
-    scale = scale * 48.0f / TEXTURE_SIZE; // TODO: remove
     m_shader.bind();
     m_shader.setUniform("u_textColour", colour);
     glActiveTexture(GL_TEXTURE0);
