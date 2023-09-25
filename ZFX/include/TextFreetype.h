@@ -19,6 +19,8 @@ namespace ZFX
         };
 
         static constexpr unsigned TEXTURE_SIZE = 64;
+        static constexpr uint8_t FIRST_ASCII_CODE = ' ';
+        static constexpr uint8_t LAST_ASCII_CODE = '~';
 
     public:
         static constexpr int U_ARRAY_LIMIT = 126;
@@ -26,18 +28,19 @@ namespace ZFX
         TextFreetype(const std::string& font);
         ~TextFreetype();
 
-        void drawText(std::string_view text, float x, float y, float scale, const glm::vec4& colour);
+        void drawText(std::string_view text, float x, float y, float scale, const glm::vec4& colour, float lineSpacing = 1.0f);
         void handleWindowResize(uint32_t newWidth, uint32_t newHeight);
 
     private:
         void init(const std::string& font);
-        void loadCharacters(const FT_Face& face, uint32_t numCharacters);
+        void loadCharacters(const FT_Face& face);
         void renderCall(int length);
 
     private:
         GLuint m_vao;
         GLuint m_vbo;
         GLuint m_textureArray;
+        int m_ySizeMax;
 
         Shader m_shader;
         std::map<char, Character> m_characters;

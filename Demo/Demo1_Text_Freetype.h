@@ -11,15 +11,14 @@ public:
     Demo1(ZFX::Camera& camera) : Demo{ camera, "Demo1 - Rendering Text" },
         m_textRenderer{ FONT }
     {
-        m_strings.push_back("<Space> : Next demo");
-        m_strings.push_back("<Arrow keys> : Move camera");
-        m_strings.push_back("<C> : Toggle background colour (black/white)");
-        m_strings.push_back("<D> : Next scene (only frame buffers demo)");
-        m_strings.push_back("<W> : Toggle wireframe mode");
-        m_strings.push_back("<Z> : Reset zoom");
-        m_strings.push_back("");
-        m_strings.push_back("Mouse wheel : zoom in/out");
-        m_strings.push_back("Mouse middle button + mouse movement : turn camera");
+        m_helpText = "<Space> : Next demo\n"
+                     "<Arrow keys> : Move camera\n"
+                     "<C> : Toggle background colour (black/white)\n"
+                     "<D> : Next scene (only frame buffers demo)\n"
+                     "<W> : Toggle wireframe mode\n"
+                     "<Z> : Reset zoom\n\n"
+                     "Mouse wheel : zoom in/out\n"
+                     "Mouse middle button + mouse movement : turn camera";
     }
 
     void draw() override
@@ -33,11 +32,7 @@ public:
             glm::vec4(0.5f, 0.8f, 0.2f, 0.5f));      // text colour
 
         float yCoord = ZFX::Window::height() - 100.0f;
-        for(const auto& str : m_strings)
-        {
-            m_textRenderer.drawText(str, 20.0f, yCoord, 0.4f, ZFX::YELLOW);
-            yCoord -= 30.0f;
-        }
+        m_textRenderer.drawText(m_helpText, 20.0f, yCoord, 0.4f, ZFX::YELLOW);
 #else // simple performance test
         m_textRenderer.drawText(
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac justo non elit\n"
@@ -64,11 +59,11 @@ public:
                 "lacinia. Pellentesque dolor mauris, commodo et sapien condimentum, fermentum ornare\n"
                 "tellus. Nullam dictum elit vitae congue maximus. Duis convallis ultrices ante at\n"
                 "pretium. Nam ullamcorper nisi et mi tempor, et semper tortor sollicitudin.\n",
-            0.0f, ZFX::Window::height() - 40.0f, 1.0f, ZFX::YELLOW);
+            0.0f, ZFX::Window::height() - 40.0f, 0.7f, ZFX::YELLOW);
 #endif
     }
 
 private:
     ZFX::TextFreetype m_textRenderer;
-    std::vector<std::string> m_strings;
+    std::string m_helpText;
 };

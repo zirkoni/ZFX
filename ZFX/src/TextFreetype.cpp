@@ -44,8 +44,9 @@ GLfloat ZFX::TextFreetype::s_vertexData[] =
     1.0f, 0.0f
 };
 
+
 ZFX::TextFreetype::TextFreetype(const std::string& font) :
-    m_vao{ 0 }, m_vbo{ 0 }, m_shader{ {VERTEX_SHADER, FRAGMENT_SHADER, "", false} }
+    m_vao{ 0 }, m_vbo{ 0 }, m_ySizeMax{ 0 }, m_shader{ {VERTEX_SHADER, FRAGMENT_SHADER, "", false} }
 {
     handleWindowResize(Window::width(), Window::height());
 
@@ -100,16 +101,16 @@ void ZFX::TextFreetype::init(const std::string& font)
     FT_Set_Pixel_Sizes(face, TEXTURE_SIZE, TEXTURE_SIZE);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    loadCharacters(face, 128);
+    loadCharacters(face);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
     FT_Done_Face(face);
     FT_Done_FreeType(ftLib);
 }
 
-void ZFX::TextFreetype::loadCharacters(const FT_Face& face, uint32_t numCharacters)
+void ZFX::TextFreetype::loadCharacters(const FT_Face& face)
 {
-    for (char c = 0; c < numCharacters; ++c)
+    for (char c = FIRST_ASCII_CODE; c <= LAST_ASCII_CODE; ++c)
     {
         if (FT_Load_Char(face, c, FT_LOAD_RENDER))
         {
@@ -137,6 +138,11 @@ void ZFX::TextFreetype::loadCharacters(const FT_Face& face, uint32_t numCharacte
             static_cast<GLuint>(face->glyph->advance.x)
         };
 
+        if(m_ySizeMax < character.size.y)
+        {
+            m_ySizeMax = character.size.y;
+        }
+
         m_characters.insert(std::pair<char, Character>(c, character));
     }
 
@@ -153,9 +159,8 @@ void ZFX::TextFreetype::handleWindowResize(uint32_t newWidth, uint32_t newHeight
 }
 
 void ZFX::TextFreetype::drawText(std::string_view text, float x, float y, float scale,
-        const glm::vec4& colour)
+        const glm::vec4& colour, float lineSpacing)
 {
-    float copyX = x;
     m_shader.bind();
     m_shader.setUniform("u_textColour", colour);
     glActiveTexture(GL_TEXTURE0);
@@ -164,30 +169,40 @@ void ZFX::TextFreetype::drawText(std::string_view text, float x, float y, float 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glDisable(GL_DEPTH_TEST);
 
+    const float copyX = x;
     int index = 0;
     for (const auto& c : text)
     {
-        const Character& ch = m_characters[c];
-
+        // New line is not in m_characters so handle it separately
         if(c == '\n')
         {
-            y -= ch.size.y *1.3f * scale;
+            y -= m_ySizeMax * lineSpacing * scale;
             x = copyX;
-        } else if(c == ' ')
+            continue;
+        }
+
+        auto chIter = m_characters.find(c);
+        if(chIter == m_characters.end())
         {
-            x += (ch.advance >> 6) * scale;
+            std::cerr << "Non-rendered character detected" << std::endl;
+            continue;
+        }
+
+        if(c == ' ')
+        {
+            x += (chIter->second.advance >> 6) * scale;
         } else
         {
-            float xpos = x + ch.bearing.x * scale;
-            float ypos = y - (TEXTURE_SIZE - ch.bearing.y) * scale;
+            float xpos = x + chIter->second.bearing.x * scale;
+            float ypos = y - (TEXTURE_SIZE - chIter->second.bearing.y) * scale;
             float w = TEXTURE_SIZE * scale;
             float h = TEXTURE_SIZE * scale;
 
             m_transforms.at(index) = glm::translate(glm::mat4{1.0f}, glm::vec3{xpos, ypos, 0.0f})
                             * glm::scale(glm::mat4{1.0f}, glm::vec3{w, h, 0.0f});
-            m_charMap.at(index) = ch.textureID;
+            m_charMap.at(index) = chIter->second.textureID;
 
-            x += (ch.advance >> 6) * scale;
+            x += (chIter->second.advance >> 6) * scale;
             ++index;
 
             if(index == U_ARRAY_LIMIT - 1)
