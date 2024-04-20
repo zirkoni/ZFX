@@ -59,7 +59,7 @@ public:
                 "lacinia. Pellentesque dolor mauris, commodo et sapien condimentum, fermentum ornare\n"
                 "tellus. Nullam dictum elit vitae congue maximus. Duis convallis ultrices ante at\n"
                 "pretium. Nam ullamcorper nisi et mi tempor, et semper tortor sollicitudin.\n",
-            0.0f, ZFX::Window::height() - 40.0f, 0.7f, ZFX::YELLOW);
+            0.0f, ZFX::Window::height() - 40.0f, 0.3f, ZFX::YELLOW);
 #endif
     }
 
