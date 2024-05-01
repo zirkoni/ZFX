@@ -1,3 +1,5 @@
+#if !defined(ZFX_NO_OBJECT_LOADER)
+
 #include "ObjLoader.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/hash.hpp"
@@ -162,3 +164,4 @@ void ZFX::ObjectLoader::loadObject(tinyobj::ObjReader& reader)
 
     m_verteces = new Verteces{data, attributes};
 }
+#endif
