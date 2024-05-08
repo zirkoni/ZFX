@@ -37,7 +37,7 @@ ZFX::Window::Window(const Options& options) :
     setGlAttributes(options);
 
     m_window = SDL_CreateWindow(options.title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        s_width, s_height, SDL_WINDOW_OPENGL);
+        s_width, s_height, windowFlags(options));
 
     if (nullptr == m_window)
     {
@@ -71,6 +71,44 @@ ZFX::Window::~Window()
     SDL_DestroyWindow(m_window);
 
     SDL_Quit();
+}
+
+Uint32 ZFX::Window::windowFlags(const Options& options)
+{
+    Uint32 flags = SDL_WINDOW_OPENGL; // Always have OpenGL
+
+    if(options.fullscreen)
+    {
+        flags |= SDL_WINDOW_FULLSCREEN;
+    } else if(options.fullscreenDesktop)
+    {
+        flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+    }
+
+    if(options.borderless)
+    {
+        flags |= SDL_WINDOW_BORDERLESS;
+    }
+
+    if(options.resizable)
+    {
+        flags |= SDL_WINDOW_RESIZABLE;
+
+        if(options.minimized)
+        {
+            flags |= SDL_WINDOW_MINIMIZED; // Seems to have no effect
+        } else if(options.maximized)
+        {
+            flags |= SDL_WINDOW_MAXIMIZED;
+        }
+    }
+
+    if(options.inputGrabbed)
+    {
+        flags |= SDL_WINDOW_INPUT_GRABBED;
+    }
+
+    return flags;
 }
 
 void ZFX::Window::setGlAttributes(const Options& options)
@@ -233,6 +271,7 @@ const std::vector<SDL_DisplayMode> ZFX::Window::getSupportedDisplayModes()
 
 void ZFX::Window::resize(const SDL_DisplayMode& mode)
 {
+    // This is for resizing by the program
     const Uint32 flags = SDL_GetWindowFlags(m_window);
     const bool isFullScreen = flags & SDL_WINDOW_FULLSCREEN;
     const bool isBorderlessFullScreen = flags & SDL_WINDOW_FULLSCREEN_DESKTOP;
@@ -255,4 +294,16 @@ void ZFX::Window::resize(const SDL_DisplayMode& mode)
         s_height = mode.h;
         Camera::resize(aspectRatio());
     }
+}
+
+void ZFX::Window::userResized()
+{
+    // This is for resizing by the user (e.g. window maximized or resized by dragging the border)
+    int w = s_width;
+    int h = s_height;
+    SDL_GL_GetDrawableSize(m_window, &w, &h);
+
+    s_width = static_cast<uint32_t>(w);
+    s_height = static_cast<uint32_t>(h);
+    Camera::resize(aspectRatio());
 }

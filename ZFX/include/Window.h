@@ -12,10 +12,20 @@ namespace ZFX
 
         struct Options
         {
+            // Window
             uint32_t width = 800;
             uint32_t height = 600;
             std::string title = "";
 
+            bool fullscreen = false;
+            bool fullscreenDesktop = false;
+            bool borderless = false;
+            bool resizable = false;
+            bool minimized = false;
+            bool maximized = false;
+            bool inputGrabbed = false;
+
+            // OpenGL
             bool enableVsync = true;
             bool enableDepthTest = true;
             bool enableStencilTest = false;
@@ -51,12 +61,13 @@ namespace ZFX
         SDL_DisplayMode getCurrentDisplayMode();
         const std::vector<SDL_DisplayMode> getSupportedDisplayModes();
         void resize(const SDL_DisplayMode& mode);
+        void userResized();
 
     private:
         void setGlAttributes(const Options& options);
         void setGlOptions(const Options& options);
+        Uint32 windowFlags(const Options& options);
 
-    private:
         SDL_Window* m_window;
         SDL_GLContext m_glContext;
 
