@@ -195,8 +195,6 @@ int main(int argc, char* argv[])
         wOpts.enableGlDebug = true;
 
         ZFX::Window window{ wOpts };
-        window.clear();
-        window.update(); // Show black screen while loading...
         mainLoop(window);
     } catch (const ZFX::Exception& e)
     {

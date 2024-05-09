@@ -12,6 +12,9 @@ namespace ZFX
          * so you'd need a 2nd intermediate non-MSAA framebuffer for that.
          */
         FrameBuffer(int numMSAASamples = 0);
+        ~FrameBuffer();
+
+        void reset(int numMSAASamples);
 
         void bind();
         static void bindDefault();
@@ -33,11 +36,17 @@ namespace ZFX
         GLuint fbo() const { return m_fbo; }
 
     private:
+        void deleteResources();
+
         GLuint m_fbo;
         // TODO: can be only 1 type
         GLuint m_textureBuffer;
         GLuint m_rbo;
         GLuint m_depthBuffer;
+
+        bool m_hasTextureBuffer = false;
+        bool m_hasRbo = false;
+        bool m_hasDepthBuffer = false;
 
         int m_numMSAASamples;
     };
