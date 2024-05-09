@@ -294,6 +294,8 @@ void ZFX::Window::resize(const SDL_DisplayMode& mode)
         s_height = mode.h;
         Camera::resize(aspectRatio());
     }
+
+    glViewport(0, 0, s_width, s_height);
 }
 
 void ZFX::Window::userResized()
@@ -306,4 +308,5 @@ void ZFX::Window::userResized()
     s_width = static_cast<uint32_t>(w);
     s_height = static_cast<uint32_t>(h);
     Camera::resize(aspectRatio());
+    glViewport(0, 0, s_width, s_height);
 }
