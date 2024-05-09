@@ -20,16 +20,19 @@ void ZFX::FrameBuffer::deleteResources()
     if(m_hasTextureBuffer)
     {
         glDeleteTextures(1, &m_textureBuffer);
+        m_hasTextureBuffer = false;
     }
 
     if(m_hasRbo)
     {
         glDeleteRenderbuffers(1, &m_rbo);
+        m_hasRbo = false;
     }
 
     if(m_hasDepthBuffer)
     {
         glDeleteTextures(1, &m_depthBuffer);
+        m_hasDepthBuffer = false;
     }
 
     glDeleteFramebuffers(1, &m_fbo);
