@@ -151,11 +151,11 @@ void ZFX::TextFreetype::loadCharacters(const FT_Face& face)
 
 void ZFX::TextFreetype::handleWindowResize(uint32_t newWidth, uint32_t newHeight)
 {
-    glm::mat4 transform = glm::ortho(0.0f, static_cast<float>(newWidth), 0.0f,
-            static_cast<float>(newHeight));
+    // Set aspect ratio so that text is not distorted
+    glm::mat4 viewProjection = glm::ortho(0.0f, static_cast<float>(newWidth), 0.0f, static_cast<float>(newHeight));
 
     m_shader.bind();
-    m_shader.setUniform("u_viewProjection", transform);
+    m_shader.setUniform("u_viewProjection", viewProjection);
 }
 
 void ZFX::TextFreetype::drawText(std::string_view text, float x, float y, float scale,
@@ -205,7 +205,7 @@ void ZFX::TextFreetype::drawText(std::string_view text, float x, float y, float 
             x += (chIter->second.advance >> 6) * scale;
             ++index;
 
-            if(index == U_ARRAY_LIMIT - 1)
+            if(index == U_ARRAY_LIMIT)
             {
                 renderCall(index);
                 index = 0;
