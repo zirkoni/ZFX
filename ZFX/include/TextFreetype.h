@@ -46,8 +46,6 @@ namespace ZFX
         std::map<char, Character> m_characters;
         std::vector<glm::mat4> m_transforms;
         std::vector<int> m_charMap;
-
-        static GLfloat s_vertexData[];
     };
 }
 

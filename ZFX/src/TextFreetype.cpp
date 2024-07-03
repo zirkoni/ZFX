@@ -36,14 +36,6 @@ const std::string FRAGMENT_SHADER =
     "    f_out_colour = u_textColour * sampled;\n"
     "}";
 
-GLfloat ZFX::TextFreetype::s_vertexData[] =
-{
-    0.0f, 1.0f,
-    0.0f, 0.0f,
-    1.0f, 1.0f,
-    1.0f, 0.0f
-};
-
 
 ZFX::TextFreetype::TextFreetype(const std::string& font) :
     m_vao{ 0 }, m_vbo{ 0 }, m_ySizeMax{ 0 }, m_shader{ {VERTEX_SHADER, FRAGMENT_SHADER, "", false} }
@@ -63,7 +55,15 @@ ZFX::TextFreetype::TextFreetype(const std::string& font) :
     glGenBuffers(1, &m_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 
-    glBufferData(GL_ARRAY_BUFFER, sizeof(s_vertexData), s_vertexData, GL_STATIC_DRAW);
+    constexpr GLfloat vertexData[] =
+    {
+        0.0f, 1.0f,
+        0.0f, 0.0f,
+        1.0f, 1.0f,
+        1.0f, 0.0f
+    };
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
@@ -200,6 +200,17 @@ void ZFX::TextFreetype::drawText(std::string_view text, float x, float y, float 
 
             m_transforms.at(index) = glm::translate(glm::mat4{1.0f}, glm::vec3{xpos, ypos, 0.0f})
                             * glm::scale(glm::mat4{1.0f}, glm::vec3{w, h, 0.0f});
+
+            /*const auto& m = m_transforms.at(index);
+            std::cout << "Char " << c << ":\n";
+            for(int i = 0; i < 4; ++i)
+            {
+                std::cout << m[0].x << ", " << m[0].y << ", " << m[0].z << "\n";
+                std::cout << m[1].x << ", " << m[1].y << ", " << m[1].z << "\n";
+                std::cout << m[2].x << ", " << m[2].y << ", " << m[2].z << "\n";
+                std::cout << m[3].x << ", " << m[3].y << ", " << m[3].z << "\n\n";
+            }*/
+
             m_charMap.at(index) = chIter->second.textureID;
 
             x += (chIter->second.advance >> 6) * scale;
@@ -215,7 +226,7 @@ void ZFX::TextFreetype::drawText(std::string_view text, float x, float y, float 
 
     renderCall(index);
 
-    glEnable(GL_DEPTH_TEST); // TODO: Only enable if neabled in Window options
+    glEnable(GL_DEPTH_TEST); // TODO: Only enable if enabled in Window options
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D_ARRAY, 0);

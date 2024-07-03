@@ -21,14 +21,17 @@ namespace ZFX
             RIGHT
         };
 
-        /* pos = camera position
+        /*  pos = camera position
          *  aspect = aspect ratio
          *  zNear = closest the camera can see ( can't see objects right next to the camera)
          *  zFar = farthest the camera can see (can't see infinitely far objects)
          */
         Camera(const glm::vec3& pos, const float aspect, const float zNear = 0.01f, const float zFar = 1000.0f);
 
+        glm::mat4 getView() const;
+        glm::mat4 getProjection() const;
         glm::mat4 getViewProjection() const;
+
         glm::vec3& position() { return m_position; }
         const glm::vec3& position() const { return m_position; }
         const glm::vec3& front() const { return m_front; }

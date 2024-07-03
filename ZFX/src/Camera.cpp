@@ -18,11 +18,20 @@ ZFX::Camera::Camera(const glm::vec3& pos, const float aspect, const float zNear,
     updateCameraVectors();
 }
 
+glm::mat4 ZFX::Camera::getView() const
+{
+    return glm::lookAt(m_position, m_position + m_front, m_up);
+}
+
+glm::mat4 ZFX::Camera::getProjection() const
+{
+    return glm::perspective(glm::radians(m_zoom), s_aspect, m_zNear, m_zFar);
+    //return glm::ortho(glm::radians(m_zoom), s_aspect, m_zNear, m_zFar);
+}
+
 glm::mat4 ZFX::Camera::getViewProjection() const
 {
-    glm::mat4 view = glm::lookAt(m_position, m_position + m_front, m_up);
-    glm::mat4 projection = glm::perspective(glm::radians(m_zoom), s_aspect, m_zNear, m_zFar);
-    return projection * view;
+    return getProjection() * getView();
 }
 
 void ZFX::Camera::move(const Direction dir, const float deltaTime, const float speed)
