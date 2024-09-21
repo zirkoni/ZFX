@@ -47,6 +47,8 @@ ZFX::TextFreetype::TextFreetype(const std::string& font) :
     glBindTexture(GL_TEXTURE_2D_ARRAY, m_textureArray);
     glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_R8, TEXTURE_SIZE, TEXTURE_SIZE, 128, 0, GL_RED, GL_UNSIGNED_BYTE, 0);
 
+    GLint al;
+    glGetIntegerv(GL_UNPACK_ALIGNMENT, &al);
     init(font);
 
     glGenVertexArrays(1, &m_vao);
@@ -70,6 +72,8 @@ ZFX::TextFreetype::TextFreetype(const std::string& font) :
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, al);
 
     for(int i = 0; i < U_ARRAY_LIMIT; ++i)
     {
@@ -102,7 +106,6 @@ void ZFX::TextFreetype::init(const std::string& font)
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     loadCharacters(face);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
     FT_Done_Face(face);
     FT_Done_FreeType(ftLib);
@@ -124,8 +127,8 @@ void ZFX::TextFreetype::loadCharacters(const FT_Face& face)
 
         // To prevent certain artifacts when a character is not rendered exactly on pixel boundaries,
         // we should clamp the texture at the edges, and enable linear interpolation
-        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 

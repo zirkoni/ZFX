@@ -26,7 +26,6 @@ glm::mat4 ZFX::Camera::getView() const
 glm::mat4 ZFX::Camera::getProjection() const
 {
     return glm::perspective(glm::radians(m_zoom), s_aspect, m_zNear, m_zFar);
-    //return glm::ortho(glm::radians(m_zoom), s_aspect, m_zNear, m_zFar);
 }
 
 glm::mat4 ZFX::Camera::getViewProjection() const

@@ -23,6 +23,7 @@ public:
 
     void draw() override
     {
+        glDisable(GL_DEPTH_TEST);
 #if 1
         m_textRenderer.drawText(
             "Hello World!",                          // text
@@ -61,6 +62,7 @@ public:
                 "pretium. Nam ullamcorper nisi et mi tempor, et semper tortor sollicitudin.\n",
             0.0f, ZFX::Window::height() - 40.0f, 0.3f, ZFX::YELLOW);
 #endif
+        glEnable(GL_DEPTH_TEST);
     }
 
 private:
