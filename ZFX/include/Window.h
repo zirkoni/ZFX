@@ -35,8 +35,8 @@ namespace ZFX
             bool enableGlDebug = false;
 
             int rgbaSize = 8;
-            int depthSize = 16;
-            int stencilSize = 16;
+            int depthSize = 24; // Same as in framebuffer
+            int stencilSize = 8; // Same as in framebuffer
             int numMSAASamples = 4;
         };
 

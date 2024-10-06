@@ -114,7 +114,7 @@ Uint32 ZFX::Window::windowFlags(const Options& options)
 void ZFX::Window::setGlAttributes(const Options& options)
 {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3); // Do not set, specific version might not be supported by the GPU driver
 
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, options.rgbaSize);
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, options.rgbaSize);
