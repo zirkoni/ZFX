@@ -4,37 +4,48 @@
 
 
 const std::string VERTEX_SHADER =
-    "#version 330 core\n"
-    "layout (location = 0) in vec2 v_in_vertex; // vec2 position\n"
-    "out V_OUT\n"
-    "{\n"
-    "    vec2 texCoord;\n"
-    "    flat int index;\n"
-    "} v_out;\n"
-    "uniform mat4 u_transforms[" + std::to_string(ZFX::TextFreetype::U_ARRAY_LIMIT) + "];\n"
-    "uniform mat4 u_viewProjection;\n"
-    "void main() {\n"
-    "    gl_Position = u_viewProjection * u_transforms[gl_InstanceID] * vec4(v_in_vertex.xy, 0.0, 1.0);\n"
-    "    v_out.index = gl_InstanceID;\n"
-    "    v_out.texCoord.x = v_in_vertex.x;\n"
-    "    v_out.texCoord.y = 1.0f - v_in_vertex.y;\n"
-    "}";
+R"(
+#version 330 core
+layout (location = 0) in vec2 v_in_vertex; // vec2 position
+
+out V_OUT
+{
+    vec2 texCoord;
+    flat int index;
+} v_out;
+
+uniform mat4 u_transforms[)" + std::to_string(ZFX::TextFreetype::U_ARRAY_LIMIT) + R"(];
+uniform mat4 u_viewProjection;
+
+void main()
+{
+    gl_Position = u_viewProjection * u_transforms[gl_InstanceID] * vec4(v_in_vertex.xy, 0.0, 1.0);
+    v_out.index = gl_InstanceID;
+    v_out.texCoord.x = v_in_vertex.x;
+   v_out.texCoord.y = 1.0f - v_in_vertex.y;
+}
+)";
 
 const std::string FRAGMENT_SHADER =
-    "#version 330 core\n"
-    "in V_OUT\n"
-    "{\n"
-    "    vec2 texCoord;\n"
-    "    flat int index;\n"
-    "} f_in;\n"
-    "out vec4 f_out_colour;\n"
-    "uniform sampler2DArray u_diffuse;\n"
-    "uniform int u_charMap[" + std::to_string(ZFX::TextFreetype::U_ARRAY_LIMIT) + "];\n"
-    "uniform vec4 u_textColour;\n"
-    "void main() {\n"
-    "    vec4 sampled = vec4(1.0, 1.0, 1.0, texture(u_diffuse, vec3(f_in.texCoord.xy, u_charMap[f_in.index])).r);\n"
-    "    f_out_colour = u_textColour * sampled;\n"
-    "}";
+R"(
+#version 330 core
+in V_OUT
+{
+    vec2 texCoord;
+    flat int index;
+} f_in;
+
+out vec4 f_out_colour;
+uniform sampler2DArray u_diffuse;
+uniform int u_charMap[)" + std::to_string(ZFX::TextFreetype::U_ARRAY_LIMIT) + R"(];
+uniform vec4 u_textColour;
+
+void main()
+{
+    vec4 sampled = vec4(1.0, 1.0, 1.0, texture(u_diffuse, vec3(f_in.texCoord.xy, u_charMap[f_in.index])).r);
+    f_out_colour = u_textColour * sampled;
+}
+)";
 
 
 ZFX::TextFreetype::TextFreetype(const std::string& font) :
