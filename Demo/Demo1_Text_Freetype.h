@@ -3,10 +3,10 @@
 #include "Window.h"
 
 
-static const std::string FONT = FONTS_PATH + "arial.ttf";
-
 class Demo1 : public Demo
 {
+    const std::string FONT = FONTS_PATH + "arial.ttf";
+
 public:
     Demo1(ZFX::Camera& camera) : Demo{ camera, "Demo1 - Rendering Text" },
         m_textRenderer{ FONT }

@@ -1,8 +1,37 @@
 CXX      = g++
-CPPFLAGS = -IZFX -IZFX/include -I/usr/include/freetype2 -Itinyobjloader
 CXXFLAGS = -g -O2 -MMD -std=c++17
 LDFLAGS  = 
-LIBS     = -lGL -lGLEW -lSDL2 -lfreetype
+
+CPPFLAGS += -IZFX
+CPPFLAGS += -IZFX/include
+CPPFLAGS += -Itinyobjloader
+
+ifeq ($(OS),Windows_NT)
+    $(info Compiling for Windows)
+
+    ifneq ($(MSYSTEM),UCRT64)
+        $(error Not mingw-w64-ucrt environment)
+        exit
+    endif
+
+    CPPFLAGS += -I/ucrt64/include/freetype2
+
+    LIBS += -lOpenGL32
+    LIBS += -lglew32
+    LIBS += -lmingw32
+    LIBS += -lSDL2main
+    LIBS += -lSDL2
+    LIBS += -lfreetype
+else
+    $(info Compiling for Linux)
+
+    CPPFLAGS += -I/usr/include/freetype2
+
+    LIBS += -lGL
+    LIBS += -lGLEW
+    LIBS += -lSDL2
+    LIBS += -lfreetype
+endif
 
 cppsrc = $(wildcard ZFX/src/*.cpp) $(wildcard Demo/*.cpp)
 ccsrc  = tinyobjloader/tiny_obj_loader.cc
