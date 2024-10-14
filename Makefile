@@ -1,7 +1,7 @@
 PROG_NAME = zfx_demo
 
 CXX      = g++
-CXXFLAGS = -g -O2 -MMD -std=c++17
+CXXFLAGS = -g -O2 -std=c++17
 LDFLAGS  = 
 
 SRC_DIRS += Demo
