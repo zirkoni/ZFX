@@ -3,7 +3,7 @@ CXXFLAGS = -g -O2 -MMD -std=c++17
 LDFLAGS  = 
 
 CPPFLAGS += -IZFX
-CPPFLAGS += -IZFX/include
+CPPFLAGS += -IZFX/src
 CPPFLAGS += -Itinyobjloader
 
 ifeq ($(OS),Windows_NT)
