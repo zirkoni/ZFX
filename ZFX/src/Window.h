@@ -64,6 +64,7 @@ namespace ZFX
         void userResized();
 
         SDL_Window* sdlWindow() { return m_window; }
+        SDL_GLContext glContext() { return m_glContext; }
 
     private:
         void setGlAttributes(const Options& options);
