@@ -4,8 +4,8 @@
 #include <string>
 
 
-ZFX::FrameBuffer::FrameBuffer(int numMSAASamples):
-    m_fbo{0}, m_textureBuffer{0}, m_rbo{0}, m_depthBuffer{0}, m_numMSAASamples{numMSAASamples}
+ZFX::FrameBuffer::FrameBuffer(int numMSAASamples, uint32_t bitsToClear):
+    m_fbo{0}, m_textureBuffer{0}, m_rbo{0}, m_depthBuffer{0}, m_numMSAASamples{numMSAASamples}, m_bitsToClear{bitsToClear}
 {
     glGenFramebuffers(1, &m_fbo);
 }
@@ -197,15 +197,16 @@ void ZFX::FrameBuffer::bindDepthCubeMap()
 
 void ZFX::FrameBuffer::clear()
 {
-    Window::clear();
+    clear(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 void ZFX::FrameBuffer::clear(float r, float g, float b, float a)
 {
-    Window::clear(r, g, b, a);
+    glClearColor(r, g, b, a);
+    glClear(m_bitsToClear);
 }
 
 void ZFX::FrameBuffer::clear(glm::vec4 bgColour)
 {
-    Window::clear(bgColour.r, bgColour.g, bgColour.b, bgColour.a);
+    clear(bgColour.r, bgColour.g, bgColour.b, bgColour.a);
 }

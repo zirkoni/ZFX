@@ -25,7 +25,7 @@ namespace ZFX
     public:
         static constexpr int U_ARRAY_LIMIT = 126;
 
-        TextFreetype(const std::string& font);
+        TextFreetype(const std::string& font, uint32_t winWidth, uint32_t winHeight);
         ~TextFreetype();
 
         void drawText(std::string_view text, float x, float y, float scale, const glm::vec4& colour, float lineSpacing = 1.0f);

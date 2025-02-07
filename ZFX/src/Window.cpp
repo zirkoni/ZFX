@@ -1,5 +1,4 @@
 #include "Window.h"
-#include "Camera.h"
 #include "zfxdefs.h"
 #include "glDebug.h"
 #include <GL/glew.h>
@@ -7,16 +6,15 @@
 #include <iostream>
 
 
-uint32_t ZFX::Window::s_width = 0;
-uint32_t ZFX::Window::s_height = 0;
-uint32_t ZFX::Window::s_bitsToClear = GL_COLOR_BUFFER_BIT;
-
 ZFX::Window::Window(const Options& options) :
-    m_window{ nullptr },
-    m_glContext{ nullptr }
+    m_window{nullptr},
+    m_glContext{nullptr},
+    m_width{0},
+    m_height{0},
+    m_bitsToClear{GL_COLOR_BUFFER_BIT}
 {
-    s_width = options.width;
-    s_height = options.height;
+    m_width = options.width;
+    m_height = options.height;
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
@@ -37,7 +35,7 @@ ZFX::Window::Window(const Options& options) :
     setGlAttributes(options);
 
     m_window = SDL_CreateWindow(options.title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        s_width, s_height, windowFlags(options));
+        m_width, m_height, windowFlags(options));
 
     if (nullptr == m_window)
     {
@@ -185,7 +183,7 @@ void ZFX::Window::setGlOptions(const Options& options)
         glEnable(GL_MULTISAMPLE);
     }
 
-    s_bitsToClear = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT * options.enableDepthTest | GL_STENCIL_BUFFER_BIT * options.enableStencilTest;
+    m_bitsToClear = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT * options.enableDepthTest | GL_STENCIL_BUFFER_BIT * options.enableStencilTest;
 }
 
 void ZFX::Window::setVsync(bool enabled)
@@ -201,7 +199,7 @@ void ZFX::Window::clear()
 void ZFX::Window::clear(float r, float g, float b, float a)
 {
     glClearColor(r, g, b, a);
-    glClear(s_bitsToClear);
+    glClear(m_bitsToClear);
 }
 
 void ZFX::Window::clear(glm::vec4 bgColour)
@@ -280,8 +278,8 @@ void ZFX::Window::resize(const SDL_DisplayMode& mode)
     {
         if(!SDL_SetWindowDisplayMode(m_window, &mode))
         {
-            s_width = mode.w;
-            s_height = mode.h;
+            m_width = mode.w;
+            m_height = mode.h;
             Camera::resize(aspectRatio());
         } else
         {
@@ -290,23 +288,23 @@ void ZFX::Window::resize(const SDL_DisplayMode& mode)
     } else
     {
         SDL_SetWindowSize(m_window, mode.w, mode.h);
-        s_width = mode.w;
-        s_height = mode.h;
+        m_width = mode.w;
+        m_height = mode.h;
         Camera::resize(aspectRatio());
     }
 
-    glViewport(0, 0, s_width, s_height);
+    glViewport(0, 0, m_width, m_height);
 }
 
 void ZFX::Window::userResized()
 {
     // This is for resizing by the user (e.g. window maximized or resized by dragging the border)
-    int w = s_width;
-    int h = s_height;
+    int w = m_width;
+    int h = m_height;
     SDL_GL_GetDrawableSize(m_window, &w, &h);
 
-    s_width = static_cast<uint32_t>(w);
-    s_height = static_cast<uint32_t>(h);
+    m_width = static_cast<uint32_t>(w);
+    m_height = static_cast<uint32_t>(h);
     Camera::resize(aspectRatio());
-    glViewport(0, 0, s_width, s_height);
+    glViewport(0, 0, m_width, m_height);
 }

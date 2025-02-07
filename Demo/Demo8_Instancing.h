@@ -46,7 +46,7 @@ class Demo8 : public Demo
     };
 
 public:
-    Demo8(ZFX::Camera& camera) : Demo{ camera, "Demo8 - Instancing (Fast)" }
+    Demo8(ZFX::Window& window) : Demo{ window, "Demo8 - Instancing (Fast)" }
     {
         srand(SDL_GetTicks());
 

@@ -9,7 +9,7 @@ class Demo2 : public Demo
     static constexpr uint32_t IDX_Y_MOVE = 1;
 
 public:
-    Demo2(ZFX::Camera& camera) : Demo{ camera, "Demo2 - Triangles" }
+    Demo2(ZFX::Window& window) : Demo{ window, "Demo2 - Triangles" }
     {
         addTriangle();
         addTexturedTriangle();

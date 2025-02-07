@@ -5,7 +5,7 @@
 class Demo6E : public Demo6D
 {
 public:
-    Demo6E(ZFX::Camera& camera) : Demo6D{camera}, m_activeEffect{4}
+    Demo6E(ZFX::Window& window) : Demo6D{window}, m_activeEffect{4}
     {
         m_name = "Demo6E - Framebuffer";
         addFrameBuffer();
@@ -85,8 +85,8 @@ protected:
         m_screen.shader().bind();
         m_screen.shader().setUniform("u_screenTexture", 0);
 
-        m_buffer.attachTextureBuffer(ZFX::Window::width(), ZFX::Window::height());
-        m_buffer.attachRenderBuffer(ZFX::Window::width(), ZFX::Window::height()); // For depth testing
+        m_buffer.attachTextureBuffer(m_window.width(), m_window.height());
+        m_buffer.attachRenderBuffer(m_window.width(), m_window.height()); // For depth testing
     }
 
     void drawFrameBufferToScreen()

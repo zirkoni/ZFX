@@ -17,30 +17,34 @@
 #include <vector>
 
 
+static bool drawFilled = true;
+
 using DemoList = std::vector<std::unique_ptr<Demo> >;
 
-void addDemos(DemoList& demos, ZFX::Camera& camera)
+void addDemos(DemoList& demos, ZFX::Window& window)
 {
-    demos.push_back(std::make_unique<Demo1>(camera));
-    demos.push_back(std::make_unique<Demo2>(camera));
-    demos.push_back(std::make_unique<Demo3>(camera));
-    demos.push_back(std::make_unique<Demo4>(camera));
-    demos.push_back(std::make_unique<Demo5>(camera));
-    demos.push_back(std::make_unique<Demo6A>(camera));
-    demos.push_back(std::make_unique<Demo6B>(camera));
-    demos.push_back(std::make_unique<Demo6C>(camera));
-    demos.push_back(std::make_unique<Demo6D>(camera));
-    demos.push_back(std::make_unique<Demo6E>(camera));
-    demos.push_back(std::make_unique<Demo6E_MSAA>(camera));
-    demos.push_back(std::make_unique<Demo6F>(camera));
-    demos.push_back(std::make_unique<Demo6G>(camera));
-//    demos.push_back(std::make_unique<Demo7>(camera)); // Very slow to load on Intel integrated GPU/mobile CPU! TODO: fix
-    demos.push_back(std::make_unique<Demo8>(camera));
+    demos.push_back(std::make_unique<Demo1>(window));
+    demos.push_back(std::make_unique<Demo2>(window));
+    demos.push_back(std::make_unique<Demo3>(window));
+    demos.push_back(std::make_unique<Demo4>(window));
+    demos.push_back(std::make_unique<Demo5>(window));
+    demos.push_back(std::make_unique<Demo6A>(window));
+    demos.push_back(std::make_unique<Demo6B>(window));
+    demos.push_back(std::make_unique<Demo6C>(window));
+    demos.push_back(std::make_unique<Demo6D>(window));
+    demos.push_back(std::make_unique<Demo6E>(window));
+    demos.push_back(std::make_unique<Demo6E_MSAA>(window));
+    demos.push_back(std::make_unique<Demo6F>(window));
+    demos.push_back(std::make_unique<Demo6G>(window));
+//    demos.push_back(std::make_unique<Demo7>(window)); // Very slow to load on Intel integrated GPU/mobile CPU! TODO: fix
+    demos.push_back(std::make_unique<Demo8>(window));
 }
 
 void toggleWireframe()
 {
-    if(ZFX::drawFilled)
+    drawFilled = !drawFilled;
+
+    if(!drawFilled)
     {
         ZFX::wireframeMode();
     } else
@@ -154,10 +158,8 @@ bool checkInput(ZFX::Camera& camera, DemoList& demos, DemoList::iterator& active
 
 void mainLoop(ZFX::Window& window)
 {
-    ZFX::Camera camera{ glm::vec3{0.0f, 0.0f, 3.0f}, window.aspectRatio() };
-
     DemoList demos;
-    addDemos(demos, camera);
+    addDemos(demos, window);
     auto activeDemo = demos.begin();
     window.setTitle(activeDemo->get()->name());
 
@@ -173,7 +175,7 @@ void mainLoop(ZFX::Window& window)
         now = SDL_GetPerformanceCounter();
         deltaTime = (now - last) * 1000 / (float)SDL_GetPerformanceFrequency();
 
-        exitRequested = checkInput(camera, demos, activeDemo, deltaTime, window);
+        exitRequested = checkInput(*window.getCamera(), demos, activeDemo, deltaTime, window);
 
         window.clear(activeDemo->get()->bgColour());
         activeDemo->get()->draw();
@@ -195,6 +197,9 @@ int main(int argc, char* argv[])
         wOpts.enableGlDebug = true;
 
         ZFX::Window window{ wOpts };
+        ZFX::Camera camera{ glm::vec3{0.0f, 0.0f, 3.0f}, window.aspectRatio() };
+        window.setCamera(camera);
+
         mainLoop(window);
     } catch (const ZFX::Exception& e)
     {

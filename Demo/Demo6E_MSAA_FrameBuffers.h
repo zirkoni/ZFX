@@ -5,7 +5,7 @@
 class Demo6E_MSAA : public Demo6E
 {
 public:
-    Demo6E_MSAA(ZFX::Camera& camera) : Demo6E{camera}, m_MSAABuffer{4}
+    Demo6E_MSAA(ZFX::Window& window) : Demo6E{window}, m_MSAABuffer{4}
     {
         m_name = "Demo6E_MSAA - MSAA Framebuffer";
         addMSAABuffer();
@@ -39,7 +39,7 @@ public:
         // Blit MSAA buffer to framebuffer
         glBindFramebuffer(GL_READ_FRAMEBUFFER, m_MSAABuffer.fbo());
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_buffer.fbo());
-        glBlitFramebuffer(0, 0, ZFX::Window::width(), ZFX::Window::height(), 0, 0, ZFX::Window::width(), ZFX::Window::height(),
+        glBlitFramebuffer(0, 0, m_window.width(), m_window.height(), 0, 0, m_window.width(), m_window.height(),
                 GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
         drawFrameBufferToScreen();
@@ -49,8 +49,8 @@ private:
 
     void addMSAABuffer()
     {
-        m_MSAABuffer.attachTextureBuffer(ZFX::Window::width(), ZFX::Window::height());
-        m_MSAABuffer.attachRenderBuffer(ZFX::Window::width(), ZFX::Window::height()); // For depth testing
+        m_MSAABuffer.attachTextureBuffer(m_window.width(), m_window.height());
+        m_MSAABuffer.attachRenderBuffer(m_window.width(), m_window.height()); // For depth testing
     }
 
 private:

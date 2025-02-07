@@ -8,8 +8,8 @@ class Demo1 : public Demo
     const std::string FONT = FONTS_PATH + "arial.ttf";
 
 public:
-    Demo1(ZFX::Camera& camera) : Demo{ camera, "Demo1 - Rendering Text" },
-        m_textRenderer{ FONT }
+    Demo1(ZFX::Window& window) : Demo{ window, "Demo1 - Rendering Text" },
+        m_textRenderer{ FONT, window.width(), window.height() }
     {
         m_helpText = "<Space> : Next demo\n"
                      "<Arrow keys> : Move camera\n"
@@ -26,13 +26,13 @@ public:
         glDisable(GL_DEPTH_TEST);
 #if 1
         m_textRenderer.drawText(
-            "Hello World!",                          // text
-            ZFX::Window::width() / 2.0f - 150.0f,    // x-coordinate (pixel coordinates)
-            ZFX::Window::height() - 50.0f,           // y-coordinate (pixel coordinates)
-            0.7f,                                    // scale
-            glm::vec4(0.5f, 0.8f, 0.2f, 0.5f));      // text colour
+            "Hello World!",                      // text
+            m_window.width() / 2.0f - 150.0f,    // x-coordinate (pixel coordinates)
+            m_window.height() - 50.0f,           // y-coordinate (pixel coordinates)
+            0.7f,                                // scale
+            glm::vec4(0.5f, 0.8f, 0.2f, 0.5f));  // text colour
 
-        float yCoord = ZFX::Window::height() - 100.0f;
+        float yCoord = m_window.height() - 100.0f;
         m_textRenderer.drawText(m_helpText, 20.0f, yCoord, 0.4f, ZFX::YELLOW);
 #else // simple performance test
         m_textRenderer.drawText(
@@ -60,7 +60,7 @@ public:
                 "lacinia. Pellentesque dolor mauris, commodo et sapien condimentum, fermentum ornare\n"
                 "tellus. Nullam dictum elit vitae congue maximus. Duis convallis ultrices ante at\n"
                 "pretium. Nam ullamcorper nisi et mi tempor, et semper tortor sollicitudin.\n",
-            0.0f, ZFX::Window::height() - 40.0f, 0.3f, ZFX::YELLOW);
+            0.0f, m_window.height() - 40.0f, 0.3f, ZFX::YELLOW);
 #endif
         glEnable(GL_DEPTH_TEST);
     }

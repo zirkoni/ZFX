@@ -3,6 +3,7 @@
 #include <vector>
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
+#include "Camera.h"
 
 namespace ZFX
 {
@@ -45,17 +46,19 @@ namespace ZFX
         Window& operator=(const Window& other) = delete;
         ~Window();
 
-        static void clear(); // clear to black
-        static void clear(float r, float g, float b, float a); // clear to user defined colour
-        static void clear(glm::vec4 bgColour); // clear to user defined colour
+        void setCamera(Camera& camera) { m_camera = &camera; }
+
+        void clear(); // clear to black
+        void clear(float r, float g, float b, float a); // clear to user defined colour
+        void clear(glm::vec4 bgColour); // clear to user defined colour
 
         void update();
         void setVsync(bool enabled);
         void setTitle(const std::string& title);
 
-        static float aspectRatio() { return ((float)s_width / s_height); }
-        static uint32_t width() { return s_width; }
-        static uint32_t height() { return s_height; }
+        float aspectRatio() { return ((float)m_width / m_height); }
+        uint32_t width() { return m_width; }
+        uint32_t height() { return m_height; }
 
         void toggleFullscreen();
         SDL_DisplayMode getCurrentDisplayMode();
@@ -65,6 +68,7 @@ namespace ZFX
 
         SDL_Window* sdlWindow() { return m_window; }
         SDL_GLContext glContext() { return m_glContext; }
+        Camera* getCamera() { return m_camera; }
 
     private:
         void setGlAttributes(const Options& options);
@@ -74,9 +78,11 @@ namespace ZFX
         SDL_Window* m_window;
         SDL_GLContext m_glContext;
 
-        static uint32_t s_width;
-        static uint32_t s_height;
-        static uint32_t s_bitsToClear;
+        uint32_t m_width;
+        uint32_t m_height;
+        uint32_t m_bitsToClear;
+
+        Camera* m_camera;
     };
 }
 

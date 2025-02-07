@@ -11,7 +11,7 @@ class Demo6G : public Demo
     const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
 
 public:
-    Demo6G(ZFX::Camera& camera) : Demo{ camera, "Demo6G - Multidirectional Shadow Mapping" }
+    Demo6G(ZFX::Window& window) : Demo{ window, "Demo6G - Multidirectional Shadow Mapping" }
     {
         loadShaders();
         loadCubes();
@@ -54,7 +54,7 @@ public:
         m_depthBuffer.bindDefault();
 
         // 2. render scene as normal
-        glViewport(0, 0, ZFX::Window::width(), ZFX::Window::height());
+        glViewport(0, 0, m_window.width(), m_window.height());
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glm::mat4 viewProjection = m_camera.getViewProjection();
         m_shader->bind();

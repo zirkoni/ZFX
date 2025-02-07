@@ -5,7 +5,7 @@
 class Demo6B : public Demo
 {
 public:
-    Demo6B(ZFX::Camera& camera) : Demo{ camera, "Demo6B - Materials" }
+    Demo6B(ZFX::Window& window) : Demo{ window, "Demo6B - Materials" }
     {
         addCubes();
         m_shinyCube.transform().scale() = glm::vec3{ 0.5f };

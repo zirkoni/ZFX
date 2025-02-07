@@ -11,7 +11,7 @@ namespace ZFX
          * Note that an MSAA framebuffer cannot be used directly for post-processing
          * so you'd need a 2nd intermediate non-MSAA framebuffer for that.
          */
-        FrameBuffer(int numMSAASamples = 0);
+        FrameBuffer(int numMSAASamples = 0, uint32_t bitsToClear = GL_COLOR_BUFFER_BIT);
         ~FrameBuffer();
 
         void reset(int numMSAASamples);
@@ -49,5 +49,6 @@ namespace ZFX
         bool m_hasDepthBuffer = false;
 
         int m_numMSAASamples;
+        uint32_t m_bitsToClear;
     };
 }

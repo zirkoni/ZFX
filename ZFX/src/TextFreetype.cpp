@@ -48,10 +48,10 @@ void main()
 )";
 
 
-ZFX::TextFreetype::TextFreetype(const std::string& font) :
+ZFX::TextFreetype::TextFreetype(const std::string& font, uint32_t winWidth, uint32_t winHeight) :
     m_vao{ 0 }, m_vbo{ 0 }, m_ySizeMax{ 0 }, m_shader{ {VERTEX_SHADER, FRAGMENT_SHADER, "", false} }
 {
-    handleWindowResize(Window::width(), Window::height());
+    handleWindowResize(winWidth, winHeight);
 
     glGenTextures(1, &m_textureArray);
     glActiveTexture(GL_TEXTURE0);

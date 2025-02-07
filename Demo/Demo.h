@@ -6,8 +6,8 @@
 class Demo
 {
 public:
-    Demo(ZFX::Camera& camera, const std::string& name): m_counter{ 0.0f },
-    m_camera{ camera }, m_name{ name }, m_bgColour{ZFX::BLACK} {}
+    Demo(ZFX::Window& window, const std::string& name): m_counter{ 0.0f },
+    m_window{ window }, m_camera{ *window.getCamera() }, m_name{ name }, m_bgColour{ZFX::BLACK} {}
 
     virtual ~Demo() {}
 
@@ -41,6 +41,7 @@ public:
 
 protected:
     float m_counter;
+    ZFX::Window& m_window;
     ZFX::Camera& m_camera;
     std::string m_name;
 
