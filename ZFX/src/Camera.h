@@ -63,9 +63,9 @@ namespace ZFX
             updateCameraVectors();
         }
 
-        static void resize(float newAspect)
+        void resize(float newAspect)
         {
-            s_aspect = newAspect;
+            m_aspect = newAspect;
         }
 
     private:
@@ -73,7 +73,7 @@ namespace ZFX
         void zoom(float amount);
 
     private:
-        static float s_aspect;
+        float m_aspect;
         float m_yaw;
         float m_pitch;
         float m_zoom;

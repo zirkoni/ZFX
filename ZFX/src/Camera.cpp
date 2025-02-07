@@ -1,14 +1,12 @@
 #include "Camera.h"
 
 
-float ZFX::Camera::s_aspect = 0.0f;
-
 ZFX::Camera::Camera(const glm::vec3& pos, const float aspect, const float zNear, const float zFar)
 {
     m_yaw = -90.0f;
     m_pitch = 0.0f;
     m_zoom = 45.0f;
-    s_aspect = aspect;
+    m_aspect = aspect;
     m_zNear = zNear;
     m_zFar = zFar;
 
@@ -25,7 +23,7 @@ glm::mat4 ZFX::Camera::getView() const
 
 glm::mat4 ZFX::Camera::getProjection() const
 {
-    return glm::perspective(glm::radians(m_zoom), s_aspect, m_zNear, m_zFar);
+    return glm::perspective(glm::radians(m_zoom), m_aspect, m_zNear, m_zFar);
 }
 
 glm::mat4 ZFX::Camera::getViewProjection() const

@@ -71,6 +71,7 @@ namespace ZFX
         Camera* getCamera() { return m_camera; }
 
     private:
+        void resizeCamera(float aspect);
         void setGlAttributes(const Options& options);
         void setGlOptions(const Options& options);
         Uint32 windowFlags(const Options& options);
