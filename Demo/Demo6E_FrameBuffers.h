@@ -5,7 +5,7 @@
 class Demo6E : public Demo6D
 {
 public:
-    Demo6E(ZFX::Window& window) : Demo6D{window}, m_activeEffect{4}
+    Demo6E(ZFX::Window& window) : Demo6D{window}, m_activeEffect{4}, m_buffer{0, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT}
     {
         m_name = "Demo6E - Framebuffer";
         addFrameBuffer();
