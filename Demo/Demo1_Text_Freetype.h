@@ -8,7 +8,7 @@ class Demo1 : public Demo
     const std::string FONT = FONTS_PATH + "arial.ttf";
 
 public:
-    Demo1(ZFX::Window& window) : Demo{ window, "Demo1 - Rendering Text" },
+    Demo1(ZFX::Window& window, ZFX::Camera& camera) : Demo{ window, camera, "Demo1 - Rendering Text" },
         m_textRenderer{ FONT, window.width(), window.height() }
     {
         m_helpText = "<Space> : Next demo\n"

@@ -5,7 +5,7 @@
 class Demo7 : public Demo
 {
 public:
-    Demo7(ZFX::Window& window) : Demo{ window, "Demo7 - Object Loader" }
+    Demo7(ZFX::Window& window, ZFX::Camera& camera) : Demo{ window, camera, "Demo7 - Object Loader" }
     {
         addCube();
         m_cube.transform().scale() = glm::vec3{ 0.5f };

@@ -9,7 +9,7 @@ ZFX::Indeces cubeIndeces();
 class Demo6A : public Demo
 {
 public:
-    Demo6A(ZFX::Window& window) : Demo{ window, "Demo6A - Basic Lighting" }
+    Demo6A(ZFX::Window& window, ZFX::Camera& camera) : Demo{ window, camera, "Demo6A - Basic Lighting" }
     {
         addCube();
         m_cube.transform().scale() = glm::vec3{ 0.5f };

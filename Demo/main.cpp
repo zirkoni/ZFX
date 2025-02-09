@@ -21,23 +21,23 @@ static bool drawFilled = true;
 
 using DemoList = std::vector<std::unique_ptr<Demo> >;
 
-void addDemos(DemoList& demos, ZFX::Window& window)
+void addDemos(DemoList& demos, ZFX::Window& window, ZFX::Camera& camera)
 {
-    demos.push_back(std::make_unique<Demo1>(window));
-    demos.push_back(std::make_unique<Demo2>(window));
-    demos.push_back(std::make_unique<Demo3>(window));
-    demos.push_back(std::make_unique<Demo4>(window));
-    demos.push_back(std::make_unique<Demo5>(window));
-    demos.push_back(std::make_unique<Demo6A>(window));
-    demos.push_back(std::make_unique<Demo6B>(window));
-    demos.push_back(std::make_unique<Demo6C>(window));
-    demos.push_back(std::make_unique<Demo6D>(window));
-    demos.push_back(std::make_unique<Demo6E>(window));
-    demos.push_back(std::make_unique<Demo6E_MSAA>(window));
-    demos.push_back(std::make_unique<Demo6F>(window));
-    demos.push_back(std::make_unique<Demo6G>(window));
-//    demos.push_back(std::make_unique<Demo7>(window)); // Very slow to load on Intel integrated GPU/mobile CPU! TODO: fix
-    demos.push_back(std::make_unique<Demo8>(window));
+    demos.push_back(std::make_unique<Demo1>(window, camera));
+    demos.push_back(std::make_unique<Demo2>(window, camera));
+    demos.push_back(std::make_unique<Demo3>(window, camera));
+    demos.push_back(std::make_unique<Demo4>(window, camera));
+    demos.push_back(std::make_unique<Demo5>(window, camera));
+    demos.push_back(std::make_unique<Demo6A>(window, camera));
+    demos.push_back(std::make_unique<Demo6B>(window, camera));
+    demos.push_back(std::make_unique<Demo6C>(window, camera));
+    demos.push_back(std::make_unique<Demo6D>(window, camera));
+    demos.push_back(std::make_unique<Demo6E>(window, camera));
+    demos.push_back(std::make_unique<Demo6E_MSAA>(window, camera));
+    demos.push_back(std::make_unique<Demo6F>(window, camera));
+    demos.push_back(std::make_unique<Demo6G>(window, camera));
+//    demos.push_back(std::make_unique<Demo7>(window, camera)); // Very slow to load on Intel integrated GPU/mobile CPU! TODO: fix
+    demos.push_back(std::make_unique<Demo8>(window, camera));
 }
 
 void toggleWireframe()
@@ -158,8 +158,10 @@ bool checkInput(ZFX::Camera& camera, DemoList& demos, DemoList::iterator& active
 
 void mainLoop(ZFX::Window& window)
 {
+    ZFX::Camera camera{ glm::vec3{0.0f, 0.0f, 3.0f}, window.aspectRatio() };
+
     DemoList demos;
-    addDemos(demos, window);
+    addDemos(demos, window, camera);
     auto activeDemo = demos.begin();
     window.setTitle(activeDemo->get()->name());
 
@@ -175,7 +177,7 @@ void mainLoop(ZFX::Window& window)
         now = SDL_GetPerformanceCounter();
         deltaTime = (now - last) * 1000 / (float)SDL_GetPerformanceFrequency();
 
-        exitRequested = checkInput(*window.getCamera(), demos, activeDemo, deltaTime, window);
+        exitRequested = checkInput(camera, demos, activeDemo, deltaTime, window);
 
         window.clear(activeDemo->get()->bgColour());
         activeDemo->get()->draw();
@@ -197,9 +199,6 @@ int main(int argc, char* argv[])
         wOpts.enableGlDebug = true;
 
         ZFX::Window window{ wOpts };
-        ZFX::Camera camera{ glm::vec3{0.0f, 0.0f, 3.0f}, window.aspectRatio() };
-        window.setCamera(camera);
-
         mainLoop(window);
     } catch (const ZFX::Exception& e)
     {

@@ -46,8 +46,6 @@ namespace ZFX
         Window& operator=(const Window& other) = delete;
         ~Window();
 
-        void setCamera(Camera& camera) { m_camera = &camera; }
-
         void clear(); // clear to black
         void clear(float r, float g, float b, float a); // clear to user defined colour
         void clear(glm::vec4 bgColour); // clear to user defined colour
@@ -68,10 +66,8 @@ namespace ZFX
 
         SDL_Window* sdlWindow() { return m_window; }
         SDL_GLContext glContext() { return m_glContext; }
-        Camera* getCamera() { return m_camera; }
 
     private:
-        void resizeCamera(float aspect);
         void setGlAttributes(const Options& options);
         void setGlOptions(const Options& options);
         Uint32 windowFlags(const Options& options);
@@ -82,8 +78,6 @@ namespace ZFX
         uint32_t m_width;
         uint32_t m_height;
         uint32_t m_bitsToClear;
-
-        Camera* m_camera;
     };
 }
 

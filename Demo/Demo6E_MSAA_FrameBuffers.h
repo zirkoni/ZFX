@@ -5,7 +5,7 @@
 class Demo6E_MSAA : public Demo6E
 {
 public:
-    Demo6E_MSAA(ZFX::Window& window) : Demo6E{window}, m_MSAABuffer{4, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT}
+    Demo6E_MSAA(ZFX::Window& window, ZFX::Camera& camera) : Demo6E{window, camera}, m_MSAABuffer{4, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT}
     {
         m_name = "Demo6E_MSAA - MSAA Framebuffer";
         addMSAABuffer();

@@ -11,7 +11,7 @@ class Demo6F : public Demo
     const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
 
 public:
-    Demo6F(ZFX::Window& window) : Demo{ window, "Demo6F - Shadow Mapping" }
+    Demo6F(ZFX::Window& window, ZFX::Camera& camera) : Demo{ window, camera, "Demo6F - Shadow Mapping" }
     {
         loadShaders();
         loadFloor();
