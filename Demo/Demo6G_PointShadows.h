@@ -23,6 +23,25 @@ public:
 
     void draw() override
     {
+        // Do here instead of in loadShaders.
+        // This fixes occasional black screen, no idea why.
+        static bool lateInitWorkaround = true;
+        if(lateInitWorkaround)
+        {
+            m_shader->bind();
+            m_shader->setUniform("u_diffuseTexture", 0);
+            m_shader->setUniform("u_depthMap", 1);
+
+            /* Validate after setting the above uniforms.
+            *  This fixes error on Intel integrated graphics:
+            *  glValidateProgram failed:
+            *  active samplers with a different type refer to the same texture image unit
+            *  TODO: should always validate only in debug build + only when requested by user (before start drawing)?
+            */
+            m_shader->validate();
+            lateInitWorkaround = false;
+        }
+
         // move light position over time
         m_lightPos.z = sin(m_counter);
         m_counter += 0.01f;
@@ -85,18 +104,6 @@ private:
         // Vertex + fragment + geometry shader
         ZFX::ShaderSource depthSrc = {SHADERS_PATH + "depthCube.vs", SHADERS_PATH + "depthCube.fs", SHADERS_PATH + "depthCube.gs"};
         m_simpleDepthShader = std::make_unique<ZFX::Shader>(depthSrc);
-
-        m_shader->bind();
-        m_shader->setUniform("u_diffuseTexture", 0);
-        m_shader->setUniform("u_depthMap", 1);
-
-        /* Validate after setting the above uniforms.
-        *  This fixes error on Intel integrated graphics:
-        *  glValidateProgram failed:
-        *  active samplers with a different type refer to the same texture image unit
-        *  TODO: should always validate only in debug build + only when requested by user (before start drawing)?
-        */
-        m_shader->validate();
     }
 
     void loadCubes()
