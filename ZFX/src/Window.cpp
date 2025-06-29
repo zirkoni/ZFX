@@ -249,6 +249,18 @@ SDL_DisplayMode ZFX::Window::getCurrentDisplayMode()
     return mode;
 }
 
+SDL_DisplayMode ZFX::Window::getNativeDisplayMode()
+{
+    SDL_DisplayMode mode;
+    int displayIdx = SDL_GetWindowDisplayIndex(m_window);
+    if(SDL_GetDesktopDisplayMode(displayIdx, &mode) != 0)
+    {
+        throw ZFX::Exception{__FILE__, __LINE__, "SDL_DesktopDisplayMode failed"};
+    }
+
+    return mode;
+}
+
 const std::vector<SDL_DisplayMode> ZFX::Window::getSupportedDisplayModes()
 {
     std::vector<SDL_DisplayMode> modeList;

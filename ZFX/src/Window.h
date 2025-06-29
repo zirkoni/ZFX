@@ -60,6 +60,7 @@ namespace ZFX
 
         void toggleFullscreen();
         SDL_DisplayMode getCurrentDisplayMode();
+        SDL_DisplayMode getNativeDisplayMode();
         const std::vector<SDL_DisplayMode> getSupportedDisplayModes();
         void resize(const SDL_DisplayMode& mode);
         void userResized();
