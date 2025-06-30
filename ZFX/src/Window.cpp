@@ -116,6 +116,11 @@ Uint32 ZFX::Window::windowFlags(const Options& options)
         flags |= SDL_WINDOW_INPUT_GRABBED;
     }
 
+    if(!options.visible)
+    {
+        flags |= SDL_WINDOW_HIDDEN;
+    }
+
     return flags;
 }
 

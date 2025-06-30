@@ -25,6 +25,7 @@ namespace ZFX
             bool minimized = false;
             bool maximized = false;
             bool inputGrabbed = false;
+            bool visible = true;
 
             // OpenGL
             bool enableVsync = true;
