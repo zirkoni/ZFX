@@ -197,8 +197,13 @@ int main(int argc, char* argv[])
         wOpts.title = "Demo";
         wOpts.enableVsync = true;
         wOpts.enableGlDebug = true;
+        //wOpts.fullscreen = true; // Use the resolution that was configured
+        //wOpts.fullscreenDesktop = true; // Use the desktop resolution
 
         ZFX::Window window{ wOpts };
+        SDL_DisplayMode mode = window.getCurrentDisplayMode();
+        std::cout << "Created window with resolution " << mode.w << "x" << mode.h << "\n";
+
         mainLoop(window);
     } catch (const ZFX::Exception& e)
     {

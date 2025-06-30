@@ -34,8 +34,18 @@ ZFX::Window::Window(const Options& options) :
 
     setGlAttributes(options);
 
+    Uint32 winFlags = windowFlags(options);
     m_window = SDL_CreateWindow(options.title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        m_width, m_height, windowFlags(options));
+        m_width, m_height, winFlags);
+
+    // With this flag the window will use the desktop resolution.
+    // The user given values don't matter but we need to set the width and height to the correct values here.
+    if(winFlags & SDL_WINDOW_FULLSCREEN_DESKTOP)
+    {
+        SDL_DisplayMode mode = getCurrentDisplayMode();
+        m_width = mode.w;
+        m_height = mode.h;
+    }
 
     if (nullptr == m_window)
     {
