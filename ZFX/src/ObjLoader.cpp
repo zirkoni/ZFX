@@ -5,7 +5,7 @@
 #include "glm/gtx/hash.hpp"
 #include "glm/glm.hpp"
 #include "zfxdefs.h"
-#include "../tinyobjloader/tiny_obj_loader.h"
+#include "tiny_obj_loader.h"
 #include <algorithm>
 #include <unordered_map>
 
