@@ -11,7 +11,7 @@ target_include_directories(zfx_demo
 
 target_link_libraries(zfx_demo
     PRIVATE
-        zfx
+        ZFX
         tinyobjloader
 )
 

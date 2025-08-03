@@ -2,9 +2,9 @@ file(GLOB_RECURSE ZFX_SOURCES
     src/*.cpp
 )
 
-add_library(zfx STATIC ${ZFX_SOURCES})
+add_library(ZFX STATIC ${ZFX_SOURCES})
 
-target_include_directories(zfx
+target_include_directories(ZFX
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -12,7 +12,7 @@ target_include_directories(zfx
         ${tinyobjloader_SOURCE_DIR}
 )
 
-target_link_libraries(zfx
+target_link_libraries(ZFX
     PUBLIC
         ${EXTRA_LIBS}
 )
