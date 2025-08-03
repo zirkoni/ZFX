@@ -1,4 +1,0 @@
-[submodule "tinyobjloader"]
-	path = tinyobjloader
-	url = https://github.com/tinyobjloader/tinyobjloader.git
-	ignore = dirty
