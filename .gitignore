@@ -1,12 +1,5 @@
-# Make objects/dependency files
-*.o
-*.d
-
-# Binary
-zfx_demo*
-
-# Script
-run_with_mangohud.sh
+# Build
+build/
 
 # Vim swap
 *.swp
