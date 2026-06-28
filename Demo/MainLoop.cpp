@@ -14,7 +14,7 @@
 #include "Demo6G_PointShadows.h"
 #include "Demo7_ObjectLoader.h"
 #include "Demo8_Instancing.h"
-#include "Demo9_mouse.h"
+#include "Demo9_Mouse.h"
 #include <thread>
 
 MainLoop::MainLoop(ZFX::Window::Options& opts):
