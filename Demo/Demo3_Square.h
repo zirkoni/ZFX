@@ -5,7 +5,7 @@
 class Demo3 : public Demo
 {
 public:
-    Demo3(ZFX::Window& window, ZFX::Camera& camera) : Demo{ window, camera, "Demo3 - Square" }
+    Demo3(ZFX::Window& window, ZFX::Camera& camera, const std::string& name = "Demo3 - Square") : Demo{ window, camera, name }
     {
         addSquare();
     }
@@ -18,7 +18,7 @@ public:
         m_square.draw(m_camera);
     }
 
-private:
+protected:
     void addSquare()
     {
         /* The 4 corners of a square, starting from left lower corner in clockwise order */
@@ -48,6 +48,5 @@ private:
         m_square.load(vertices, indeces, SHADERS_PATH + "colour");
     }
 
-private:
     ZFX::Object m_square;
 };

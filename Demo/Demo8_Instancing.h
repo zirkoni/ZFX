@@ -21,7 +21,8 @@ class Demo8 : public Demo
         Shape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces,
                 const std::vector<glm::mat4>& instanceMatrix) :
             mesh{ vertices, indeces, instanceMatrix },
-            shader{ {SHADERS_PATH + "instancing.vs", SHADERS_PATH + "instancing.fs"} } {}
+            shader{ {SHADERS_PATH + "instancing.vs", SHADERS_PATH + "instancing.fs"} }
+        {}
 
         ~Shape() {}
 
@@ -70,6 +71,7 @@ public:
         }
 
         m_cube = addCube();
+        onEntry();
     }
 
     void update()
@@ -206,5 +208,3 @@ private:
     std::vector<CubeInstance> m_transformations;
 };
 #endif
-
-

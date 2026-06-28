@@ -3,60 +3,7 @@
 #include <vector>
 
 
-ZFX::Verteces cubeVertecesWithNormals();
-ZFX::Indeces cubeIndeces();
-
-class Demo6A : public Demo
-{
-public:
-    Demo6A(ZFX::Window& window, ZFX::Camera& camera) : Demo{ window, camera, "Demo6A - Basic Lighting" }
-    {
-        addCube();
-        m_cube.transform().scale() = glm::vec3{ 0.5f };
-
-        addLight();
-    }
-
-    void draw() override
-    {
-        m_cube.transform().rotation().z = m_counter;
-        m_cube.transform().rotation().x = m_counter;
-        m_counter += 0.001f;
-
-        m_light.transform().position().x = sin(50 * m_counter);
-
-        m_cube.shader().bind();
-        m_cube.shader().setUniform("u_viewPosition", m_camera.position());
-        m_cube.shader().setUniform("u_lightPosition", m_light.transform().position());
-
-        m_light.draw(m_camera);
-        m_cube.draw(m_camera);
-    }
-
-private:
-    void addCube()
-    {
-        m_cube.load(cubeVertecesWithNormals(), cubeIndeces(), SHADERS_PATH + "colour3D_Lighting");
-    }
-
-    void addLight()
-    {
-        m_light.load(simpleCubeVerteces(), simpleCubeIndeces(), SHADERS_PATH + "colour3D");
-
-        m_light.shader().bind();
-        m_light.shader().setUniform("u_colour", ZFX::WHITE);
-        m_light.transform().scale() = glm::vec3{ 0.01f };
-        m_light.transform().position().x = 0.0f;
-        m_light.transform().position().y = 0.0f;
-        m_light.transform().position().z = 0.9f;
-    }
-
-private:
-    ZFX::Object m_cube;
-    ZFX::Object m_light;
-};
-
-ZFX::Verteces cubeVertecesWithNormals()
+inline ZFX::Verteces cubeVertecesWithNormals()
 {
     /* Duplicate some vertices to get clearly defined edges:
     * - each corner has a normal vector in every cardinal (x,y,z) direction
@@ -111,7 +58,7 @@ ZFX::Verteces cubeVertecesWithNormals()
     return vertices;
 }
 
-ZFX::Indeces cubeIndeces()
+inline ZFX::Indeces cubeIndeces()
 {
     ZFX::Indeces indeces =
     {
@@ -137,3 +84,53 @@ ZFX::Indeces cubeIndeces()
     return indeces;
 }
 
+
+class Demo6A : public Demo
+{
+public:
+    Demo6A(ZFX::Window& window, ZFX::Camera& camera) : Demo{ window, camera, "Demo6A - Basic Lighting" }
+    {
+        addCube();
+        m_cube.transform().scale() = glm::vec3{ 0.5f };
+
+        addLight();
+    }
+
+    void draw() override
+    {
+        m_cube.transform().rotation().z = m_counter;
+        m_cube.transform().rotation().x = m_counter;
+        m_counter += 0.001f;
+
+        m_light.transform().position().x = sin(50 * m_counter);
+
+        m_cube.shader().bind();
+        m_cube.shader().setUniform("u_viewPosition", m_camera.position());
+        m_cube.shader().setUniform("u_lightPosition", m_light.transform().position());
+
+        m_light.draw(m_camera);
+        m_cube.draw(m_camera);
+    }
+
+private:
+    void addCube()
+    {
+        m_cube.load(cubeVertecesWithNormals(), cubeIndeces(), SHADERS_PATH + "colour3D_Lighting");
+    }
+
+    void addLight()
+    {
+        m_light.load(simpleCubeVerteces(), simpleCubeIndeces(), SHADERS_PATH + "colour3D");
+
+        m_light.shader().bind();
+        m_light.shader().setUniform("u_colour", ZFX::WHITE);
+        m_light.transform().scale() = glm::vec3{ 0.01f };
+        m_light.transform().position().x = 0.0f;
+        m_light.transform().position().y = 0.0f;
+        m_light.transform().position().z = 0.9f;
+    }
+
+private:
+    ZFX::Object m_cube;
+    ZFX::Object m_light;
+};
