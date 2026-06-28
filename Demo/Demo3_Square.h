@@ -10,11 +10,14 @@ public:
         addSquare();
     }
 
-    void draw() override
+    void update() override
     {
         m_square.transform().rotation().z = m_counter;
         m_counter += 0.001f;
+    }
 
+    void draw() override
+    {
         m_square.draw(m_camera);
     }
 

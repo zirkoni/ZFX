@@ -123,6 +123,7 @@ void MainLoop::doFrame(bool draw, const std::chrono::duration<float>& deltaTime)
 void MainLoop::update(float deltaTime)
 {
     handleEvents(deltaTime);
+    m_activeDemo->get()->update();
 }
 
 void MainLoop::toggleWireframe()

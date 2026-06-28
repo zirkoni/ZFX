@@ -17,12 +17,15 @@ public:
         addSmallTriangles();
     }
 
-    void draw() override
+    void update() override
     {
         m_triangles.at(IDX_X_MOVE).transform().position().x = sin(m_counter);
         m_triangles.at(IDX_Y_MOVE).transform().position().y = sin(m_counter);
         m_counter += 0.001f;
+    }
 
+    void draw() override
+    {
         for (auto& t : m_triangles)
         {
             t.draw(m_camera);

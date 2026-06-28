@@ -11,12 +11,15 @@ public:
         addMSAABuffer();
     }
 
-    void draw() override
+    void update() override
     {
         m_cube.transform().rotation().z = m_counter;
         m_cube.transform().rotation().x = m_counter;
         m_counter += 0.001f;
+    }
 
+    void draw() override
+    {
         m_MSAABuffer.bind(); // draw to MSAA buffer
         m_MSAABuffer.clear(bgColour());
 

@@ -71,14 +71,17 @@ public:
         setLightColour( glm::vec3{ 1.0f } );
     }
 
-    void draw() override
+    void update() override
     {
         m_cube.transform().rotation().z = m_counter;
         m_cube.transform().rotation().x = m_counter;
         m_counter += 0.001f;
 
         m_light.transform().position().x = sin(50 * m_counter);
+    }
 
+    void draw() override
+    {
         m_cube.shader().bind();
         m_cube.shader().setUniform("u_viewPosition", m_camera.position());
         m_cube.shader().setUniform("u_light.position", m_light.transform().position());

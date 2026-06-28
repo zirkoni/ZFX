@@ -12,6 +12,7 @@ public:
     virtual ~Demo() {}
 
     virtual void handleInput(const SDL_Event& e) {}
+    virtual void update() {}
     virtual void draw() = 0;
 
     virtual void onExit() {}

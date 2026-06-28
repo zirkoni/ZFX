@@ -13,12 +13,15 @@ public:
 
     virtual ~Demo6E() {}
 
-    virtual void draw() override
+    virtual void update() override
     {
         m_cube.transform().rotation().z = m_counter;
         m_cube.transform().rotation().x = m_counter;
         m_counter += 0.001f;
+    }
 
+    virtual void draw() override
+    {
         m_buffer.bind(); // draw to frame buffer
         m_buffer.clear(bgColour());
 

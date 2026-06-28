@@ -18,14 +18,17 @@ public:
         updateLighting( glm::vec3{ 1.0f } );
     }
 
-    void draw() override
+    void update() override
     {
         m_shinyCube.transform().rotation().z = m_counter;
         m_shinyCube.transform().rotation().x = m_counter;
         m_counter += 0.001f;
 
         m_light.transform().position().x = sin(50 * m_counter);
+    }
 
+    void draw() override
+    {
         glm::vec3 lightColour;
         lightColour.r = 1.0f - sin(m_counter);
         lightColour.g = 1.0f - cos(m_counter);

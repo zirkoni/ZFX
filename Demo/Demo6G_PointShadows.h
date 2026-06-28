@@ -21,7 +21,7 @@ public:
         onEntry();
     }
 
-    void draw() override
+    void update() override
     {
         // Do here instead of in loadShaders.
         // This fixes occasional black screen, no idea why.
@@ -45,7 +45,10 @@ public:
         // move light position over time
         m_lightPos.z = sin(m_counter);
         m_counter += 0.01f;
+    }
 
+    void draw() override
+    {
         // 0. create depth cubemap transformation matrices
         float nearPlane = 1.0f;
         float farPlane = 25.0f;
@@ -63,7 +66,7 @@ public:
         m_depthBuffer.bind();
         glClear(GL_DEPTH_BUFFER_BIT);
         m_simpleDepthShader->bind();
-        for (unsigned int i = 0; i < 6; ++i)
+        for (size_t i = 0; i < shadowTransforms.size(); ++i)
         {
             m_simpleDepthShader->setUniform("u_shadowMatrices[" + std::to_string(i) + "]", shadowTransforms[i]);
         }

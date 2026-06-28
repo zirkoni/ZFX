@@ -74,7 +74,7 @@ public:
         onEntry();
     }
 
-    void update()
+    void update() override
     {
         for (unsigned i = 0; i < NUM_OBJECTS; ++i)
         {
@@ -94,12 +94,11 @@ public:
         }
 
         m_counter += 0.01f;
-        m_cube->mesh.updateModels(m_instanceMatrix);
     }
 
     void draw() override
     {
-        update();
+        m_cube->mesh.updateModels(m_instanceMatrix);
         m_cube->draw(m_camera);
     }
 
