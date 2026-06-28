@@ -3,17 +3,12 @@
 #include <memory>
 #include <vector>
 
-//#define LOW_PERF_GPU
 
 class Demo8 : public Demo
 {
-#ifdef LOW_PERF_GPU
-    static constexpr unsigned NUM_OBJECTS = 5000;
-#else
     // Can be increased much higher without dropping below 60 fps!
     // My Nvidia GTX 1660 Super can handle 2M cubes.
     static constexpr unsigned NUM_OBJECTS = 42000;
-#endif
     static constexpr float RADIUS = 30.0f;
     static constexpr float OFFSET = 3.5f;
 
