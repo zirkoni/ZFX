@@ -139,14 +139,24 @@ void MainLoop::toggleWireframe()
     }
 }
 
-void MainLoop::changeActiveDemo()
+void MainLoop::changeActiveDemo(bool next)
 {
     m_activeDemo->get()->onExit();
 
-    ++m_activeDemo;
-    if (m_activeDemo == m_demos.end())
+    if (next)
     {
-        m_activeDemo = m_demos.begin();
+        ++m_activeDemo;
+        if (m_activeDemo == m_demos.end())
+        {
+            m_activeDemo = m_demos.begin();
+        }
+    } else
+    {
+        if (m_activeDemo == m_demos.begin())
+        {
+            m_activeDemo = m_demos.end();
+        }
+        --m_activeDemo;
     }
 
     m_activeDemo->get()->onEntry();
@@ -160,9 +170,14 @@ void MainLoop::checkKeyboardInput(const SDL_Event& e, float deltaTime)
     {
         toggleWireframe();
     }
-    else if (e.key.keysym.scancode == SDL_SCANCODE_SPACE) // Switch to different demo by pressing space
+    else if (e.key.keysym.scancode == SDL_SCANCODE_SPACE) // Switch to the next demo by pressing space
     {
-        changeActiveDemo();
+        changeActiveDemo(true);
+        m_window.setTitle(m_activeDemo->get()->name());
+    }
+    else if (e.key.keysym.scancode == SDL_SCANCODE_BACKSPACE) // Switch to the previous demo by pressing backspace
+    {
+        changeActiveDemo(false);
         m_window.setTitle(m_activeDemo->get()->name());
     }
     else if (e.key.keysym.scancode == SDL_SCANCODE_Z)

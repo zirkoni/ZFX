@@ -45,7 +45,7 @@ private:
     void handleEvents(float deltaTime);
 
     void toggleWireframe();
-    void changeActiveDemo();
+    void changeActiveDemo(bool next);
     void checkKeyboardInput(const SDL_Event& e, float deltaTime);
     void checkMouseInput(const SDL_Event& e);
 

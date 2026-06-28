@@ -12,6 +12,7 @@ public:
         m_textRenderer{ FONT, window.width(), window.height() }
     {
         m_helpText = "<Space> : Next demo\n"
+                     "<Backspace> : Previous demo\n"
                      "<Arrow keys> : Move camera\n"
                      "<C> : Toggle background colour (black/white)\n"
                      "<D> : Next scene (only frame buffers demo)\n"
