@@ -126,7 +126,7 @@ Uint32 ZFX::Window::windowFlags(const Options& options)
 
 void ZFX::Window::setGlAttributes(const Options& options)
 {
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, options.rgbaSize);

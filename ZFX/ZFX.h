@@ -7,3 +7,5 @@
 #include "ObjLoader.h"
 #include "Light.h"
 #include "FrameBuffer.h"
+#include "Shader.h"
+#include "SSBO.h"

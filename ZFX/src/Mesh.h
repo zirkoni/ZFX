@@ -23,6 +23,7 @@ namespace ZFX
         void draw(GLsizei amount);
 
         void updateModels(const std::vector<glm::mat4>& modelMatrices);
+        GLuint getInstanceBufferID() const { return m_vertexBuffers[INSTANCE_BUFFER]; }
 
     private:
         enum

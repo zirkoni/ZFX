@@ -305,3 +305,20 @@ GLuint ZFX::Shader::create(bool isFile, const std::string& source, GLenum shader
 
     return shader;
 }
+
+ZFX::ComputeShader::ComputeShader(const std::string& source)
+{
+    GLuint computeShader;
+    m_program = glCreateProgram();
+    computeShader = create(false, source, GL_COMPUTE_SHADER);
+    glAttachShader(m_program, computeShader);
+    compile(true);
+    glDeleteShader(computeShader);
+    saveUniformLocations();
+}
+
+void ZFX::ComputeShader::compute(GLuint numX, GLuint numY, GLuint numZ)
+{
+    glDispatchCompute(numX, numY, numZ);
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+}

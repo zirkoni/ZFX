@@ -1,17 +1,18 @@
 #pragma once
 #include "Demo6A_BasicLighting.h"
-#include <cmath>
+#include <memory>
 #include <vector>
 
 //#define LOW_PERF_GPU
 
-#if 1
 class Demo8 : public Demo
 {
 #ifdef LOW_PERF_GPU
     static constexpr unsigned NUM_OBJECTS = 5000;
 #else
-    static constexpr unsigned NUM_OBJECTS = 42000; // Can be increased much higher without dropping below 60 fps (GTX 1660 Super)!
+    // Can be increased much higher without dropping below 60 fps!
+    // My Nvidia GTX 1660 Super can handle 2M cubes.
+    static constexpr unsigned NUM_OBJECTS = 42000;
 #endif
     static constexpr float RADIUS = 30.0f;
     static constexpr float OFFSET = 3.5f;
@@ -24,8 +25,6 @@ class Demo8 : public Demo
             shader{ {SHADERS_PATH + "instancing.vs", SHADERS_PATH + "instancing.fs"} }
         {}
 
-        ~Shape() {}
-
         void draw(const ZFX::Camera& camera)
         {
             shader.bind();
@@ -37,68 +36,53 @@ class Demo8 : public Demo
         ZFX::Shader shader;
     };
 
-    struct InstanceTransform
-    {
-        float angle;
-        float xDisplacement;
-        float yDisplacement;
-        float zDisplacement;
-        ZFX::Transform transform;
-    };
-
 public:
-    Demo8(ZFX::Window& window, ZFX::Camera& camera) : Demo{ window, camera, "Demo8 - Instancing (Fast)" }
+    Demo8(ZFX::Window& window, ZFX::Camera& camera) : Demo{ window, camera, "Demo8 - Instancing" }
     {
         srand(SDL_GetTicks());
 
+        std::vector<glm::vec4> animParams0;
+        std::vector<glm::vec2> animParams1;
+
         for(unsigned i = 0; i < NUM_OBJECTS; ++i)
         {
-            ZFX::Transform transform;
-
             float angle = (float)i / (float)NUM_OBJECTS * 360.0f;
             float xDisplacement = (rand() % (int)(2 * OFFSET * 100)) / 100.0f - OFFSET;
             float yDisplacement = (rand() % (int)(2 * OFFSET * 100)) / 100.0f - OFFSET;
             float zDisplacement = (rand() % (int)(2 * OFFSET * 100)) / 100.0f - OFFSET;
+            float scale = (rand() % 20) / 50.0f + 0.05f;
+            float yRot = rand() % 360;
 
-            transform.position().x = sin(angle) * RADIUS + xDisplacement;
-            transform.position().z = cos(angle) * RADIUS + zDisplacement;
-            transform.position().y = (yDisplacement - transform.position().z) * 0.4f;
-
-            transform.scale() = glm::vec3{ (rand() % 20) / 50.0f + 0.05f };
-            transform.rotation().y = rand() % 360;
-            m_instanceMatrix.push_back(transform.getModel());
-            m_transforms.push_back({angle, xDisplacement, yDisplacement, zDisplacement, transform});
+            animParams0.push_back(glm::vec4(xDisplacement, yDisplacement, zDisplacement, angle));
+            animParams1.push_back(glm::vec2(scale, yRot));
         }
 
+        m_instanceMatrix.resize(NUM_OBJECTS, glm::mat4(1.0f));
+
+        m_paramsSsbo = std::make_unique<ZFX::SSBO>(animParams0, 1);
+        m_scalesSsbo = std::make_unique<ZFX::SSBO>(animParams1, 2);
+
         m_cube = addCube();
+        m_meshInstanceBuffer = m_cube->mesh.getInstanceBufferID();
+
+        createComputeShader();
         onEntry();
     }
 
     void update() override
     {
-        for (unsigned i = 0; i < NUM_OBJECTS; ++i)
-        {
-            auto& t = m_transforms.at(i);
-            auto& model = m_instanceMatrix.at(i);
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_meshInstanceBuffer);
 
-            // Move in a circle
-            t.transform.position().x = sin(t.angle + m_counter / 10) * RADIUS + t.xDisplacement;
-            t.transform.position().z = cos(t.angle + m_counter / 10) * RADIUS + t.zDisplacement;
-            t.transform.position().y = (t.yDisplacement - t.transform.position().z) * 0.4f;
-
-            // Rotate cube around its center
-            t.transform.rotation().z = m_counter;
-            t.transform.rotation().x = m_counter;
-
-            model = t.transform.getModel();
-        }
+        m_computeShader->bind();
+        m_computeShader->setUniform("u_counter", m_counter);
+        // Each group has 256 threads (local_size_x = 256), ceiling division to calculate num. of work groups
+        m_computeShader->compute((NUM_OBJECTS + 255) / 256);
 
         m_counter += 0.01f;
     }
 
     void draw() override
     {
-        m_cube->mesh.updateModels(m_instanceMatrix);
         m_cube->draw(m_camera);
     }
 
@@ -114,96 +98,93 @@ private:
         return std::make_unique<Shape>(cubeVertecesWithNormals(), cubeIndeces(), m_instanceMatrix);
     }
 
+    void createComputeShader()
+    {
+        // Note: Compute shader requires OpenGL version 4.3+
+        std::string computeSource = R"(
+#version 430
+
+layout(std430, binding = 0) buffer InstanceData
+{
+    mat4 modelMatrices[];
+};
+
+layout(std430, binding = 1) buffer AnimationParams0
+{
+    vec4 params0[];
+};
+
+layout(std430, binding = 2) buffer AnimationParams1
+{
+    vec2 params1[];
+};
+
+uniform float u_counter;
+uniform float u_radius = 30.0;
+
+layout(local_size_x = 256) in;
+
+void main()
+{
+    uint idx = gl_GlobalInvocationID.x;
+
+    vec4 param0 = params0[idx];
+    float xDisp = param0.x;
+    float yDisp = param0.y;
+    float zDisp = param0.z;
+    float angle = param0.w;
+
+    float posX = sin(angle + u_counter / 10.0) * u_radius + xDisp;
+    float posZ = cos(angle + u_counter / 10.0) * u_radius + zDisp;
+    float posY = (yDisp - posZ) * 0.4;
+
+    vec2 param1 = params1[idx];
+    float rotX = u_counter;
+    float rotZ = u_counter;
+    float rotY = param1.y;
+    float scale = param1.x;
+
+    // Identity
+    mat4 M = mat4(1.0);
+
+    // Translate
+    M[3] = vec4(posX, posY, posZ, 1.0);
+
+    // Rotate around Z - multiply from right
+    float cz = cos(rotZ);
+    float sz = sin(rotZ);
+    mat4 Rz = mat4(cz, sz, 0, 0, -sz, cz, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+    M = M * Rz;
+
+    // Rotate around X - multiply from right
+    float cx = cos(rotX);
+    float sx = sin(rotX);
+    mat4 Rx = mat4(1, 0, 0, 0, 0, cx, sx, 0, 0, -sx, cx, 0, 0, 0, 0, 1);
+    M = M * Rx;
+
+    // Rotate around Y - multiply from right
+    float cy = cos(rotY);
+    float sy = sin(rotY);
+    mat4 Ry = mat4(cy, 0, -sy, 0, 0, 1, 0, 0, sy, 0, cy, 0, 0, 0, 0, 1);
+    M = M * Ry;
+
+    // Scale
+    M[0] *= scale;
+    M[1] *= scale;
+    M[2] *= scale;
+
+    modelMatrices[idx] = M;
+}
+        )";
+
+        m_computeShader = std::make_unique<ZFX::ComputeShader>(computeSource);
+    }
+
 private:
     std::unique_ptr<Shape> m_cube;
-    std::vector<InstanceTransform> m_transforms;
     std::vector<glm::mat4> m_instanceMatrix;
+    std::unique_ptr<ZFX::SSBO> m_paramsSsbo;
+    std::unique_ptr<ZFX::SSBO> m_scalesSsbo;
+    std::unique_ptr<ZFX::ComputeShader> m_computeShader;
+    GLuint m_meshInstanceBuffer = 0;
 };
-#else // Each cube has its own draw call => slow.
-class Demo8 : public Demo
-{
-#ifdef LOW_PERF_GPU
-    static constexpr unsigned NUM_OBJECTS = 5000;
-#else
-    static constexpr unsigned NUM_OBJECTS = 42000; // Higher than ~this not reaching 60fps anymore (GTX 1660 Super)
-#endif
-
-    struct CubeInstance
-    {
-        static constexpr float RADIUS = 30.0;
-        static constexpr float OFFSET = 3.5f;
-
-        CubeInstance(ZFX::Transform& transform, unsigned idx)
-        {
-            angle = (float)idx / (float)NUM_OBJECTS * 360.0f;
-            xDisplacement = (rand() % (int)(2 * OFFSET * 100)) / 100.0f - OFFSET;
-            yDisplacement = (rand() % (int)(2 * OFFSET * 100)) / 100.0f - OFFSET;
-            zDisplacement = (rand() % (int)(2 * OFFSET * 100)) / 100.0f - OFFSET;
-
-            transform.scale() = glm::vec3{ (rand() % 20) / 50.0f + 0.05f };
-            transform.rotation().y = rand() % 360;
-            update(transform, 0.0f);
-        }
-
-        void update(ZFX::Transform& transform, float counter)
-        {
-            // Move in a circle
-            transform.position().x = sin(angle + counter / 10) * RADIUS + xDisplacement;
-            transform.position().z = cos(angle + counter / 10) * RADIUS + zDisplacement;
-            transform.position().y = (yDisplacement - transform.position().z) * 0.4f;
-
-            // Rotate cube around its center
-            transform.rotation().z = counter;
-            transform.rotation().x = counter;
-        }
-
-        float angle;
-        float xDisplacement;
-        float yDisplacement;
-        float zDisplacement;
-    };
-
-public:
-    Demo8(ZFX::Window& window, ZFX::Camera& camera) : Demo{ window, camera, "Demo8 - Instancing (Slow)" }
-    {
-        addCube();
-
-        for(unsigned i = 0; i < NUM_OBJECTS; ++i)
-        {
-            m_transformations.emplace_back( CubeInstance{m_cube.transform(i), i} );
-
-            if(i < NUM_OBJECTS - 1) // Do not  duplicate on last loop iteration
-            {
-                m_cube.duplicate();
-            }
-        }
-    }
-
-    void draw() override
-    {
-        for(int i = 0; i < m_transformations.size(); ++i)
-        {
-            m_transformations[i].update(m_cube.transform(i), m_counter); // Movement
-        }
-
-        m_cube.draw(m_camera); // Here draw is called for each Transform
-        m_counter += 0.01f;
-    }
-
-    void onEntry() override
-    {
-        m_camera.position().z = 80.0f;
-        m_camera.resetZoom();
-    }
-
-private:
-    void addCube()
-    {
-        m_cube.load(cubeVertecesWithNormals(), cubeIndeces(), SHADERS_PATH + "colour3D_Lighting");
-    }
-
-private:
-    ZFX::Object m_cube;
-    std::vector<CubeInstance> m_transformations;
-};
-#endif

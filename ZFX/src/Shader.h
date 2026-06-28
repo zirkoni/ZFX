@@ -55,6 +55,7 @@ namespace ZFX
         void setUniformArray(const std::string& uniform, const std::vector<glm::mat4>& values, int numValues);
 
     protected:
+        Shader() = default;
         void compile(bool validate);
         void saveUniformLocations();
         void saveSingleUniform(const GLint BUF_SIZE, GLuint idx);
@@ -69,5 +70,14 @@ namespace ZFX
         GLuint m_program;
         UniformMap m_uniforms;
     };
-}
 
+    class ComputeShader: public Shader
+    {
+    public:
+        ComputeShader(const std::string& source);
+        ComputeShader(const ComputeShader& other) = delete;
+        ComputeShader& operator=(const ComputeShader& other) = delete;
+
+        void compute(GLuint numX = 1, GLuint numY = 1, GLuint numZ = 1);
+    };
+}
