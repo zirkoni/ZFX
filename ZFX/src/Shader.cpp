@@ -72,9 +72,9 @@ void ZFX::Shader::saveUniformLocations()
     glGetProgramiv(m_program, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformMaxLength);
     glGetProgramiv(m_program, GL_ACTIVE_UNIFORMS, &numUniforms);
 
-    for(GLuint i = 0; i < numUniforms; ++i)
+    for(GLint i = 0; i < numUniforms; ++i)
     {
-        saveSingleUniform(uniformMaxLength, i);
+        saveSingleUniform(uniformMaxLength, static_cast<GLuint>(i));
     }
 }
 
