@@ -15,7 +15,7 @@ namespace ZFX
         ObjectLoader(const std::string& filename, bool smoothNormals = true);
         ~ObjectLoader();
 
-        const Verteces* verteces() const { return m_verteces; }
+        const Verteces& verteces() const { return m_verteces; }
         const Indeces& indeces() const { return m_indeces; }
 
     private:
@@ -25,7 +25,7 @@ namespace ZFX
         bool m_smoothNormals;
         VertexData m_data;
         AttributeSizes m_attributes;
-        Verteces* m_verteces;
+        Verteces m_verteces;
         Indeces  m_indeces;
     };
 }

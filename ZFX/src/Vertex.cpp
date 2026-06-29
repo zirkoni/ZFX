@@ -11,6 +11,12 @@ ZFX::Verteces::Verteces(VertexData&& data, AttributeSizes&& attributes)
     m_attributes = std::move(attributes);
 }
 
+void ZFX::Verteces::load(VertexData& data, AttributeSizes& attributes)
+{
+    m_data = std::move(data);
+    m_attributes = std::move(attributes);
+}
+
 uint32_t ZFX::Verteces::numElementsPerVertex() const
 {
     uint32_t sum = 0;

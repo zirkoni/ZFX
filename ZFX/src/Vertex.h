@@ -13,9 +13,11 @@ namespace ZFX
     class Verteces
     {
     public:
+        Verteces() = default;
         Verteces(VertexData& data, AttributeSizes& attributes);
         Verteces(VertexData&& data, AttributeSizes&& attributes);
 
+        void load(VertexData& data, AttributeSizes& attributes);
         const VertexData& data() const { return m_data; }
         const AttributeSizes& attributes() const { return m_attributes; }
         uint32_t numElementsPerVertex() const;
@@ -25,4 +27,3 @@ namespace ZFX
         AttributeSizes m_attributes;
     };
 }
-

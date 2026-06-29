@@ -53,7 +53,7 @@ void MainLoop::addDemos()
     m_demos.push_back(std::make_unique<Demo6E_MSAA>(m_window, m_camera));
     m_demos.push_back(std::make_unique<Demo6F>(m_window, m_camera));
     m_demos.push_back(std::make_unique<Demo6G>(m_window, m_camera));
-//    m_demos.push_back(std::make_unique<Demo7>(m_window, m_camera)); // Very slow to load! TODO: fix
+    m_demos.push_back(std::make_unique<Demo7>(m_window, m_camera));
     m_demos.push_back(std::make_unique<Demo8>(m_window, m_camera));
 //    m_demos.push_back(std::make_unique<Demo9>(m_window, m_camera));
 }

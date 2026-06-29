@@ -29,7 +29,7 @@ private:
         //ZFX::ObjectLoader obj{ OBJS_PATH + "cube.obj", false };
         //ZFX::ObjectLoader obj{ OBJS_PATH + "monkey/monkey3_normals.obj" };
         ZFX::ObjectLoader obj{ OBJS_PATH + "teamug/teamugobj.obj" };
-        m_cube.load(*obj.verteces(), obj.indeces(), SHADERS_PATH + "colour3D_Lighting");
+        m_cube.load(obj.verteces(), obj.indeces(), SHADERS_PATH + "colour3D_Lighting");
     }
 
 private:
