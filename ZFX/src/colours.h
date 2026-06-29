@@ -14,7 +14,7 @@ static const glm::vec4 CYAN     { 0.0f, 1.0f, 1.0f, 1.0f };
 static const glm::vec4 MAGENTA  { 1.0f, 0.0f, 1.0f, 1.0f };
 
 // Grays
-static glm::vec4 makeGray(float lightAmount, float alpha = 1.0f)
+[[maybe_unused]] static glm::vec4 makeGray(float lightAmount, float alpha = 1.0f)
 {
     assert(lightAmount > 0.0f && lightAmount < 1.0f);
 
@@ -24,4 +24,3 @@ static glm::vec4 makeGray(float lightAmount, float alpha = 1.0f)
 }
 
 }
-
