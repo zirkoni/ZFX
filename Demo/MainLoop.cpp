@@ -12,7 +12,8 @@
 #include "Demo6E_MSAA_FrameBuffers.h"
 #include "Demo6F_ShadowMapping.h"
 #include "Demo6G_PointShadows.h"
-#include "Demo7_ObjectLoader.h"
+#include "Demo7A_ObjectLoader.h"
+#include "Demo7B_Backpack.h"
 #include "Demo8_Instancing.h"
 #include "Demo9_Mouse.h"
 #include <thread>
@@ -53,7 +54,8 @@ void MainLoop::addDemos()
     m_demos.push_back(std::make_unique<Demo6E_MSAA>(m_window, m_camera));
     m_demos.push_back(std::make_unique<Demo6F>(m_window, m_camera));
     m_demos.push_back(std::make_unique<Demo6G>(m_window, m_camera));
-    m_demos.push_back(std::make_unique<Demo7>(m_window, m_camera));
+    m_demos.push_back(std::make_unique<Demo7A>(m_window, m_camera));
+    m_demos.push_back(std::make_unique<Demo7B>(m_window, m_camera));
     m_demos.push_back(std::make_unique<Demo8>(m_window, m_camera));
 //    m_demos.push_back(std::make_unique<Demo9>(m_window, m_camera));
 }

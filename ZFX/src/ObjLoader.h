@@ -12,8 +12,7 @@ namespace ZFX
     class ObjectLoader
     {
     public:
-        ObjectLoader(const std::string& filename, bool smoothNormals = true);
-        ~ObjectLoader();
+        ObjectLoader(const std::string& filename, bool smoothNormals = true, bool printWarnings = true);
 
         const Verteces& verteces() const { return m_verteces; }
         const Indeces& indeces() const { return m_indeces; }

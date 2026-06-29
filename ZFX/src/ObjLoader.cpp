@@ -11,7 +11,7 @@
 #include <iostream>
 #include <unordered_map>
 
-ZFX::ObjectLoader::ObjectLoader(const std::string& filename, bool smoothNormals): m_smoothNormals{smoothNormals}
+ZFX::ObjectLoader::ObjectLoader(const std::string& filename, bool smoothNormals, bool printWarnings): m_smoothNormals{smoothNormals}
 {
     tinyobj::ObjReader reader;
 
@@ -25,7 +25,7 @@ ZFX::ObjectLoader::ObjectLoader(const std::string& filename, bool smoothNormals)
         throw ZFX::Exception{ __FILE__, __LINE__, "TinyObjReader: ParseFromFile failed" };
     }
 
-    if (!reader.Warning().empty())
+    if (!reader.Warning().empty() && printWarnings)
     {
         std::cout << "TinyObjReader: " << reader.Warning() << "\n";
     }
@@ -33,12 +33,14 @@ ZFX::ObjectLoader::ObjectLoader(const std::string& filename, bool smoothNormals)
     loadObject(reader);
 }
 
-ZFX::ObjectLoader::~ObjectLoader()
-{
-}
-
 void ZFX::ObjectLoader::loadObject(tinyobj::ObjReader& reader)
 {
+    // How many floats each property has
+    constexpr unsigned numPositionValues = 3;
+    constexpr unsigned numNormalValues = 3;
+    constexpr unsigned numTextureValues = 2;
+    constexpr unsigned totalNumValues = numPositionValues + numNormalValues + numTextureValues;
+
     VertexData data;
     AttributeSizes attributes;
     std::unordered_map<glm::vec3, uint32_t> vertexMap;
@@ -50,17 +52,18 @@ void ZFX::ObjectLoader::loadObject(tinyobj::ObjReader& reader)
 
     const auto& vertices = attrib.vertices;
     const auto& normals = attrib.normals;
+    const auto& texcoords = attrib.texcoords;
 
-    data.reserve(vertices.size() * 3);
+    data.reserve(vertices.size() * totalNumValues);
     m_indeces.reserve(shapes[0].mesh.indices.size());
 
     for (const auto& shape : shapes)
     {
         for (const auto& index : shape.mesh.indices)
         {
-            const float x = vertices[3 * index.vertex_index + 0];
-            const float y = vertices[3 * index.vertex_index + 1];
-            const float z = vertices[3 * index.vertex_index + 2];
+            const float x = vertices[numPositionValues * index.vertex_index + 0];
+            const float y = vertices[numPositionValues * index.vertex_index + 1];
+            const float z = vertices[numPositionValues * index.vertex_index + 2];
 
             glm::vec3 coordinate{ x, y, z };
 
@@ -87,24 +90,24 @@ void ZFX::ObjectLoader::loadObject(tinyobj::ObjReader& reader)
                 data.push_back(y);
                 data.push_back(z);
 
-                if (index.normal_index >= 0)
+                if (index.normal_index >= 0 && !normals.empty())
                 {
-                    const float nx = normals[3 * size_t(index.normal_index) + 0];
-                    const float ny = normals[3 * size_t(index.normal_index) + 1];
-                    const float nz = normals[3 * size_t(index.normal_index) + 2];
+                    const float nx = normals[numNormalValues * size_t(index.normal_index) + 0];
+                    const float ny = normals[numNormalValues * size_t(index.normal_index) + 1];
+                    const float nz = normals[numNormalValues * size_t(index.normal_index) + 2];
                     data.push_back(nx);
                     data.push_back(ny);
                     data.push_back(nz);
                     hasNormals = true;
                 }
 
-                if (index.texcoord_index >= 0)
+                if (index.texcoord_index >= 0 && !texcoords.empty())
                 {
-                    /*const float tx = attrib.texcoords[2 * size_t(index.texcoord_index) + 0];
-                    const float ty = attrib.texcoords[2 * size_t(index.texcoord_index) + 1];
+                    const float tx = texcoords[numTextureValues * size_t(index.texcoord_index) + 0];
+                    const float ty = texcoords[numTextureValues * size_t(index.texcoord_index) + 1];
                     data.push_back(tx);
                     data.push_back(ty);
-                    hasUvs = true;*/
+                    hasUvs = true;
                 }
 
                 m_indeces.push_back(vertexIndex);
@@ -112,16 +115,16 @@ void ZFX::ObjectLoader::loadObject(tinyobj::ObjReader& reader)
         }
     }
 
-    attributes.push_back(3);
+    attributes.push_back(numPositionValues);
 
     if (hasNormals)
     {
-        attributes.push_back(3);
+        attributes.push_back(numNormalValues);
     }
 
     if (hasUvs)
     {
-        attributes.push_back(2);
+        attributes.push_back(numTextureValues);
     }
 
     m_verteces.load(data, attributes);
