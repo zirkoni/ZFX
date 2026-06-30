@@ -14,9 +14,14 @@
 
 ZFX::ObjectLoader::ObjectLoader(const std::string& filename, bool printWarnings)
 {
+    tinyobj::ObjReaderConfig cfg;
+    cfg.triangulate = true;
+    cfg.triangulation_method = "simple";
+    cfg.vertex_color = false;
+
     tinyobj::ObjReader reader;
 
-    if (!reader.ParseFromFile(filename))
+    if (!reader.ParseFromFile(filename, cfg))
     {
         if (!reader.Error().empty())
         {
