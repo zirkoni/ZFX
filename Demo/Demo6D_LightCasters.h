@@ -10,7 +10,7 @@ public:
         addCube();
         m_cube.transform().scale() = glm::vec3{ 0.5f };
         m_cube.transform().position().x = 0.7f;
-        m_cube.duplicate().position().x = -0.7f;
+        m_cube.meshes()[0].duplicate().position().x = -0.7f;
         addDirectionalLight();
         addPointLights();
         addSpotLight();
@@ -45,7 +45,7 @@ public:
 protected:
     void addCube()
     {
-        m_cube.load(cubeVertecesWithNormalsAndTexture(), cubeIndeces(), SHADERS_PATH + "colour3D_LightCasters");
+        m_cube.load({cubeVerticesWithNormalsAndTexture()}, {cubeIndices()}, SHADERS_PATH + "colour3D_LightCasters");
         m_cube.loadTexture(TEXTURES_PATH + "container.png");
         m_cube.loadTexture(TEXTURES_PATH + "container_specular.png");
 
@@ -106,7 +106,7 @@ protected:
     void addPointLightObject(const glm::vec3& position, const glm::vec3& colour)
     {
         ZFX::Object cube;
-        cube.load(simpleCubeVerteces(), simpleCubeIndeces(), SHADERS_PATH + "colour3D");
+        cube.load({simpleCubeVertices()}, {simpleCubeIndices()}, SHADERS_PATH + "colour3D");
         cube.shader().bind();
         cube.shader().setUniform("u_colour", glm::vec4{ colour, 1.0f });
         cube.transform().scale() = glm::vec3{ 0.05f };

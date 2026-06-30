@@ -11,12 +11,20 @@ public:
     {
         loadBackpackModel();
         addLighting();
-        m_backpack.transform().scale() = glm::vec3{ 0.5f };
+
+        for (auto& m : m_backpack.meshes())
+        {
+            m.transform().scale() = glm::vec3{ 0.5f };
+        }
     }
 
     void update() override
     {
-        m_backpack.transform().rotation().y = m_counter;
+        for (auto& m : m_backpack.meshes())
+        {
+            m.transform().rotation().y = m_counter;
+        }
+
         m_counter += 0.005f;
 
         updateLighting();
@@ -31,7 +39,7 @@ private:
     void loadBackpackModel()
     {
         ZFX::ObjectLoader obj{ OBJS_PATH + "backpack/backpack.obj" };
-        m_backpack.load(obj.verteces(), obj.indeces(), SHADERS_PATH + "colour3D_NormalMapping");
+        m_backpack.load({obj.vertices()}, {obj.indices()}, SHADERS_PATH + "colour3D_NormalMapping");
         m_backpack.shader().bind();
         m_backpack.shader().setUniform("u_material.shininess", 32.0f);
 

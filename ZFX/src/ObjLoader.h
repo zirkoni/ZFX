@@ -1,5 +1,6 @@
 #pragma once
 #include "Mesh.h"
+#include "Object.h"
 #include <string>
 
 namespace tinyobj
@@ -14,17 +15,15 @@ namespace ZFX
     public:
         ObjectLoader(const std::string& filename, bool smoothNormals = true, bool printWarnings = true);
 
-        const Verteces& verteces() const { return m_verteces; }
-        const Indeces& indeces() const { return m_indeces; }
+        const auto& vertices() const { return m_vertices; }
+        const auto& indices() const { return m_indices; }
 
     private:
         void loadObject(tinyobj::ObjReader& reader);
 
     private:
         bool m_smoothNormals;
-        VertexData m_data;
-        AttributeSizes m_attributes;
-        Verteces m_verteces;
-        Indeces  m_indeces;
+        Object::VertexList m_vertices;
+        Object::IndexList  m_indices;
     };
 }

@@ -1,31 +1,55 @@
 #include "Object.h"
+#include "Shader.h"
+#include <memory>
 
 
-ZFX::Object::Object()
+ZFX::ObjectPart::ObjectPart(const Vertices& vertices, const Indices& indices)
 {
+    m_mesh = std::make_unique<Mesh>(vertices, indices);
+    m_transforms.push_back( Transform{} );
 }
 
-void ZFX::Object::load(const ZFX::Verteces &vertices,
-        const ZFX::Indeces &indeces, const std::string &shadersFileName)
+ZFX::Transform& ZFX::ObjectPart::duplicate()
+{
+    auto& copy = m_transforms[0];
+    m_transforms.push_back(copy);
+    return m_transforms.back();
+}
+
+void ZFX::ObjectPart::duplicate(Transform &transform)
+{
+    m_transforms.push_back(transform);
+}
+
+//////////////////////////////////////////////////////////////////////////
+void ZFX::Object::load(
+        const VertexList& vertices,
+        const IndexList& indices,
+        const std::string &shadersFileName)
 {
     ShaderSource src{ shadersFileName + ".vs", shadersFileName + ".fs" };
-    load(vertices, indeces, src);
+    load(vertices, indices, src);
 }
 
-void ZFX::Object::load(const ZFX::Verteces &vertices, const ZFX::Indeces &indeces,
+void ZFX::Object::load(
+        const VertexList& vertices,
+        const IndexList& indices,
         std::shared_ptr<ZFX::Shader> shader)
 {
-    m_mesh = std::make_unique<Mesh>(vertices, indeces);
     m_shader = shader;
-    m_transforms.push_back( Transform{} );
+
+    for (size_t i = 0; i < vertices.size(); ++i)
+    {
+        m_meshes.emplace_back(vertices[i], indices[i]);
+    }
 }
 
-void ZFX::Object::load(const ZFX::Verteces &vertices, const ZFX::Indeces &indeces,
+void ZFX::Object::load(
+        const VertexList& vertices,
+        const IndexList& indices,
         const ShaderSource& shaderSrc)
 {
-    m_mesh = std::make_unique<Mesh>(vertices, indeces);
-    m_shader = std::make_shared<Shader>(shaderSrc);
-    m_transforms.push_back( Transform{} );
+    load(vertices, indices, std::make_shared<ZFX::Shader>(shaderSrc));
 }
 
 void ZFX::Object::loadTexture(const std::string &textureFile)
@@ -34,19 +58,7 @@ void ZFX::Object::loadTexture(const std::string &textureFile)
     m_textures.push_back(std::move(texture));
 }
 
-ZFX::Transform& ZFX::Object::duplicate()
-{
-    auto& copy = m_transforms[0];
-    m_transforms.push_back(copy);
-    return m_transforms.back();
-}
-
-void ZFX::Object::duplicate(Transform &transform)
-{
-    m_transforms.push_back(transform);
-}
-
-void ZFX::Object::draw(const ZFX::Camera &camera)
+void ZFX::Object::draw(const ZFX::Camera &camera) const
 {
     m_shader->bind();
 
@@ -55,20 +67,26 @@ void ZFX::Object::draw(const ZFX::Camera &camera)
         m_textures[i]->bind(i);
     }
 
-    for(const auto& t : m_transforms)
+    for(const auto& mesh : m_meshes)
     {
-        m_shader->update(t, camera);
-        m_mesh->draw();
+        for(const auto& t : mesh.transformList())
+        {
+            m_shader->update(t, camera);
+            mesh.mesh().draw();
+        }
     }
 }
 
-void ZFX::Object::draw(ZFX::Shader &shader)
+void ZFX::Object::draw(ZFX::Shader &shader) const
 {
     shader.bind();
 
-    for(const auto& t : m_transforms)
+    for(const auto& mesh : m_meshes)
     {
-        shader.update(t.getModel());
-        m_mesh->draw();
+        for(const auto& t : mesh.transformList())
+        {
+            shader.update(t.getModel());
+            mesh.mesh().draw();
+        }
     }
 }

@@ -14,9 +14,9 @@ class Demo8 : public Demo
 
     struct Shape
     {
-        Shape(const ZFX::Verteces& vertices, const ZFX::Indeces& indeces,
+        Shape(const ZFX::Vertices& vertices, const ZFX::Indices& indices,
                 const std::vector<glm::mat4>& instanceMatrix) :
-            mesh{ vertices, indeces, instanceMatrix },
+            mesh{ vertices, indices, instanceMatrix },
             shader{ {SHADERS_PATH + "instancing.vs", SHADERS_PATH + "instancing.fs"} }
         {}
 
@@ -90,7 +90,7 @@ public:
 private:
     std::unique_ptr<Shape> addCube()
     {
-        return std::make_unique<Shape>(cubeVertecesWithNormals(), cubeIndeces(), m_instanceMatrix);
+        return std::make_unique<Shape>(cubeVerticesWithNormals(), cubeIndices(), m_instanceMatrix);
     }
 
     void createComputeShader()

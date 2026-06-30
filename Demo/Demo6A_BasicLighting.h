@@ -3,13 +3,13 @@
 #include <vector>
 
 
-inline ZFX::Verteces cubeVertecesWithNormals()
+inline ZFX::Vertices cubeVerticesWithNormals()
 {
     /* Duplicate some vertices to get clearly defined edges:
     * - each corner has a normal vector in every cardinal (x,y,z) direction
     * - 8 corners and 3 axis => 24 vertices
     */
-    ZFX::Verteces vertices =
+    ZFX::Vertices vertices =
     {
         ZFX::VertexData
         {
@@ -58,9 +58,9 @@ inline ZFX::Verteces cubeVertecesWithNormals()
     return vertices;
 }
 
-inline ZFX::Indeces cubeIndeces()
+inline ZFX::Indices cubeIndices()
 {
-    ZFX::Indeces indeces =
+    ZFX::Indices indices =
     {
         // +X
         8, 10, 9, 9, 10, 11,
@@ -81,7 +81,7 @@ inline ZFX::Indeces cubeIndeces()
         20, 21, 22, 21, 23, 22
     };
 
-    return indeces;
+    return indices;
 }
 
 
@@ -118,12 +118,12 @@ public:
 private:
     void addCube()
     {
-        m_cube.load(cubeVertecesWithNormals(), cubeIndeces(), SHADERS_PATH + "colour3D_Lighting");
+        m_cube.load({cubeVerticesWithNormals()}, {cubeIndices()}, SHADERS_PATH + "colour3D_Lighting");
     }
 
     void addLight()
     {
-        m_light.load(simpleCubeVerteces(), simpleCubeIndeces(), SHADERS_PATH + "colour3D");
+        m_light.load({simpleCubeVertices()}, {simpleCubeIndices()}, SHADERS_PATH + "colour3D");
 
         m_light.shader().bind();
         m_light.shader().setUniform("u_colour", ZFX::WHITE);

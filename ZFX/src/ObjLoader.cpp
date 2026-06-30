@@ -1,4 +1,6 @@
+#include "Mesh.h"
 #if !defined(ZFX_NO_OBJECT_LOADER)
+#define TINYOBJLOADER_IMPLEMENTATION
 
 #include "ObjLoader.h"
 #define GLM_ENABLE_EXPERIMENTAL
@@ -41,92 +43,85 @@ void ZFX::ObjectLoader::loadObject(tinyobj::ObjReader& reader)
     constexpr unsigned numTextureValues = 2;
     constexpr unsigned totalNumValues = numPositionValues + numNormalValues + numTextureValues;
 
-    VertexData data;
-    AttributeSizes attributes;
-    std::unordered_map<glm::vec3, uint32_t> vertexMap;
-    bool hasNormals = false;
-    bool hasUvs = false;
-
     auto& attrib = reader.GetAttrib();
     auto& shapes = reader.GetShapes();
+    //auto& materials = reader.GetMaterials();
 
-    const auto& vertices = attrib.vertices;
-    const auto& normals = attrib.normals;
-    const auto& texcoords = attrib.texcoords;
-
-    data.reserve(vertices.size() * totalNumValues);
-    m_indeces.reserve(shapes[0].mesh.indices.size());
-
-    for (const auto& shape : shapes)
+    for (size_t s = 0; s < shapes.size(); s++)
     {
-        for (const auto& index : shape.mesh.indices)
+        VertexData data;
+        AttributeSizes attributes;
+        Indices indices;
+        bool hasNormals = false;
+        bool hasUvs = false;
+
+        // Loop over faces(polygon)
+        size_t index_offset = 0;
+        for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++)
         {
-            const float x = vertices[numPositionValues * index.vertex_index + 0];
-            const float y = vertices[numPositionValues * index.vertex_index + 1];
-            const float z = vertices[numPositionValues * index.vertex_index + 2];
+            size_t fv = size_t(shapes[s].mesh.num_face_vertices[f]);
 
-            glm::vec3 coordinate{ x, y, z };
-
-            bool newVertex = true;
-            uint32_t vertexIndex = 0;
-
-            if (m_smoothNormals)
+            // Loop over vertices in the face.
+            for (size_t v = 0; v < fv; v++)
             {
-                auto it = vertexMap.find(coordinate);
-                if (it != vertexMap.end())
+                // access to vertex
+                tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
+                tinyobj::real_t vx = attrib.vertices[3*size_t(idx.vertex_index)+0];
+                tinyobj::real_t vy = attrib.vertices[3*size_t(idx.vertex_index)+1];
+                tinyobj::real_t vz = attrib.vertices[3*size_t(idx.vertex_index)+2];
+
+                data.push_back(vx);
+                data.push_back(vy);
+                data.push_back(vz);
+                indices.push_back(index_offset + v);
+
+                // Check if `normal_index` is zero or positive. negative = no normal data
+                if (idx.normal_index >= 0)
                 {
-                    vertexIndex = it->second;
-                    m_indeces.push_back(vertexIndex);
-                    newVertex = false;
-                }
-            }
+                    tinyobj::real_t nx = attrib.normals[3*size_t(idx.normal_index)+0];
+                    tinyobj::real_t ny = attrib.normals[3*size_t(idx.normal_index)+1];
+                    tinyobj::real_t nz = attrib.normals[3*size_t(idx.normal_index)+2];
 
-            if(newVertex)
-            {
-                vertexIndex = (uint32_t)vertexMap.size();
-                vertexMap[coordinate] = vertexIndex;
-
-                data.push_back(x);
-                data.push_back(y);
-                data.push_back(z);
-
-                if (index.normal_index >= 0 && !normals.empty())
-                {
-                    const float nx = normals[numNormalValues * size_t(index.normal_index) + 0];
-                    const float ny = normals[numNormalValues * size_t(index.normal_index) + 1];
-                    const float nz = normals[numNormalValues * size_t(index.normal_index) + 2];
                     data.push_back(nx);
                     data.push_back(ny);
                     data.push_back(nz);
                     hasNormals = true;
                 }
 
-                if (index.texcoord_index >= 0 && !texcoords.empty())
+                // Check if `texcoord_index` is zero or positive. negative = no texcoord data
+                if (idx.texcoord_index >= 0)
                 {
-                    const float tx = texcoords[numTextureValues * size_t(index.texcoord_index) + 0];
-                    const float ty = texcoords[numTextureValues * size_t(index.texcoord_index) + 1];
+                    tinyobj::real_t tx = attrib.texcoords[2*size_t(idx.texcoord_index)+0];
+                    tinyobj::real_t ty = attrib.texcoords[2*size_t(idx.texcoord_index)+1];
+
                     data.push_back(tx);
                     data.push_back(ty);
                     hasUvs = true;
                 }
 
-                m_indeces.push_back(vertexIndex);
+                // Optional: vertex colors
+                // tinyobj::real_t red   = attrib.colors[3*size_t(idx.vertex_index)+0];
+                // tinyobj::real_t green = attrib.colors[3*size_t(idx.vertex_index)+1];
+                // tinyobj::real_t blue  = attrib.colors[3*size_t(idx.vertex_index)+2];
             }
+
+            index_offset += fv;
         }
+
+        attributes.push_back(3);
+
+        if (hasNormals)
+        {
+            attributes.push_back(3);
+        }
+
+        if (hasUvs)
+        {
+            attributes.push_back(2);
+        }
+
+        m_vertices.emplace_back(data, attributes);
+        m_indices.emplace_back(indices);
     }
-
-    attributes.push_back(numPositionValues);
-
-    if (hasNormals)
-    {
-        attributes.push_back(numNormalValues);
-    }
-
-    if (hasUvs)
-    {
-        attributes.push_back(numTextureValues);
-    }
-
-    m_verteces.load(data, attributes);
 }
 #endif

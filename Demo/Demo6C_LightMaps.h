@@ -3,13 +3,13 @@
 #include <vector>
 
 
-inline ZFX::Verteces cubeVertecesWithNormalsAndTexture()
+inline ZFX::Vertices cubeVerticesWithNormalsAndTexture()
 {
     /* Duplicate some vertices to get clearly defined edges:
     * - each corner has a normal vector in every cardinal (x,y,z) direction
     * - 8 corners and 3 axis => 24 vertices
     */
-    ZFX::Verteces vertices =
+    ZFX::Vertices vertices =
     {
         ZFX::VertexData
         {
@@ -93,7 +93,7 @@ public:
 private:
     void addCube()
     {
-        m_cube.load(cubeVertecesWithNormalsAndTexture(), cubeIndeces(), SHADERS_PATH + "colour3D_LightMap");
+        m_cube.load({cubeVerticesWithNormalsAndTexture()}, {cubeIndices()}, SHADERS_PATH + "colour3D_LightMap");
         m_cube.loadTexture(TEXTURES_PATH + "container.png");
         m_cube.loadTexture(TEXTURES_PATH + "container_specular.png");
 
@@ -106,7 +106,7 @@ private:
 
     void addLight()
     {
-        m_light.load(simpleCubeVerteces(), simpleCubeIndeces(), SHADERS_PATH + "colour3D");
+        m_light.load({simpleCubeVertices()}, {simpleCubeIndices()}, SHADERS_PATH + "colour3D");
         m_light.shader().bind();
         m_light.shader().setUniform("u_colour", glm::vec4{ 1.0f });
         m_light.transform().scale() = glm::vec3{ 0.01f };

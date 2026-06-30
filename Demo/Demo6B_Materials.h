@@ -43,7 +43,7 @@ public:
 private:
     void addCubes()
     {
-        m_shinyCube.load(cubeVertecesWithNormals(), cubeIndeces(), SHADERS_PATH + "colour3D_Materials");
+        m_shinyCube.load({cubeVerticesWithNormals()}, {cubeIndices()}, SHADERS_PATH + "colour3D_Materials");
         m_shinyCube.shader().bind();
         m_shinyCube.shader().setUniform("u_material.ambient",  glm::vec3{ 0.25f, 0.25f, 0.25f });
         m_shinyCube.shader().setUniform("u_material.diffuse",  glm::vec3{ 0.4f, 0.4f, 0.4f });
@@ -51,7 +51,7 @@ private:
         m_shinyCube.shader().setUniform("u_material.shininess", 0.6f * 128);
 
         // We could duplicate the shiny cube but then both cubes would have the same material
-        m_dimCube.load(cubeVertecesWithNormals(), cubeIndeces(), SHADERS_PATH + "colour3D_Materials");
+        m_dimCube.load({cubeVerticesWithNormals()}, {cubeIndices()}, SHADERS_PATH + "colour3D_Materials");
         m_dimCube.shader().bind();
         m_dimCube.shader().setUniform("u_material.ambient",  glm::vec3{ 0.02f, 0.02f, 0.02f });
         m_dimCube.shader().setUniform("u_material.diffuse",  glm::vec3{ 0.01f, 0.01f, 0.01f });
@@ -61,7 +61,7 @@ private:
 
     void addLight()
     {
-        m_light.load(simpleCubeVerteces(), simpleCubeIndeces(), SHADERS_PATH + "colour3D");
+        m_light.load({simpleCubeVertices()}, {simpleCubeIndices()}, SHADERS_PATH + "colour3D");
         m_light.shader().bind();
         m_light.shader().setUniform("u_colour", ZFX::WHITE);
         m_light.transform().scale() = glm::vec3{ 0.01f };

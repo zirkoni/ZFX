@@ -3,10 +3,10 @@
 #include <vector>
 
 
-inline ZFX::Verteces simpleCubeVerteces()
+inline ZFX::Vertices simpleCubeVertices()
 {
     /* The 8 corners of a cube */
-    ZFX::Verteces vertices =
+    ZFX::Vertices vertices =
     {
         ZFX::VertexData
         {
@@ -28,9 +28,9 @@ inline ZFX::Verteces simpleCubeVerteces()
     return vertices;
 }
 
-inline ZFX::Indeces simpleCubeIndeces()
+inline ZFX::Indices simpleCubeIndices()
 {
-    ZFX::Indeces indeces =
+    ZFX::Indices indices =
     {
         /* Back */
         0, 3, 1, 3, 2, 1,
@@ -51,7 +51,7 @@ inline ZFX::Indeces simpleCubeIndeces()
         4, 0, 5, 0, 1, 5
     };
 
-    return indeces;
+    return indices;
 }
 
 class Demo5 : public Demo
@@ -78,7 +78,7 @@ public:
 private:
     void addCube()
     {
-        m_cube.load(simpleCubeVerteces(), simpleCubeIndeces(), SHADERS_PATH + "colour3D");
+        m_cube.load({simpleCubeVertices()}, {simpleCubeIndices()}, SHADERS_PATH + "colour3D");
 
 //#define CHANGE_COLOUR
 #if defined(CHANGE_COLOUR)

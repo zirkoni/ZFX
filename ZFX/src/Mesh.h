@@ -5,22 +5,22 @@
 
 namespace ZFX
 {
-    using Indeces = std::vector<uint32_t>;
+    using Indices = std::vector<uint32_t>;
 
     class Mesh
     {
-        Mesh(const Verteces& vertices, const Indeces& indeces, unsigned numBuffers);
+        Mesh(const Vertices& vertices, const Indices& indices, unsigned numBuffers);
 
     public:
-        Mesh(const Verteces& vertices, const Indeces& indeces);
-        Mesh(const Verteces& vertices, const Indeces& indeces, const std::vector<glm::mat4>& modelMatrices);
+        Mesh(const Vertices& vertices, const Indices& indices);
+        Mesh(const Vertices& vertices, const Indices& indices, const std::vector<glm::mat4>& modelMatrices);
         Mesh(const Mesh& other) = delete;
         Mesh(Mesh&&) = default;
         Mesh& operator=(const Mesh& other) = delete;
         ~Mesh();
 
-        void draw();
-        void draw(GLsizei amount);
+        void draw() const;
+        void draw(GLsizei amount) const;
 
         void updateModels(const std::vector<glm::mat4>& modelMatrices);
         GLuint getInstanceBufferID() const { return m_vertexBuffers[INSTANCE_BUFFER]; }
@@ -35,11 +35,10 @@ namespace ZFX
             MAX_NUM_BUFFERS
         };
 
-        GLsizei  m_numIndeces;
+        GLsizei  m_numIndices;
         unsigned m_numBuffers;
 
         GLuint m_vertexArrayObject;
         GLuint m_vertexBuffers[MAX_NUM_BUFFERS];
     };
 }
-

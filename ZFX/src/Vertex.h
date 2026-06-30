@@ -10,12 +10,12 @@ namespace ZFX
     using VertexData = std::vector<float>;
     using AttributeSizes = std::vector<GLint>;
 
-    class Verteces
+    class Vertices
     {
     public:
-        Verteces() = default;
-        Verteces(VertexData& data, AttributeSizes& attributes);
-        Verteces(VertexData&& data, AttributeSizes&& attributes);
+        Vertices() = default;
+        Vertices(VertexData& data, AttributeSizes& attributes);
+        Vertices(VertexData&& data, AttributeSizes&& attributes);
 
         void load(VertexData& data, AttributeSizes& attributes);
         const VertexData& data() const { return m_data; }

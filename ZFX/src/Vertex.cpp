@@ -1,23 +1,23 @@
 #include "Vertex.h"
 
 
-ZFX::Verteces::Verteces(VertexData& data, AttributeSizes& attributes): m_data{data}, m_attributes{attributes}
+ZFX::Vertices::Vertices(VertexData& data, AttributeSizes& attributes): m_data{data}, m_attributes{attributes}
 {
 }
 
-ZFX::Verteces::Verteces(VertexData&& data, AttributeSizes&& attributes)
-{
-    m_data = std::move(data);
-    m_attributes = std::move(attributes);
-}
-
-void ZFX::Verteces::load(VertexData& data, AttributeSizes& attributes)
+ZFX::Vertices::Vertices(VertexData&& data, AttributeSizes&& attributes)
 {
     m_data = std::move(data);
     m_attributes = std::move(attributes);
 }
 
-uint32_t ZFX::Verteces::numElementsPerVertex() const
+void ZFX::Vertices::load(VertexData& data, AttributeSizes& attributes)
+{
+    m_data = std::move(data);
+    m_attributes = std::move(attributes);
+}
+
+uint32_t ZFX::Vertices::numElementsPerVertex() const
 {
     uint32_t sum = 0;
     for (const auto& atr : m_attributes)

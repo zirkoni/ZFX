@@ -27,7 +27,7 @@ private:
     {
         /* Create a square with texture that is a circle */
 
-        ZFX::Verteces vertices =
+        ZFX::Vertices vertices =
         {
             ZFX::VertexData
             {
@@ -40,13 +40,13 @@ private:
             ZFX::AttributeSizes{2, 2}
         };
 
-        ZFX::Indeces indeces =
+        ZFX::Indices indices =
         {
             0, 2, 1,
             0, 3, 2
         };
 
-        m_textureCircle.load(vertices, indeces, SHADERS_PATH + "texture");
+        m_textureCircle.load({vertices}, {indices}, SHADERS_PATH + "texture");
         m_textureCircle.loadTexture(TEXTURES_PATH + "circle.png");
     }
 
@@ -54,7 +54,7 @@ private:
     {
         /* Create a square, fragment shader will draw it as a circle */
 
-        ZFX::Verteces vertices =
+        ZFX::Vertices vertices =
         {
             ZFX::VertexData
             {
@@ -67,13 +67,13 @@ private:
             ZFX::AttributeSizes{2}
         };
 
-        ZFX::Indeces indeces =
+        ZFX::Indices indices =
         {
             0, 2, 1,
             0, 3, 2
         };
 
-        m_shaderCircle.load(vertices, indeces, SHADERS_PATH + "circle");
+        m_shaderCircle.load({vertices}, {indices}, SHADERS_PATH + "circle");
 
         // Set colour
         m_shaderCircle.shader().bind();

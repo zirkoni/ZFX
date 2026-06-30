@@ -19,8 +19,8 @@ public:
 
     void update() override
     {
-        m_triangles.at(IDX_X_MOVE).transform().position().x = sin(m_counter);
-        m_triangles.at(IDX_Y_MOVE).transform().position().y = sin(m_counter);
+        m_triangles.at(IDX_X_MOVE).meshes()[0].transform().position().x = sin(m_counter);
+        m_triangles.at(IDX_Y_MOVE).meshes()[0].transform().position().y = sin(m_counter);
         m_counter += 0.001f;
     }
 
@@ -36,7 +36,7 @@ private:
     void addTriangle()
     {
         /* The 3 corners of a triangle (clockwise) */
-        ZFX::Verteces vertices =
+        ZFX::Vertices vertices =
         {
             ZFX::VertexData
             {
@@ -49,16 +49,16 @@ private:
             ZFX::AttributeSizes{2, 4} // 2 x float for coordinates, 4 x float for colour
         };
 
-        /* With indeces we must choose the vertices in counter clockwise order
+        /* With indices we must choose the vertices in counter clockwise order
          * because we are culling back faces and by default OpenGL winding order is counter clockwise.
          */
-        ZFX::Indeces indeces =
+        ZFX::Indices indices =
         {
             0, 2, 1
         };
 
         ZFX::Object triangle;
-        triangle.load(vertices, indeces, SHADERS_PATH + "colour");
+        triangle.load({vertices}, {indices}, SHADERS_PATH + "colour");
         m_triangles.push_back(std::move(triangle));
     }
 
@@ -81,7 +81,7 @@ private:
 
         for(int i = 1; i < 4; ++i)
         {
-            auto& transform = m_triangles.back().duplicate();
+            auto& transform = m_triangles.back().meshes()[0].duplicate();
             transform.position() = glm::vec3{ positions[i], 0.0f };
             transform.scale() = glm::vec3{ sizes[i] };
         }
@@ -90,7 +90,7 @@ private:
     void loadTriangle(const glm::vec2& position, float scale)
     {
         /* The 3 corners of a triangle (counter clockwise) */
-        ZFX::Verteces vertices =
+        ZFX::Vertices vertices =
         {
             ZFX::VertexData
             {
@@ -103,14 +103,14 @@ private:
             ZFX::AttributeSizes{2}
         };
 
-        /* Now indeces are different! */
-        ZFX::Indeces indeces =
+        /* Now indices are different! */
+        ZFX::Indices indices =
         {
             0, 1, 2
         };
 
         ZFX::Object triangle;
-        triangle.load(vertices, indeces, SHADERS_PATH + "colour2");
+        triangle.load({vertices}, {indices}, SHADERS_PATH + "colour2");
         triangle.transform().position() = glm::vec3{ position, 0.0f };
         triangle.transform().scale() = glm::vec3{ scale };
         triangle.shader().bind();
@@ -121,7 +121,7 @@ private:
     void addTexturedTriangle()
     {
         /* Texture coordinates have (0, 0) at the lower left corner and (1, 1) at the upper right corner */
-        ZFX::Verteces vertices =
+        ZFX::Vertices vertices =
         {
             ZFX::VertexData
             {
@@ -134,20 +134,20 @@ private:
             ZFX::AttributeSizes{2, 2}
         };
 
-        ZFX::Indeces indeces =
+        ZFX::Indices indices =
         {
             0, 1, 2
         };
 
         ZFX::Object triangle;
-        triangle.load(vertices, indeces, SHADERS_PATH + "texture");
+        triangle.load({vertices}, {indices}, SHADERS_PATH + "texture");
         triangle.loadTexture(TEXTURES_PATH + "texture.png");
         m_triangles.push_back(std::move(triangle));
     }
 
     void addTexturedTriangleWithColour()
     {
-        ZFX::Verteces vertices =
+        ZFX::Vertices vertices =
         {
             ZFX::VertexData
             {
@@ -160,13 +160,13 @@ private:
             ZFX::AttributeSizes{2, 4, 2}
         };
 
-        ZFX::Indeces indeces =
+        ZFX::Indices indices =
         {
             0, 1, 2
         };
 
         ZFX::Object triangle;
-        triangle.load(vertices, indeces, SHADERS_PATH + "textureAndColour");
+        triangle.load({vertices}, {indices}, SHADERS_PATH + "textureAndColour");
         triangle.loadTexture(TEXTURES_PATH + "texture.png");
         m_triangles.push_back(std::move(triangle));
     }

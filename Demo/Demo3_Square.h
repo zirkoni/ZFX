@@ -25,7 +25,7 @@ protected:
     void addSquare()
     {
         /* The 4 corners of a square, starting from left lower corner in clockwise order */
-        ZFX::Verteces vertices =
+        ZFX::Vertices vertices =
         {
             ZFX::VertexData
             {
@@ -39,16 +39,16 @@ protected:
             ZFX::AttributeSizes{2, 4}
         };
 
-        /* Now we use indeces to define our shape (square is made of 2 triangles that have 2 common verteces)
+        /* Now we use indices to define our shape (square is made of 2 triangles that have 2 common vertices)
          * and set counter clockwise winding.
          */
-        ZFX::Indeces indeces =
+        ZFX::Indices indices =
         {
             0, 2, 1, // 1st triangle: [-0.5, -0.5], [0.5f, 0.5f], [-0.5f, 0.5f]
             0, 3, 2  // 2nd triangle: [-0.5, -0.5], [0.5f, -0.5f], [0.5f, 0.5f]
         };
 
-        m_square.load(vertices, indeces, SHADERS_PATH + "colour");
+        m_square.load({vertices}, {indices}, SHADERS_PATH + "colour");
     }
 
     ZFX::Object m_square;

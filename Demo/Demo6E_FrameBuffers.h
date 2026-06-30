@@ -68,7 +68,7 @@ protected:
 
     void addFrameBuffer()
     {
-        ZFX::Verteces vertices =
+        ZFX::Vertices vertices =
         {
             ZFX::VertexData
             {
@@ -82,9 +82,9 @@ protected:
             ZFX::AttributeSizes{2, 2}
         };
 
-        ZFX::Indeces indeces = { 0, 2, 1, 0, 3, 2 };
+        ZFX::Indices indices = { 0, 2, 1, 0, 3, 2 };
 
-        m_screen.load(vertices, indeces, SHADERS_PATH + "framebuffer");
+        m_screen.load({vertices}, {indices}, SHADERS_PATH + "framebuffer");
         m_screen.shader().bind();
         m_screen.shader().setUniform("u_screenTexture", 0);
 
@@ -99,7 +99,7 @@ protected:
 
         m_screen.shader().bind();
         m_buffer.bindTextureBuffer();
-        m_screen.mesh().draw();
+        m_screen.meshes()[0].mesh().draw();
     }
 
 protected:

@@ -7,13 +7,21 @@ public:
     Demo7A(ZFX::Window& window, ZFX::Camera& camera) : Demo{ window, camera, "Demo7A - Object Loader" }
     {
         loadModel();
-        m_model.transform().scale() = glm::vec3{ 0.5f };
+
+        for (auto& m : m_model.meshes())
+        {
+            m.transform().scale() = glm::vec3{ 0.5f };
+        }
     }
 
     void update() override
     {
-        m_model.transform().rotation().z = m_counter;
-        m_model.transform().rotation().x = m_counter;
+        for (auto& m : m_model.meshes())
+        {
+            m.transform().rotation().z = m_counter;
+            m.transform().rotation().x = m_counter;
+        }
+
         m_counter += 0.001f;
     }
 
@@ -26,7 +34,7 @@ private:
     void loadModel()
     {
         ZFX::ObjectLoader obj{ OBJS_PATH + "teamug/teamugobj.obj", true, false };
-        m_model.load(obj.verteces(), obj.indeces(), SHADERS_PATH + "colour3D_Lighting");
+        m_model.load({obj.vertices()}, {obj.indices()}, SHADERS_PATH + "colour3D_Lighting");
     }
 
 private:

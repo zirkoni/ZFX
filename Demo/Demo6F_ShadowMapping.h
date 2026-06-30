@@ -83,7 +83,7 @@ private:
 
     void loadFloor()
     {
-        ZFX::Verteces planeVertices =
+        ZFX::Vertices planeVertices =
         {
             ZFX::VertexData
             {
@@ -100,15 +100,15 @@ private:
             ZFX::AttributeSizes{3, 3, 2}
         };
 
-        ZFX::Indeces indeces = { 2, 1, 0,  5, 4, 3 };
+        ZFX::Indices indices = { 2, 1, 0,  5, 4, 3 };
 
-        m_floor.load(planeVertices, indeces, m_shader);
+        m_floor.load({planeVertices}, {indices}, m_shader);
         m_floor.loadTexture(TEXTURES_PATH + "texture.png");
     }
 
     void loadCubes()
     {
-        m_cubes.load(cubeVertecesWithNormalsAndTexture(), cubeIndeces(), m_shader);
+        m_cubes.load({cubeVerticesWithNormalsAndTexture()}, {cubeIndices()}, m_shader);
         m_cubes.loadTexture(TEXTURES_PATH + "container.png");
 
         // 1st cube
@@ -117,11 +117,11 @@ private:
         cube1.position() = glm::vec3{0.0f, 1.5f, 0.0f};
 
         // 2nd cube
-        auto& cube2 = m_cubes.duplicate();
+        auto& cube2 = m_cubes.meshes()[0].duplicate();
         cube2.position() = glm::vec3{2.0f, 0.0f, 1.0f};
 
         // 3rd cube
-        auto& cube3 = m_cubes.duplicate();
+        auto& cube3 = m_cubes.meshes()[0].duplicate();
         cube3.scale() = glm::vec3{0.25f};
         cube3.position() = glm::vec3{-1.0f, 0.0f, 2.0f};
         cube3.rotation().x = glm::radians(60.0f);
