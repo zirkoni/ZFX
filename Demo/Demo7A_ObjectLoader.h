@@ -33,7 +33,8 @@ public:
 private:
     void loadModel()
     {
-        ZFX::ObjectLoader obj{ OBJS_PATH + "teamug/teamugobj.obj", true, false };
+        const bool showWarnings = false;
+        ZFX::ObjectLoader obj{ OBJS_PATH + "teamug/teamugobj.obj", showWarnings };
         m_model.load(obj.vertices(), obj.indices(), SHADERS_PATH + "colour3D_Lighting");
     }
 

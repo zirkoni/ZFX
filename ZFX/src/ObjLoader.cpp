@@ -12,7 +12,7 @@
 #include <iostream>
 #include <unordered_map>
 
-ZFX::ObjectLoader::ObjectLoader(const std::string& filename, bool smoothNormals, bool printWarnings): m_smoothNormals{smoothNormals}
+ZFX::ObjectLoader::ObjectLoader(const std::string& filename, bool printWarnings)
 {
     tinyobj::ObjReader reader;
 
