@@ -19,8 +19,8 @@ public:
 
     void update() override
     {
-        m_triangles.at(IDX_X_MOVE).meshes()[0].transform().position().x = sin(m_counter);
-        m_triangles.at(IDX_Y_MOVE).meshes()[0].transform().position().y = sin(m_counter);
+        m_triangles.at(IDX_X_MOVE).transform().position().x = sin(m_counter);
+        m_triangles.at(IDX_Y_MOVE).transform().position().y = sin(m_counter);
         m_counter += 0.001f;
     }
 
@@ -81,7 +81,7 @@ private:
 
         for(int i = 1; i < 4; ++i)
         {
-            auto& transform = m_triangles.back().meshes()[0].duplicate();
+            auto& transform = m_triangles.back().duplicate();
             transform.position() = glm::vec3{ positions[i], 0.0f };
             transform.scale() = glm::vec3{ sizes[i] };
         }

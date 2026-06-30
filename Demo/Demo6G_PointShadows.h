@@ -124,22 +124,22 @@ private:
         cube1.position() = glm::vec3{4.0f, -3.5f, 0.0};
 
         // 2nd cube
-        auto& cube2 = m_cubes.meshes()[0].duplicate();
+        auto& cube2 = m_cubes.duplicate();
         cube2.scale() = glm::vec3{0.75f};
         cube2.position() = glm::vec3{2.0f, 3.0f, 1.0};
 
         // 3rd cube
-        auto& cube3 = m_cubes.meshes()[0].duplicate();
+        auto& cube3 = m_cubes.duplicate();
         cube3.scale() = glm::vec3{0.5f};
         cube3.position() = glm::vec3{-3.0f, -1.0f, 0.0};
 
         // 4th cube
-        auto& cube4 = m_cubes.meshes()[0].duplicate();
+        auto& cube4 = m_cubes.duplicate();
         cube4.scale() = glm::vec3{0.5f};
         cube4.position() = glm::vec3{-1.5f, 1.0f, 1.5};
 
         // 5th cube
-        auto& cube5 = m_cubes.meshes()[0].duplicate();
+        auto& cube5 = m_cubes.duplicate();
         cube5.scale() = glm::vec3{0.75f};
         cube5.position() = glm::vec3{-1.5f, 2.0f, -3.0};
         cube5.rotation().x = glm::radians(60.0f);

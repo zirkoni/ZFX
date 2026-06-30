@@ -47,11 +47,14 @@ namespace ZFX
         void draw(const ZFX::Camera& camera) const;
         void draw(ZFX::Shader& shader) const;
 
-        Transform& transform() { return m_meshes[0].transform(); }
-
         MeshList& meshes()      { return m_meshes; }
         Shader& shader()        { return *m_shader.get(); }
         TextureList& textures() { return m_textures; }
+
+        /* For Objects that contain only a single Mesh */
+        Transform& transform() { return m_meshes[0].transform(); }
+        Transform& duplicate() { return m_meshes[0].duplicate(); }
+        void duplicate(Transform& transform) { m_meshes[0].duplicate(transform); }
 
     private:
         MeshList m_meshes;

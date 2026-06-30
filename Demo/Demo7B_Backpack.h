@@ -39,7 +39,7 @@ private:
     void loadBackpackModel()
     {
         ZFX::ObjectLoader obj{ OBJS_PATH + "backpack/backpack.obj" };
-        m_backpack.load({obj.vertices()}, {obj.indices()}, SHADERS_PATH + "colour3D_NormalMapping");
+        m_backpack.load(obj.vertices(), obj.indices(), SHADERS_PATH + "colour3D_NormalMapping");
         m_backpack.shader().bind();
         m_backpack.shader().setUniform("u_material.shininess", 32.0f);
 

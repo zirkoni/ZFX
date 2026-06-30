@@ -1,4 +1,3 @@
-#include "Mesh.h"
 #if !defined(ZFX_NO_OBJECT_LOADER)
 #define TINYOBJLOADER_IMPLEMENTATION
 
@@ -37,12 +36,6 @@ ZFX::ObjectLoader::ObjectLoader(const std::string& filename, bool smoothNormals,
 
 void ZFX::ObjectLoader::loadObject(tinyobj::ObjReader& reader)
 {
-    // How many floats each property has
-    constexpr unsigned numPositionValues = 3;
-    constexpr unsigned numNormalValues = 3;
-    constexpr unsigned numTextureValues = 2;
-    constexpr unsigned totalNumValues = numPositionValues + numNormalValues + numTextureValues;
-
     auto& attrib = reader.GetAttrib();
     auto& shapes = reader.GetShapes();
     //auto& materials = reader.GetMaterials();
