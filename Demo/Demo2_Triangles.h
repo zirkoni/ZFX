@@ -81,7 +81,7 @@ private:
 
         for(int i = 1; i < 4; ++i)
         {
-            auto& transform = m_triangles.back().duplicate();
+            auto& transform = m_triangles.back().addInstance();
             transform.position() = glm::vec3{ positions[i], 0.0f };
             transform.scale() = glm::vec3{ sizes[i] };
         }

@@ -117,11 +117,11 @@ private:
         cube1.position() = glm::vec3{0.0f, 1.5f, 0.0f};
 
         // 2nd cube
-        auto& cube2 = m_cubes.duplicate();
+        auto& cube2 = m_cubes.addInstance();
         cube2.position() = glm::vec3{2.0f, 0.0f, 1.0f};
 
         // 3rd cube
-        auto& cube3 = m_cubes.duplicate();
+        auto& cube3 = m_cubes.addInstance();
         cube3.scale() = glm::vec3{0.25f};
         cube3.position() = glm::vec3{-1.0f, 0.0f, 2.0f};
         cube3.rotation().x = glm::radians(60.0f);

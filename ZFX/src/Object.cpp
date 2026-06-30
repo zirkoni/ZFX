@@ -6,19 +6,19 @@
 ZFX::ObjectPart::ObjectPart(const Vertices& vertices, const Indices& indices)
 {
     m_mesh = std::make_unique<Mesh>(vertices, indices);
-    m_transforms.push_back( Transform{} );
+    m_instances.push_back( Transform{} );
 }
 
-ZFX::Transform& ZFX::ObjectPart::duplicate()
+ZFX::Transform& ZFX::ObjectPart::addInstance()
 {
-    auto& copy = m_transforms[0];
-    m_transforms.push_back(copy);
-    return m_transforms.back();
+    auto& copy = m_instances[0];
+    m_instances.push_back(copy);
+    return m_instances.back();
 }
 
-void ZFX::ObjectPart::duplicate(const Transform& transform)
+void ZFX::ObjectPart::addInstance(const Transform& transform)
 {
-    m_transforms.push_back(transform);
+    m_instances.push_back(transform);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -69,7 +69,7 @@ void ZFX::Object::draw(const ZFX::Camera& camera) const
 
     for(const auto& mesh : m_meshes)
     {
-        for(const auto& t : mesh.transformList())
+        for(const auto& t : mesh.instances())
         {
             m_shader->update(t, camera);
             mesh.mesh().draw();
@@ -83,7 +83,7 @@ void ZFX::Object::draw(ZFX::Shader& shader) const
 
     for(const auto& mesh : m_meshes)
     {
-        for(const auto& t : mesh.transformList())
+        for(const auto& t : mesh.instances())
         {
             shader.update(t.getModel());
             mesh.mesh().draw();

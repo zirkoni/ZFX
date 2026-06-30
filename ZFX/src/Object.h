@@ -15,18 +15,18 @@ namespace ZFX
     public:
         ObjectPart(const Vertices& vertices, const Indices& indices);
 
-        Transform& duplicate();
-        void duplicate(const Transform& transform);
+        Transform& addInstance();
+        void addInstance(const Transform& transform);
 
         const Mesh& mesh() const { return *m_mesh.get(); }
 
-        Transform& transform() { return m_transforms.front(); }
-        Transform& transform(int idx) { return m_transforms.at(idx); }
-        const std::vector<Transform>& transformList() const { return m_transforms; }
+        Transform& transform() { return m_instances.front(); }
+        Transform& transform(int idx) { return m_instances.at(idx); }
+        const std::vector<Transform>& instances() const { return m_instances; }
 
     private:
         std::unique_ptr<Mesh> m_mesh;
-        std::vector<Transform> m_transforms;
+        std::vector<Transform> m_instances;
     };
 
     class Object
@@ -53,8 +53,8 @@ namespace ZFX
 
         /* For Objects that contain only a single Mesh */
         Transform& transform() { return m_meshes[0].transform(); }
-        Transform& duplicate() { return m_meshes[0].duplicate(); }
-        void duplicate(const Transform& transform) { m_meshes[0].duplicate(transform); }
+        Transform& addInstance() { return m_meshes[0].addInstance(); }
+        void addInstance(const Transform& transform) { m_meshes[0].addInstance(transform); }
 
     private:
         MeshList m_meshes;
