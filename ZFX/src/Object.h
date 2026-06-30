@@ -16,7 +16,7 @@ namespace ZFX
         ObjectPart(const Vertices& vertices, const Indices& indices);
 
         Transform& duplicate();
-        void duplicate(Transform& transform);
+        void duplicate(const Transform& transform);
 
         const Mesh& mesh() const { return *m_mesh.get(); }
 
@@ -54,7 +54,7 @@ namespace ZFX
         /* For Objects that contain only a single Mesh */
         Transform& transform() { return m_meshes[0].transform(); }
         Transform& duplicate() { return m_meshes[0].duplicate(); }
-        void duplicate(Transform& transform) { m_meshes[0].duplicate(transform); }
+        void duplicate(const Transform& transform) { m_meshes[0].duplicate(transform); }
 
     private:
         MeshList m_meshes;

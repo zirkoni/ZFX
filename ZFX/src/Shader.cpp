@@ -4,7 +4,7 @@
 #include <fstream>
 
 
-ZFX::Shader::Shader(const ShaderSource &source, bool validate)
+ZFX::Shader::Shader(const ShaderSource& source, bool validate)
 {
     GLuint vertexShader;
     GLuint fragmentShader;

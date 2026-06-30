@@ -16,7 +16,7 @@ ZFX::Transform& ZFX::ObjectPart::duplicate()
     return m_transforms.back();
 }
 
-void ZFX::ObjectPart::duplicate(Transform &transform)
+void ZFX::ObjectPart::duplicate(const Transform& transform)
 {
     m_transforms.push_back(transform);
 }
@@ -25,7 +25,7 @@ void ZFX::ObjectPart::duplicate(Transform &transform)
 void ZFX::Object::load(
         const VertexList& vertices,
         const IndexList& indices,
-        const std::string &shadersFileName)
+        const std::string& shadersFileName)
 {
     ShaderSource src{ shadersFileName + ".vs", shadersFileName + ".fs" };
     load(vertices, indices, src);
@@ -52,13 +52,13 @@ void ZFX::Object::load(
     load(vertices, indices, std::make_shared<ZFX::Shader>(shaderSrc));
 }
 
-void ZFX::Object::loadTexture(const std::string &textureFile)
+void ZFX::Object::loadTexture(const std::string& textureFile)
 {
     auto texture = std::make_unique<Texture>(textureFile);
     m_textures.push_back(std::move(texture));
 }
 
-void ZFX::Object::draw(const ZFX::Camera &camera) const
+void ZFX::Object::draw(const ZFX::Camera& camera) const
 {
     m_shader->bind();
 
@@ -77,7 +77,7 @@ void ZFX::Object::draw(const ZFX::Camera &camera) const
     }
 }
 
-void ZFX::Object::draw(ZFX::Shader &shader) const
+void ZFX::Object::draw(ZFX::Shader& shader) const
 {
     shader.bind();
 

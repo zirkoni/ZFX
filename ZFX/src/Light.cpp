@@ -31,7 +31,7 @@ ZFX::DirectionalLight::DirectionalLight(const std::string& name, Shader &shader)
 {
 }
 
-void ZFX::DirectionalLight::setDirection(const glm::vec3 &dir)
+void ZFX::DirectionalLight::setDirection(const glm::vec3& dir)
 {
     m_shader.setUniform(m_name + ".direction", dir);
 }
@@ -41,7 +41,7 @@ ZFX::PointLight::PointLight(const std::string& name, Shader &shader): Light{ nam
 {
 }
 
-void ZFX::PointLight::setPosition(const glm::vec3 &pos)
+void ZFX::PointLight::setPosition(const glm::vec3& pos)
 {
     m_shader.setUniform(m_name + ".position", pos);
 }
@@ -66,7 +66,7 @@ ZFX::SpotLight::SpotLight(const std::string& name, Shader &shader): PointLight{ 
 {
 }
 
-void ZFX::SpotLight::setDirection(const glm::vec3 &dir)
+void ZFX::SpotLight::setDirection(const glm::vec3& dir)
 {
     m_shader.setUniform(m_name + ".direction", dir);
 }

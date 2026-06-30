@@ -14,10 +14,10 @@ namespace ZFX
     {
     public:
         Vertices() = default;
-        Vertices(VertexData& data, AttributeSizes& attributes);
+        Vertices(const VertexData& data, const AttributeSizes& attributes);
         Vertices(VertexData&& data, AttributeSizes&& attributes);
 
-        void load(VertexData& data, AttributeSizes& attributes);
+        void load(const VertexData& data, const AttributeSizes& attributes);
         const VertexData& data() const { return m_data; }
         const AttributeSizes& attributes() const { return m_attributes; }
         uint32_t numElementsPerVertex() const;

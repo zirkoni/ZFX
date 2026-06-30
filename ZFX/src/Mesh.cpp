@@ -39,11 +39,11 @@ ZFX::Mesh::Mesh(const Vertices& vertices, const Indices& indices, unsigned numBu
     glBindVertexArray(0);
 }
 
-ZFX::Mesh::Mesh(const Vertices &vertices, const Indices &indices): Mesh{ vertices, indices, 2 }
+ZFX::Mesh::Mesh(const Vertices& vertices, const Indices& indices): Mesh{ vertices, indices, 2 }
 {
 }
 
-ZFX::Mesh::Mesh(const Vertices &vertices, const Indices &indices, const std::vector<glm::mat4>& modelMatrices) :
+ZFX::Mesh::Mesh(const Vertices& vertices, const Indices& indices, const std::vector<glm::mat4>& modelMatrices) :
     Mesh{ vertices, indices, 3 }
 {
     // set instance vertex attribute (with divisor 1)

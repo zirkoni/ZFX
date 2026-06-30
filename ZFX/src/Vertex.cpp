@@ -1,7 +1,7 @@
 #include "Vertex.h"
 
 
-ZFX::Vertices::Vertices(VertexData& data, AttributeSizes& attributes): m_data{data}, m_attributes{attributes}
+ZFX::Vertices::Vertices(const VertexData& data, const AttributeSizes& attributes): m_data{data}, m_attributes{attributes}
 {
 }
 
@@ -11,7 +11,7 @@ ZFX::Vertices::Vertices(VertexData&& data, AttributeSizes&& attributes)
     m_attributes = std::move(attributes);
 }
 
-void ZFX::Vertices::load(VertexData& data, AttributeSizes& attributes)
+void ZFX::Vertices::load(const VertexData& data, const AttributeSizes& attributes)
 {
     m_data = std::move(data);
     m_attributes = std::move(attributes);
