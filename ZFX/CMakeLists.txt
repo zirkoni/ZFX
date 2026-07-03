@@ -19,9 +19,10 @@ target_include_directories(ZFX
 
 target_link_libraries(ZFX
     PUBLIC
+        Freetype::Freetype
+    PRIVATE
         OpenGL
         GLEW
-        Freetype::Freetype
         SDL2
         tinyobjloader
 )
