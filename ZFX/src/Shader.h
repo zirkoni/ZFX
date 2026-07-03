@@ -62,7 +62,7 @@ namespace ZFX
 
         static void checkError(GLuint shader, GLuint flag, bool isProgram,
                 const std::string& errorMsg, const std::string& errorMsg2 = "");
-        static void loadFromFile(const std::string& fileName, GLuint shader);
+        static void loadFromFile(const std::string& filePath, GLuint shader);
         static void loadFromString(const std::string& source, GLuint shader);
         static GLuint create(bool isFile, const std::string& source, GLenum shaderType);
 

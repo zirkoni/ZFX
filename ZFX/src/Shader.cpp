@@ -248,27 +248,33 @@ void ZFX::Shader::checkError(GLuint shader, GLuint flag, bool isProgram, const s
     }
 }
 
-void ZFX::Shader::loadFromFile(const std::string& fileName, GLuint shader)
+void ZFX::Shader::loadFromFile(const std::string& filePath, GLuint shader)
 {
-    std::ifstream file(fileName.c_str());
+    std::ifstream file(filePath, std::ios::ate);
 
-    std::string output;
-    std::string line;
-
-    if (file)
+    if (!file)
     {
-        while (std::getline(file, line))
-        {
-            output.append(line + "\n");
-        }
-        file.close();
-    }
-    else
-    {
-        throw ZFX::Exception{ __FILE__, __LINE__, "Unable to load shader: " + fileName };
+        throw ZFX::Exception{ __FILE__, __LINE__, "Unable to load shader file: " + filePath };
     }
 
-    loadFromString(output, shader);
+    auto end = file.tellg();
+    file.seekg(0, std::ios::beg);
+
+    auto size = std::size_t(end - file.tellg());
+
+    if (size == 0)
+    {
+        throw ZFX::Exception{ __FILE__, __LINE__, "Shader file is empty: " + filePath };
+    }
+
+    std::string source(size, ' ');
+    if(!file.read(source.data(), source.size()))
+    {
+        throw ZFX::Exception{ __FILE__, __LINE__, "Unable to read shader file: " + filePath };
+    }
+
+    file.close();
+    loadFromString(source, shader);
 }
 
 void ZFX::Shader::loadFromString(const std::string& source, GLuint shader)
