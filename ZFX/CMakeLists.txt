@@ -25,4 +25,5 @@ target_link_libraries(ZFX
         GLEW
         SDL2
         tinyobjloader
+        image_loader
 )

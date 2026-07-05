@@ -4,7 +4,6 @@
 #include <stdexcept>
 #include <string>
 #include "zfxPrint.h"
-//#define USE_SDL2_IMAGE
 
 
 namespace ZFX
