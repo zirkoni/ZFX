@@ -44,13 +44,13 @@ ZFX::Texture::Texture(const std::string& filename) : m_texture{ 0 }
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGB, GL_UNSIGNED_BYTE, surface->pixels);
     }
-    
+
     SDL_FreeSurface(surface);
 #else
     int width;
     int height;
     int numComponents;
-    stbi_set_flip_vertically_on_load(true);
+    //stbi_set_flip_vertically_on_load(true);
     unsigned char* imageData = stbi_load(filename.c_str(), &width, &height, &numComponents, 4);
 
     if (imageData == nullptr)

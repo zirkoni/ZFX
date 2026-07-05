@@ -45,7 +45,7 @@ vec3 calcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, v
 
     // Attenuation
     float distance = length(light.position - fragPos);
-    float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));    
+    float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
     // combine results
     vec3 ambient = light.ambient * difSample;
@@ -59,16 +59,13 @@ vec3 calcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, v
 
 void main()
 {
-    // Flip V coordinate for proper texture mapping
-    vec2 texCoord = vec2(v_out_texCoord.x, 1.0 - v_out_texCoord.y);
-    
     // Sample textures
-    vec3 difSample = vec3(texture(u_material.diffuse, texCoord));
-    vec3 specSample = vec3(texture(u_material.specular, texCoord));
-    
+    vec3 difSample = vec3(texture(u_material.diffuse, v_out_texCoord));
+    vec3 specSample = vec3(texture(u_material.specular, v_out_texCoord));
+
     // Use interpolated normals
     vec3 norm = normalize(v_out_normal);
-    
+
     vec3 viewDir = normalize(u_viewPosition - v_out_position);
 
     // Calculate point lighting
@@ -80,4 +77,3 @@ void main()
 
     f_out_colour = vec4(result, 1.0);
 }
-

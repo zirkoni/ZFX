@@ -120,15 +120,19 @@ private:
 
     void addTexturedTriangle()
     {
-        /* Texture coordinates have (0, 0) at the lower left corner and (1, 1) at the upper right corner */
+        /* Texture coordinates have (0, 0) at the lower left corner and (1, 1) at the upper right corner.
+         * The texture y-coordinate is flipped here to render the image correctly: y = 1 - real_y
+         * Other option would be to flip the texture by the image loader, for example when using stb_image
+         * you can use stbi_set_flip_vertically_on_load(true).
+         */
         ZFX::Vertices vertices =
         {
             ZFX::VertexData
             {
-            //    x      y      texture coordinates
-                -0.5f, -0.5f,     0.0f, 0.0f,
-                 0.5f, -0.5f,     1.0f, 0.0f,
-                 0.0f,  0.5f,     0.5f, 1.0f
+            //    x      y        texture coordinates
+                -0.5f, -0.5f,     0.0f, (1.0f - 0.0f),
+                 0.5f, -0.5f,     1.0f, (1.0f - 0.0f),
+                 0.0f,  0.5f,     0.5f, (1.0f - 1.0f)
             },
 
             ZFX::AttributeSizes{2, 2}
@@ -151,10 +155,10 @@ private:
         {
             ZFX::VertexData
             {
-            //    x      y     red  green  blue  alpha   texture coordinates
-               -0.5f, -0.5f,   1.0f, 0.0f, 0.0f, 0.8f,     0.0f, 0.0f,
-                0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 0.8f,     1.0f, 0.0f,
-                0.0f,  0.5f,   0.0f, 1.0f, 0.0f, 0.8f,     0.5f, 1.0f,
+            //    x      y     red  green  blue  alpha     texture coordinates (y flipped)
+               -0.5f, -0.5f,   1.0f, 0.0f, 0.0f, 0.8f,     0.0f, (1.0f - 0.0f),
+                0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 0.8f,     1.0f, (1.0f - 0.0f),
+                0.0f,  0.5f,   0.0f, 1.0f, 0.0f, 0.8f,     0.5f, (1.0f - 1.0f)
             },
 
             ZFX::AttributeSizes{2, 4, 2}
