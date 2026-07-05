@@ -44,11 +44,13 @@ A simple demo application (`zfx_demo`) is included.
 Make sure the following libraries are installed:
 
 - **SDL2**
-- **SDL2_Image**
 - **GLEW**
 - **GLM**
 - **FreeType2**
 - **OpenGL**
+
+The following libraries are optional:
+- **SDL2_Image** (if not found, stb_image is used instead)
 
 ### Arch Linux example
 
@@ -58,13 +60,15 @@ sudo pacman -S --needed base-devel cmake glew glm freetype2 sdl3 sdl2-compat sdl
 
 ### Compiling
 
+This will compile the demo program:
+
 ```bash
 git clone https://github.com/zirkoni/ZFX.git
 cd ZFX
 make
 ```
 
-This will compile the demo program. To run it:
+And to run it:
 
 ```bash
 ./build/Demo/zfx_demo
