@@ -57,7 +57,7 @@ void MainLoop::addDemos()
     m_demos.push_back(std::make_unique<Demo7A>(m_window, m_camera));
     m_demos.push_back(std::make_unique<Demo7B>(m_window, m_camera));
     m_demos.push_back(std::make_unique<Demo8>(m_window, m_camera));
-//    m_demos.push_back(std::make_unique<Demo9>(m_window, m_camera));
+    m_demos.push_back(std::make_unique<Demo9>(m_window, m_camera));
 }
 
 void MainLoop::regulateFramerate()
