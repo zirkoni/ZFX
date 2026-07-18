@@ -177,6 +177,7 @@ void ZFX::TextFreetype::drawText(std::string_view text, float x, float y, float 
 {
     m_shader.bind();
     m_shader.setUniform("u_textColour", colour);
+    m_shader.setUniform("u_diffuse", 0);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D_ARRAY, m_textureArray);
     glBindVertexArray(m_vao);
