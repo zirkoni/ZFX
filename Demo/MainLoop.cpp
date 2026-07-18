@@ -64,6 +64,7 @@ void MainLoop::regulateFramerate()
 {
     addDemos();
     m_activeDemo = m_demos.begin();
+    m_activeDemo->get()->onEntry();
     m_window.setTitle(m_activeDemo->get()->name());
 
     while(!m_exitRequested)
