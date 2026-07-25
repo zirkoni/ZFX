@@ -9,6 +9,7 @@ class Demo7B : public Demo
 public:
     Demo7B(ZFX::Window& window, ZFX::Camera& camera) : Demo{ window, camera, "Demo7B - Backback" }
     {
+        m_speed = 0.5f;
         loadBackpackModel();
         addLighting();
 
@@ -18,14 +19,14 @@ public:
         }
     }
 
-    void update() override
+    void update(float deltaTime) override
     {
+        Demo::update(deltaTime);
+
         for (auto& m : m_backpack.meshes())
         {
-            m.transform().rotation().y = m_counter;
+            m.transform().rotation().y = m_delta;
         }
-
-        m_counter += 0.005f;
 
         updateLighting();
     }

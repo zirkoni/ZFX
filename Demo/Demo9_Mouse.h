@@ -18,7 +18,7 @@ public:
         m_squares.front().transform().rotation().z = 0.5;
     }
 
-    void update() override
+    void update(float deltaTime) override
     {
         updateMousePosition();
 

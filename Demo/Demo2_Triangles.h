@@ -17,11 +17,11 @@ public:
         addSmallTriangles();
     }
 
-    void update() override
+    void update(float deltaTime) override
     {
-        m_triangles.at(IDX_X_MOVE).transform().position().x = sin(m_counter);
-        m_triangles.at(IDX_Y_MOVE).transform().position().y = sin(m_counter);
-        m_counter += 0.001f;
+        Demo::update(deltaTime);
+        m_triangles.at(IDX_X_MOVE).transform().position().x = sin(m_delta);
+        m_triangles.at(IDX_Y_MOVE).transform().position().y = sin(m_delta);
     }
 
     void draw() override

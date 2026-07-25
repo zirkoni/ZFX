@@ -6,13 +6,23 @@
 class Demo
 {
 public:
-    Demo(ZFX::Window& window, ZFX::Camera& camera, const std::string& name): m_counter{ 0.0f },
-    m_window{ window }, m_camera{ camera }, m_name{ name }, m_bgColour{ZFX::BLACK} {}
+    Demo(ZFX::Window& window, ZFX::Camera& camera, const std::string& name):
+        m_delta(0.0f),
+        m_speed{ 0.1f },
+        m_window{ window },
+        m_camera{ camera },
+        m_name{ name },
+        m_bgColour{ZFX::BLACK} {}
 
     virtual ~Demo() {}
 
     virtual void handleInput(const SDL_Event& e) {}
-    virtual void update() {}
+
+    virtual void update(float deltaTime)
+    {
+        m_delta += m_speed * deltaTime;
+    }
+
     virtual void draw() = 0;
 
     virtual void onExit() {}
@@ -41,7 +51,8 @@ public:
     const glm::vec4& bgColour() const { return m_bgColour; }
 
 protected:
-    float m_counter;
+    float m_delta;
+    float m_speed;
     ZFX::Window& m_window;
     ZFX::Camera& m_camera;
     std::string m_name;

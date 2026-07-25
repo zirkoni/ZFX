@@ -1,6 +1,5 @@
 #pragma once
 #include "Demo6A_BasicLighting.h"
-#include <vector>
 
 
 inline ZFX::Vertices cubeVerticesWithNormalsAndTexture()
@@ -74,13 +73,13 @@ public:
         setLightColour( glm::vec3{ 1.0f } );
     }
 
-    void update() override
+    void update(float deltaTime) override
     {
-        m_cube.transform().rotation().z = m_counter;
-        m_cube.transform().rotation().x = m_counter;
-        m_counter += 0.001f;
+        Demo::update(deltaTime);
+        m_cube.transform().rotation().z = m_delta;
+        m_cube.transform().rotation().x = m_delta;
 
-        m_light.transform().position().x = sin(50 * m_counter);
+        m_light.transform().position().x = sin(20 * m_delta);
     }
 
     void draw() override

@@ -6,6 +6,7 @@ class Demo7A : public Demo
 public:
     Demo7A(ZFX::Window& window, ZFX::Camera& camera) : Demo{ window, camera, "Demo7A - Object Loader" }
     {
+        m_speed = 0.5f;
         loadModel();
 
         for (auto& m : m_model.meshes())
@@ -14,15 +15,15 @@ public:
         }
     }
 
-    void update() override
+    void update(float deltaTime) override
     {
+        Demo::update(deltaTime);
+
         for (auto& m : m_model.meshes())
         {
-            m.transform().rotation().z = m_counter;
-            m.transform().rotation().x = m_counter;
+            m.transform().rotation().z = m_delta;
+            m.transform().rotation().x = m_delta;
         }
-
-        m_counter += 0.001f;
     }
 
     void draw() override

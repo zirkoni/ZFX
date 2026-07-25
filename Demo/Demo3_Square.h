@@ -10,10 +10,10 @@ public:
         addSquare();
     }
 
-    void update() override
+    void update(float deltaTime) override
     {
-        m_square.transform().rotation().z = m_counter;
-        m_counter += 0.001f;
+        Demo::update(deltaTime);
+        m_square.transform().rotation().z = m_delta;
     }
 
     void draw() override

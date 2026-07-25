@@ -1,6 +1,6 @@
 #pragma once
 #include "Demo6E_FrameBuffers.h"
-#include <vector>
+
 
 class Demo6E_MSAA : public Demo6E
 {
@@ -11,11 +11,11 @@ public:
         addMSAABuffer();
     }
 
-    void update() override
+    void update(float deltaTime) override
     {
-        m_cube.transform().rotation().z = m_counter;
-        m_cube.transform().rotation().x = m_counter;
-        m_counter += 0.001f;
+        Demo::update(deltaTime);
+        m_cube.transform().rotation().z = m_delta;
+        m_cube.transform().rotation().x = m_delta;
     }
 
     void draw() override

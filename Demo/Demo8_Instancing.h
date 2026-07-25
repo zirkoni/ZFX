@@ -34,6 +34,7 @@ class Demo8 : public Demo
 public:
     Demo8(ZFX::Window& window, ZFX::Camera& camera) : Demo{ window, camera, "Demo8 - Instancing" }
     {
+        m_speed = 1.0f;
         srand(SDL_GetTicks());
 
         std::vector<glm::vec4> animParams0;
@@ -64,16 +65,16 @@ public:
         onEntry();
     }
 
-    void update() override
+    void update(float deltaTime) override
     {
+        Demo::update(deltaTime);
+
         glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_meshInstanceBuffer);
 
         m_computeShader->bind();
-        m_computeShader->setUniform("u_counter", m_counter);
+        m_computeShader->setUniform("u_counter", m_delta);
         // Each group has 256 threads (local_size_x = 256), ceiling division to calculate num. of work groups
         m_computeShader->compute((NUM_OBJECTS + 255) / 256);
-
-        m_counter += 0.01f;
     }
 
     void draw() override

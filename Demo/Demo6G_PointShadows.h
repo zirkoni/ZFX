@@ -21,7 +21,7 @@ public:
         onEntry();
     }
 
-    void update() override
+    void update(float deltaTime) override
     {
         // Do here instead of in loadShaders.
         // This fixes occasional black screen, no idea why.
@@ -43,8 +43,8 @@ public:
         }
 
         // move light position over time
-        m_lightPos.z = sin(m_counter);
-        m_counter += 0.01f;
+        Demo::update(deltaTime);
+        m_lightPos.z = sin(10 * m_delta);
     }
 
     void draw() override

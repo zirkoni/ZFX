@@ -18,21 +18,21 @@ public:
         updateLighting( glm::vec3{ 1.0f } );
     }
 
-    void update() override
+    void update(float deltaTime) override
     {
-        m_shinyCube.transform().rotation().z = m_counter;
-        m_shinyCube.transform().rotation().x = m_counter;
-        m_counter += 0.001f;
+        Demo::update(deltaTime);
+        m_shinyCube.transform().rotation().z = m_delta;
+        m_shinyCube.transform().rotation().x = m_delta;
 
-        m_light.transform().position().x = sin(50 * m_counter);
+        m_light.transform().position().x = sin(20 * m_delta);
     }
 
     void draw() override
     {
         glm::vec3 lightColour;
-        lightColour.r = 1.0f - sin(m_counter);
-        lightColour.g = 1.0f - cos(m_counter);
-        lightColour.b = 1.0f - sin(m_counter);
+        lightColour.r = 1.0f - sin(m_speed);
+        lightColour.g = 1.0f - cos(m_speed);
+        lightColour.b = 1.0f - sin(m_speed);
         updateLighting(lightColour);
 
         m_light.draw(m_camera);

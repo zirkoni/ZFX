@@ -1,6 +1,6 @@
 #pragma once
 #include "Demo6D_LightCasters.h"
-#include <vector>
+
 
 class Demo6E : public Demo6D
 {
@@ -13,11 +13,11 @@ public:
 
     virtual ~Demo6E() {}
 
-    virtual void update() override
+    virtual void update(float deltaTime) override
     {
-        m_cube.transform().rotation().z = m_counter;
-        m_cube.transform().rotation().x = m_counter;
-        m_counter += 0.001f;
+        Demo::update(deltaTime);
+        m_cube.transform().rotation().z = m_delta;
+        m_cube.transform().rotation().x = m_delta;
     }
 
     virtual void draw() override

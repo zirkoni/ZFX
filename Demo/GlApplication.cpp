@@ -23,7 +23,7 @@ void GlApplication::run(int argc, char* argv[])
     wOpts.width = 800;
     wOpts.height = 600;
     wOpts.title = "Demo";
-    wOpts.enableVsync = true;
+    wOpts.enableVsync = false;
     wOpts.enableGlDebug = true;
     //wOpts.fullscreen = true; // Use the resolution that was configured
     //wOpts.fullscreenDesktop = true; // Use the desktop resolution

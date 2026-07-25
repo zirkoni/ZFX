@@ -63,11 +63,11 @@ public:
         m_cube.transform().scale() = glm::vec3{ 0.5f };
     }
 
-    void update() override
+    void update(float deltaTime) override
     {
-        m_cube.transform().rotation().z = m_counter;
-        m_cube.transform().rotation().x = m_counter;
-        m_counter += 0.001f;
+        Demo::update(deltaTime);
+        m_cube.transform().rotation().z = m_delta;
+        m_cube.transform().rotation().x = m_delta;
     }
 
     void draw() override
