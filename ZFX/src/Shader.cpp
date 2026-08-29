@@ -6,7 +6,97 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
-#include <type_traits>
+
+namespace
+{
+    void checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg, const std::string& errorMsg2 = "")
+    {
+        GLint success = 0;
+        GLchar error[1024] = { 0 };
+
+        if (isProgram)
+        {
+            glGetProgramiv(shader, flag, &success);
+        } else
+        {
+            glGetShaderiv(shader, flag, &success);
+        }
+
+        if (success == GL_FALSE)
+        {
+            if (isProgram)
+            {
+                glGetProgramInfoLog(shader, sizeof(error), NULL, error);
+            } else
+            {
+                glGetShaderInfoLog(shader, sizeof(error), NULL, error);
+            }
+
+            throw ZFX::Exception{ __FILE__, __LINE__, errorMsg + ":\n" + errorMsg2 + "\n" + error };
+        }
+    }
+
+    GLuint loadFromString(const std::string& source, GLenum shaderType)
+    {
+        GLuint shader = glCreateShader(shaderType);
+
+        if (0 == shader)
+        {
+            throw ZFX::Exception{ __FILE__, __LINE__, "glCreateShader failed, shader type " + std::to_string(shaderType) };
+        }
+
+        const GLchar* p[1];
+        p[0] = source.c_str();
+        GLint lengths[1];
+        lengths[0] = (GLint)source.length();
+
+        glShaderSource(shader, 1, p, lengths);
+        glCompileShader(shader);
+
+        checkError(shader, GL_COMPILE_STATUS, false, std::string{"Error compiling shader"}, source);
+        return shader;
+    }
+
+    GLuint loadFromFile(const std::filesystem::path& filePath, GLenum shaderType)
+    {
+        std::ifstream file(filePath, std::ios::ate);
+
+        if (!file)
+        {
+            throw ZFX::Exception{ __FILE__, __LINE__, "Unable to load shader file: " + filePath.string() };
+        }
+
+        auto end = file.tellg();
+        file.seekg(0, std::ios::beg);
+
+        auto size = std::size_t(end - file.tellg());
+
+        if (size == 0)
+        {
+            throw ZFX::Exception{ __FILE__, __LINE__, "Shader file is empty: " + filePath.string() };
+        }
+
+        std::string source(size, ' ');
+        if(!file.read(source.data(), source.size()))
+        {
+            throw ZFX::Exception{ __FILE__, __LINE__, "Unable to read shader file: " + filePath.string() };
+        }
+
+        file.close();
+
+        return loadFromString(source, shaderType);
+    }
+
+    GLuint loadShader(const std::filesystem::path& filePath, GLenum shaderType)
+    {
+        return loadFromFile(filePath, shaderType);
+    }
+
+    GLuint loadShader(const std::string& source, GLenum shaderType)
+    {
+        return loadFromString(source, shaderType);
+    }
+}
 
 template<typename T>
 void ZFX::Shader::loadShaders(const T& src, bool validate)
@@ -18,24 +108,12 @@ void ZFX::Shader::loadShaders(const T& src, bool validate)
     m_program = glCreateProgram();
     bool hasGeomShader = !src.geometry.empty();
 
-    if(std::is_same<T, ShaderFiles>::value)
-    {
-        vertexShader = loadFromFile(src.vertex, GL_VERTEX_SHADER);
-        fragmentShader = loadFromFile(src.fragment, GL_FRAGMENT_SHADER);
+    vertexShader = loadShader(src.vertex, GL_VERTEX_SHADER);
+    fragmentShader = loadShader(src.fragment, GL_FRAGMENT_SHADER);
 
-        if(hasGeomShader)
-        {
-            geometryShader = loadFromFile(src.geometry, GL_GEOMETRY_SHADER);
-        }
-    } else
+    if(hasGeomShader)
     {
-        vertexShader = loadFromString(src.vertex, GL_VERTEX_SHADER);
-        fragmentShader = loadFromString(src.fragment, GL_FRAGMENT_SHADER);
-
-        if(hasGeomShader)
-        {
-            geometryShader = loadFromString(src.geometry, GL_GEOMETRY_SHADER);
-        }
+        geometryShader = loadShader(src.geometry, GL_GEOMETRY_SHADER);
     }
 
     glAttachShader(m_program, vertexShader);
@@ -243,87 +321,6 @@ void ZFX::Shader::setUniformArray(const std::string& uniform, const std::vector<
     }
 
     glUniformMatrix4fv(loc, numValues, GL_FALSE, &values[0][0][0]);
-}
-
-void ZFX::Shader::checkError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMsg,
-        const std::string& errorMsg2)
-{
-    GLint success = 0;
-    GLchar error[1024] = { 0 };
-
-    if (isProgram)
-    {
-        glGetProgramiv(shader, flag, &success);
-    }
-    else
-    {
-        glGetShaderiv(shader, flag, &success);
-    }
-
-    if (success == GL_FALSE)
-    {
-        if (isProgram)
-        {
-            glGetProgramInfoLog(shader, sizeof(error), NULL, error);
-        }
-        else
-        {
-            glGetShaderInfoLog(shader, sizeof(error), NULL, error);
-        }
-
-        throw ZFX::Exception{ __FILE__, __LINE__, errorMsg + ":\n" + errorMsg2 + "\n" + error };
-    }
-}
-
-GLuint ZFX::Shader::loadFromFile(const std::filesystem::path& filePath, GLenum shaderType)
-{
-    std::ifstream file(filePath, std::ios::ate);
-
-    if (!file)
-    {
-        throw ZFX::Exception{ __FILE__, __LINE__, "Unable to load shader file: " + filePath.string() };
-    }
-
-    auto end = file.tellg();
-    file.seekg(0, std::ios::beg);
-
-    auto size = std::size_t(end - file.tellg());
-
-    if (size == 0)
-    {
-        throw ZFX::Exception{ __FILE__, __LINE__, "Shader file is empty: " + filePath.string() };
-    }
-
-    std::string source(size, ' ');
-    if(!file.read(source.data(), source.size()))
-    {
-        throw ZFX::Exception{ __FILE__, __LINE__, "Unable to read shader file: " + filePath.string() };
-    }
-
-    file.close();
-
-    return loadFromString(source, shaderType);
-}
-
-GLuint ZFX::Shader::loadFromString(const std::string& source, GLenum shaderType)
-{
-    GLuint shader = glCreateShader(shaderType);
-
-    if (0 == shader)
-    {
-        throw ZFX::Exception{ __FILE__, __LINE__, "glCreateShader failed, shader type " + std::to_string(shaderType) };
-    }
-
-    const GLchar* p[1];
-    p[0] = source.c_str();
-    GLint lengths[1];
-    lengths[0] = (GLint)source.length();
-
-    glShaderSource(shader, 1, p, lengths);
-    glCompileShader(shader);
-
-    checkError(shader, GL_COMPILE_STATUS, false, std::string{"Error compiling shader"}, source);
-    return shader;
 }
 
 ZFX::ComputeShader::ComputeShader(const std::string& source)

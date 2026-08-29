@@ -67,11 +67,6 @@ namespace ZFX
         void saveUniformLocations();
         void saveSingleUniform(const GLint BUF_SIZE, GLuint idx);
 
-        static void checkError(GLuint shader, GLuint flag, bool isProgram,
-                const std::string& errorMsg, const std::string& errorMsg2 = "");
-        static GLuint loadFromFile(const std::filesystem::path& filePath, GLenum shaderType);
-        static GLuint loadFromString(const std::string& source, GLenum shaderType);
-
         template<typename T>
         void loadShaders(const T& src, bool validate);
 
