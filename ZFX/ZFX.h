@@ -9,3 +9,4 @@
 #include "FrameBuffer.h"
 #include "Shader.h"
 #include "SSBO.h"
+#include "zfxdefs.h"

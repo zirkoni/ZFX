@@ -27,7 +27,7 @@ void ZFX::Object::load(
         const IndexList& indices,
         const std::string& shadersFileName)
 {
-    ShaderSource src{ shadersFileName + ".vs", shadersFileName + ".fs" };
+    ShaderFiles src{ shadersFileName + ".vs", shadersFileName + ".fs" };
     load(vertices, indices, src);
 }
 
@@ -47,9 +47,9 @@ void ZFX::Object::load(
 void ZFX::Object::load(
         const VertexList& vertices,
         const IndexList& indices,
-        const ShaderSource& shaderSrc)
+        const ShaderFiles& shaderFiles)
 {
-    load(vertices, indices, std::make_shared<ZFX::Shader>(shaderSrc));
+    load(vertices, indices, std::make_shared<ZFX::Shader>(shaderFiles));
 }
 
 void ZFX::Object::loadTexture(const std::string& textureFile)

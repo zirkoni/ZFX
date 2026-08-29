@@ -1,7 +1,5 @@
 #include "FrameBuffer.h"
-#include "Window.h"
 #include "zfxdefs.h"
-#include <string>
 
 
 ZFX::FrameBuffer::FrameBuffer(int numMSAASamples, uint32_t bitsToClear):

@@ -17,7 +17,7 @@ class Demo8 : public Demo
         Shape(const ZFX::Vertices& vertices, const ZFX::Indices& indices,
                 const std::vector<glm::mat4>& instanceMatrix) :
             mesh{ vertices, indices, instanceMatrix },
-            shader{ {SHADERS_PATH + "instancing.vs", SHADERS_PATH + "instancing.fs"} }
+            shader{ ZFX::ShaderFiles{SHADERS_PATH + "instancing.vs", SHADERS_PATH + "instancing.fs"} }
         {}
 
         void draw(const ZFX::Camera& camera)

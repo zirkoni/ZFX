@@ -101,12 +101,12 @@ public:
 private:
     void loadShaders()
     {
-        ZFX::ShaderSource shaderSrc = {SHADERS_PATH + "colour3D_PointShadows.vs", SHADERS_PATH + "colour3D_PointShadows.fs"};
-        m_shader = std::make_shared<ZFX::Shader>(shaderSrc, false); // do not validate shader in constructor
+        ZFX::ShaderFiles shaderFiles = {SHADERS_PATH + "colour3D_PointShadows.vs", SHADERS_PATH + "colour3D_PointShadows.fs"};
+        m_shader = std::make_shared<ZFX::Shader>(shaderFiles, false); // do not validate shader in constructor
 
         // Vertex + fragment + geometry shader
-        ZFX::ShaderSource depthSrc = {SHADERS_PATH + "depthCube.vs", SHADERS_PATH + "depthCube.fs", SHADERS_PATH + "depthCube.gs"};
-        m_simpleDepthShader = std::make_unique<ZFX::Shader>(depthSrc);
+        ZFX::ShaderFiles depthFiles = {SHADERS_PATH + "depthCube.vs", SHADERS_PATH + "depthCube.fs", SHADERS_PATH + "depthCube.gs"};
+        m_simpleDepthShader = std::make_unique<ZFX::Shader>(depthFiles);
     }
 
     void loadCubes()

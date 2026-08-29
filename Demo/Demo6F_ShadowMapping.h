@@ -70,11 +70,11 @@ public:
 private:
     void loadShaders()
     {
-        ZFX::ShaderSource shaderSrc = {SHADERS_PATH + "colour3D_ShadowMapping.vs", SHADERS_PATH + "colour3D_ShadowMapping.fs"};
-        m_shader = std::make_shared<ZFX::Shader>(shaderSrc);
+        ZFX::ShaderFiles shaderFiles = {SHADERS_PATH + "colour3D_ShadowMapping.vs", SHADERS_PATH + "colour3D_ShadowMapping.fs"};
+        m_shader = std::make_shared<ZFX::Shader>(shaderFiles);
 
-        ZFX::ShaderSource depthSrc = {SHADERS_PATH + "depthshader.vs", SHADERS_PATH + "depthshader.fs"};
-        m_simpleDepthShader = std::make_unique<ZFX::Shader>(depthSrc);
+        ZFX::ShaderFiles depthFiles = {SHADERS_PATH + "depthshader.vs", SHADERS_PATH + "depthshader.fs"};
+        m_simpleDepthShader = std::make_unique<ZFX::Shader>(depthFiles);
 
         m_shader->bind();
         m_shader->setUniform("u_diffuseTexture", 0);

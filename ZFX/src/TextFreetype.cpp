@@ -1,5 +1,6 @@
 #include "TextFreetype.h"
-#include "Window.h"
+#include "Shader.h"
+#include "zfxdefs.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 
@@ -49,7 +50,7 @@ void main()
 
 
 ZFX::TextFreetype::TextFreetype(const std::string& font, uint32_t winWidth, uint32_t winHeight) :
-    m_vao{ 0 }, m_vbo{ 0 }, m_ySizeMax{ 0 }, m_shader{ {VERTEX_SHADER, FRAGMENT_SHADER, "", false} }
+    m_vao{ 0 }, m_vbo{ 0 }, m_ySizeMax{ 0 }, m_shader{ ShaderSource{ VERTEX_SHADER, FRAGMENT_SHADER } }
 {
     handleWindowResize(winWidth, winHeight);
 

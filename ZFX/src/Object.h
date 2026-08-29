@@ -40,7 +40,7 @@ namespace ZFX
         Object() = default;
 
         void load(const VertexList& vertices, const IndexList& indices, const std::string& shadersFileName);
-        void load(const VertexList& vertices, const IndexList& indices, const ShaderSource& shaderSrc);
+        void load(const VertexList& vertices, const IndexList& indices, const ShaderFiles& shaderFiles);
         void load(const VertexList& vertices, const IndexList& indices, std::shared_ptr<ZFX::Shader> shader);
         void loadTexture(const std::string& textureFile);
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "Vertex.h"
-#include "zfxdefs.h"
+#include <filesystem>
 #include <glm/glm.hpp>
 #include <unordered_map>
 
@@ -10,12 +10,18 @@ namespace ZFX
     class Camera;
     class Transform;
 
+    struct ShaderFiles
+    {
+        const std::filesystem::path vertex;
+        const std::filesystem::path fragment;
+        const std::filesystem::path geometry;
+    };
+
     struct ShaderSource
     {
         const std::string& vertex;
         const std::string& fragment;
         const std::string& geometry = "";
-        bool areFiles = true;
     };
 
     class Shader
@@ -23,6 +29,7 @@ namespace ZFX
         using UniformMap = std::unordered_map<std::string, const GLint>;
 
     public:
+        Shader(const ShaderFiles& files, bool validate = true);
         Shader(const ShaderSource& source, bool validate = true);
         Shader(const Shader& other) = delete;
         Shader& operator=(const Shader& other) = delete;
@@ -62,9 +69,8 @@ namespace ZFX
 
         static void checkError(GLuint shader, GLuint flag, bool isProgram,
                 const std::string& errorMsg, const std::string& errorMsg2 = "");
-        static void loadFromFile(const std::string& filePath, GLuint shader);
-        static void loadFromString(const std::string& source, GLuint shader);
-        static GLuint create(bool isFile, const std::string& source, GLenum shaderType);
+        static GLuint loadFromFile(const std::filesystem::path& filePath, GLenum shaderType);
+        static GLuint loadFromString(const std::string& source, GLenum shaderType);
 
     protected:
         GLuint m_program;

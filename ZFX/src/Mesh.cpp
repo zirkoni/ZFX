@@ -1,6 +1,4 @@
 #include "Mesh.h"
-#include "zfxdefs.h"
-#include <algorithm>
 #include <cstring>
 #include <SDL2/SDL.h>
 

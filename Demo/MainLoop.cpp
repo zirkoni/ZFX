@@ -16,6 +16,7 @@
 #include "Demo7B_Backpack.h"
 #include "Demo8_Instancing.h"
 #include "Demo9_Mouse.h"
+#include <iostream>
 #include <thread>
 
 MainLoop::MainLoop(ZFX::Window::Options& opts):

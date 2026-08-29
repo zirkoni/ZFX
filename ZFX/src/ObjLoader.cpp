@@ -4,13 +4,9 @@
 #include "ObjLoader.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "Vertex.h"
-#include "glm/gtx/hash.hpp"
-#include "glm/glm.hpp"
 #include "zfxdefs.h"
 #include "tiny_obj_loader.h"
-#include <algorithm>
 #include <iostream>
-#include <unordered_map>
 
 ZFX::ObjectLoader::ObjectLoader(const std::string& filename, bool printWarnings)
 {
