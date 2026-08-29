@@ -3,7 +3,6 @@
 #include <vector>
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
-#include "Camera.h"
 
 namespace ZFX
 {

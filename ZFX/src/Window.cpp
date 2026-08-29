@@ -234,7 +234,6 @@ void ZFX::Window::toggleFullscreen()
 
     if(isFullScreen or isBorderlessFullScreen)
     {
-        //resizeCamera(aspectRatio());
         SDL_SetWindowFullscreen(m_window, 0);
     } else
     {
@@ -242,7 +241,6 @@ void ZFX::Window::toggleFullscreen()
         int displayIdx = SDL_GetWindowDisplayIndex(m_window);
         SDL_GetCurrentDisplayMode(displayIdx, &dispMode);
 
-        //resizeCamera((float)dispMode.w / dispMode.h);
         SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN);
     }
 }
@@ -306,7 +304,6 @@ void ZFX::Window::resize(const SDL_DisplayMode& mode)
         {
             m_width = mode.w;
             m_height = mode.h;
-            //resizeCamera(aspectRatio());
         } else
         {
             throw ZFX::Exception{ __FILE__, __LINE__, "SDL_SetWindowDisplayMode failed" };
@@ -316,7 +313,6 @@ void ZFX::Window::resize(const SDL_DisplayMode& mode)
         SDL_SetWindowSize(m_window, mode.w, mode.h);
         m_width = mode.w;
         m_height = mode.h;
-        //resizeCamera(aspectRatio());
     }
 
     glViewport(0, 0, m_width, m_height);
@@ -331,6 +327,5 @@ void ZFX::Window::userResized()
 
     m_width = static_cast<uint32_t>(w);
     m_height = static_cast<uint32_t>(h);
-    //resizeCamera(aspectRatio());
     glViewport(0, 0, m_width, m_height);
 }
