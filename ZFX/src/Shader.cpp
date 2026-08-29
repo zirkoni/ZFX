@@ -6,23 +6,36 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
+#include <type_traits>
 
-
-ZFX::Shader::Shader(const ShaderFiles& files, bool validate)
+template<typename T>
+void ZFX::Shader::loadShaders(const T& src, bool validate)
 {
     GLuint vertexShader;
     GLuint fragmentShader;
     GLuint geometryShader;
 
     m_program = glCreateProgram();
+    bool hasGeomShader = !src.geometry.empty();
 
-    vertexShader = loadFromFile(files.vertex, GL_VERTEX_SHADER);
-    fragmentShader = loadFromFile(files.fragment, GL_FRAGMENT_SHADER);
-
-    bool hasGeomShader = !files.geometry.empty();
-    if(hasGeomShader)
+    if(std::is_same<T, ShaderFiles>::value)
     {
-        geometryShader = loadFromFile(files.geometry, GL_GEOMETRY_SHADER);
+        vertexShader = loadFromFile(src.vertex, GL_VERTEX_SHADER);
+        fragmentShader = loadFromFile(src.fragment, GL_FRAGMENT_SHADER);
+
+        if(hasGeomShader)
+        {
+            geometryShader = loadFromFile(src.geometry, GL_GEOMETRY_SHADER);
+        }
+    } else
+    {
+        vertexShader = loadFromString(src.vertex, GL_VERTEX_SHADER);
+        fragmentShader = loadFromString(src.fragment, GL_FRAGMENT_SHADER);
+
+        if(hasGeomShader)
+        {
+            geometryShader = loadFromString(src.geometry, GL_GEOMETRY_SHADER);
+        }
     }
 
     glAttachShader(m_program, vertexShader);
@@ -46,42 +59,14 @@ ZFX::Shader::Shader(const ShaderFiles& files, bool validate)
     saveUniformLocations();
 }
 
+ZFX::Shader::Shader(const ShaderFiles& files, bool validate)
+{
+    loadShaders(files, validate);
+}
+
 ZFX::Shader::Shader(const ShaderSource& source, bool validate)
 {
-    GLuint vertexShader;
-    GLuint fragmentShader;
-    GLuint geometryShader;
-
-    m_program = glCreateProgram();
-
-    vertexShader = loadFromString(source.vertex, GL_VERTEX_SHADER);
-    fragmentShader = loadFromString(source.fragment, GL_FRAGMENT_SHADER);
-
-    bool hasGeomShader = source.geometry.length() > 0;
-    if(hasGeomShader)
-    {
-        geometryShader = loadFromString(source.geometry, GL_GEOMETRY_SHADER);
-    }
-
-    glAttachShader(m_program, vertexShader);
-    glAttachShader(m_program, fragmentShader);
-
-    if(hasGeomShader)
-    {
-        glAttachShader(m_program, geometryShader);
-    }
-
-    compile(validate);
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    if(hasGeomShader)
-    {
-        glDeleteShader(geometryShader);
-    }
-
-    saveUniformLocations();
+    loadShaders(source, validate);
 }
 
 ZFX::Shader::~Shader()

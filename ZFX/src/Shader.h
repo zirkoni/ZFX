@@ -19,9 +19,9 @@ namespace ZFX
 
     struct ShaderSource
     {
-        const std::string& vertex;
-        const std::string& fragment;
-        const std::string& geometry = "";
+        const std::string vertex;
+        const std::string fragment;
+        const std::string geometry = "";
     };
 
     class Shader
@@ -71,6 +71,9 @@ namespace ZFX
                 const std::string& errorMsg, const std::string& errorMsg2 = "");
         static GLuint loadFromFile(const std::filesystem::path& filePath, GLenum shaderType);
         static GLuint loadFromString(const std::string& source, GLenum shaderType);
+
+        template<typename T>
+        void loadShaders(const T& src, bool validate);
 
     protected:
         GLuint m_program;
